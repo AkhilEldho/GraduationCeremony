@@ -28,6 +28,34 @@ namespace GraduationCeremony.Controllers
                           Problem("Entity set 'S232_Project01_TestContext.Graduations'  is null.");
         }
 
+        //Sorting the graduants for the presenter
+        //preety sure we have done it in cloud with sree
+        public string Sorting()
+        {
+            string list = "";
+
+            return list;
+        }
+/*
+ *      full stack way of ordering things
+        public IActionResult Index(string sortOrder)
+        {
+            ViewData["FirstName"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            //Sorting by productName
+            products = products.OrderBy(s => s.ProductName);
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(s => s.ProductName);
+                    break;
+            }
+            //return View(await products.ToListAsync());
+            return View(products.ToPagedList(pageNumber, 10));
+        }
+*/
+
+
         // GET: Graduation/Details/5
         public async Task<IActionResult> Details(int? id)
         {
