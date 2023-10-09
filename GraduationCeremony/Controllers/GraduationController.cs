@@ -28,8 +28,8 @@ namespace GraduationCeremony.Controllers
                           Problem("Entity set 'S232_Project01_TestContext.Graduations'  is null.");
         }
 
-        //Sorting the graduants for the presenter
-        //preety sure we have done it in cloud with sree
+        //Sorting the graduants for the presenter 
+        //preety sure we have done it in cloud with sree 
         public string Sorting()
         {
             string list = "";
