@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GraduationCeremony.Models.DB;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace GraduationCeremony.Controllers
 {
@@ -22,23 +23,52 @@ namespace GraduationCeremony.Controllers
         [Authorize]
         // GET: Graduation
         //Sorting the graduants for the presenter 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var graduations = await _context.Graduations.ToListAsync();
-
-            if (graduations != null)
+            var graduants = from g in _context.Graduations select g;
+            if (!String.IsNullOrEmpty(searchString))
             {
-                graduations = graduations
-                    .OrderBy(item => item.Level)
-                    .ThenBy(item => item.AwardDescription)
-                    .ThenBy(item => item.Forenames).ToList();
-                return View(graduations);
+                graduants = graduants.Where(s => s.Forenames.Contains(searchString));
+
+                var grads = await graduants.ToListAsync();
+
+                grads = grads
+                        .OrderBy(item => item.Level)
+                        .ThenBy(item => item.AwardDescription)
+                        .ThenBy(item => item.Forenames).ToList();
+
+                return View(grads);
             }
             else
             {
-                return View();
+                var graduations = await _context.Graduations.ToListAsync();
+
+                if (graduations != null)
+                {
+                    graduations = graduations
+                        .OrderBy(item => item.Level)
+                        .ThenBy(item => item.AwardDescription)
+                        .ThenBy(item => item.Forenames).ToList();
+                }
+
+                return View(graduations);
             }
+
+            return View();
         }
+
+
+        public string IndexAJAX(string searchString)
+        {
+            string sql = "SELECT * FROM Graduation WHERE ForeNames LIKE @p0";
+            string wrapString = "%" + searchString + "%";
+
+            List<Graduation> graduations = _context.Graduations.FromSqlRaw(sql, wrapString).ToList();
+            string json = JsonConvert.SerializeObject(graduations);
+
+            return json;
+        }
+
 
         // GET: Graduation/Details/5
         public async Task<IActionResult> Details(int? id)
