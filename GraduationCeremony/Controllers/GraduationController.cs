@@ -29,7 +29,8 @@ namespace GraduationCeremony.Controllers
             if (graduations != null)
             {
                 graduations = graduations
-                    .OrderBy(item => item.AwardDescription)
+                    .OrderBy(item => item.Level)
+                    .ThenBy(item => item.AwardDescription)
                     .ThenBy(item => item.Forenames).ToList();
                 return View(graduations);
             }
