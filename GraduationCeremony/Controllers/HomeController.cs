@@ -1,4 +1,5 @@
 ﻿using GraduationCeremony.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,6 +19,7 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
+        [Authorize(Roles ="Staff")]
         public IActionResult Privacy()
         {
             return View();

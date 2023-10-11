@@ -15,10 +15,12 @@ namespace GraduationCeremony.Controllers
             _context = context;
         }
 
-        [Authorize]
-        // GET: Graduation
-        //Sorting the graduants for the presenter 
-        public async Task<IActionResult> Index(string searchString)
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SearchCheckIn(string searchString)
         {
             var graduants = from g in _context.Graduations select g;
             if (!String.IsNullOrEmpty(searchString))
@@ -33,6 +35,20 @@ namespace GraduationCeremony.Controllers
                         .ThenBy(item => item.Forenames).ToList();
 
                 return View(grads);
+            }
+            else
+            {
+                var graduations = await _context.Graduations.ToListAsync();
+
+                if (graduations != null)
+                {
+                    graduations = graduations
+                        .OrderBy(item => item.Level)
+                        .ThenBy(item => item.AwardDescription)
+                        .ThenBy(item => item.Forenames).ToList();
+                }
+
+                return View(graduations);
             }
 
             return View();
