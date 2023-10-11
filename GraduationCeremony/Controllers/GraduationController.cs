@@ -21,40 +21,23 @@ namespace GraduationCeremony.Controllers
 
         [Authorize]
         // GET: Graduation
+        //Sorting the graduants for the presenter 
         public async Task<IActionResult> Index()
         {
-              return _context.Graduations != null ? 
-                          View(await _context.Graduations.ToListAsync()) :
-                          Problem("Entity set 'S232_Project01_TestContext.Graduations'  is null.");
-        }
+            var graduations = await _context.Graduations.ToListAsync();
 
-        //Sorting the graduants for the presenter 
-        //preety sure we have done it in cloud with sree 
-        public string Sorting()
-        {
-            string list = "";
-
-            return list;
-        }
-/*
- *      full stack way of ordering things
-        public IActionResult Index(string sortOrder)
-        {
-            ViewData["FirstName"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-
-            //Sorting by productName
-            products = products.OrderBy(s => s.ProductName);
-            switch (sortOrder)
+            if (graduations != null)
             {
-                case "name_desc":
-                    products = products.OrderByDescending(s => s.ProductName);
-                    break;
+                graduations = graduations
+                    .OrderBy(item => item.AwardDescription)
+                    .ThenBy(item => item.Forenames).ToList();
+                return View(graduations);
             }
-            //return View(await products.ToListAsync());
-            return View(products.ToPagedList(pageNumber, 10));
+            else
+            {
+                return View();
+            }
         }
-*/
-
 
         // GET: Graduation/Details/5
         public async Task<IActionResult> Details(int? id)
