@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Drawing.Printing;
+using System.Security.Principal;
 
 namespace GraduationCeremony.Controllers
 {
     public class CheckInController : Controller
     {
         private readonly GraduationContext _context;
+
+        public ArrayList students = new ArrayList();
 
         public CheckInController(GraduationContext context)
         {
@@ -26,6 +31,9 @@ namespace GraduationCeremony.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 graduants = graduants.Where(s => s.CollegeEmail.Contains(searchString));
+
+                //Adding to checkin list
+                students.Add(graduants);
 
                 var grads = await graduants.ToListAsync();
 
@@ -53,6 +61,18 @@ namespace GraduationCeremony.Controllers
 
             return View();
         }
+
+        public IActionResult CheckedIn()
+        {
+            return View();
+        }
+
+        //TEST URL: localhost:7204/CheckIn/CheckedInList
+        public IActionResult CheckedInList()
+        {
+            return View(students);
+        }
+
 
         // GET: CheckInController/Details/5
         public ActionResult Details(int id)
