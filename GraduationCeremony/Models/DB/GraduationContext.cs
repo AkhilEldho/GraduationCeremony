@@ -17,6 +17,7 @@ namespace GraduationCeremony.Models.DB
         }
 
         public virtual DbSet<Graduation> Graduations { get; set; } = null!;
+  
 
         //Custom Views
         //public virtual DbSet<Graduation> CheckIn { get; set; } = null!;

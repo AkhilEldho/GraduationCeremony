@@ -20,7 +20,8 @@ builder.Services.AddControllersWithViews();
 //Database
 builder.Services.AddDbContext<GraduationContext>(options =>
     options.UseSqlServer(connectionString));
-
+builder.Services.AddDbContext<S232_Project01_TestContext>(options =>
+    options.UseSqlServer(connectionString));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

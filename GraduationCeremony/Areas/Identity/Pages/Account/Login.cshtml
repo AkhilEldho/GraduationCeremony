@@ -1,12 +1,73 @@
 ﻿@page
 @model LoginModel
-
+@* 
 @{
     ViewData["Title"] = "Log in";
 }
+ *@
 
 <h1>@ViewData["Title"]</h1>
+
 <div class="row">
+    <div class="col-md-12">
+        <section class="vh-100">
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="container py-5 h-100">
+                    <div class="row d-flex align-items-center justify-content-center h-100">
+                        <div class="col-md-8 col-lg-7 col-xl-6">
+                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
+                                 class="img-fluid" alt="Phone image">
+                        </div>
+                        <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
+                            <!-- Email input -->
+                            <div class="form-floating">
+                                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
+                                <label asp-for="Input.Email" class="form-label"></label>
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-floating mt-3">
+                                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" />
+                                <label asp-for="Input.Password" class="form-label"></label>
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group d-flex justify-content-between align-items-center mb-4 mt-3">
+                                <!-- Checkbox -->
+                                <div class="form-check">
+                                    <label asp-for="Input.RememberMe" class="form-check-label">
+                                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                                        @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                    </label>
+                                </div>
+                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            </div>
+
+                            <!-- Submit button -->
+                            <div>
+                                <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                            </div>
+
+                            <div class="divider d-flex align-items-center my-4">
+                                <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                            </div>
+
+                            <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl"
+                               role="button">
+                                <i class="fab fa-facebook-f me-2"></i>Register as New User
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@* DEFAULT LAYOUT *@
+@* <div class="row">
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
@@ -79,7 +140,7 @@
         </section>
     </div>
 </div>
-
+ *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

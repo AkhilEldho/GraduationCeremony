@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GraduationCeremony.Models.DB
 {
-    public class CheckIn
+    public partial class CheckIn
     {
-        [Key]
         public int PersonCode { get; set; }
         public string? Forenames { get; set; }
         public string? Surname { get; set; }
