@@ -25,6 +25,7 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Award> Awards { get; set; } = null!;
         public virtual DbSet<CheckIn> CheckIns { get; set; } = null!;
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
+        public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
         public virtual DbSet<Graduation> Graduations { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -327,6 +328,63 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Town)
                     .HasMaxLength(250)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<GraduandAward>(entity =>
+            {
+                entity.ToTable("Graduand_Award");
+
+                entity.Property(e => e.GraduandAwardId).HasColumnName("Graduand_Award_ID");
+
+                entity.Property(e => e.AcademicDressRequirements1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Academic_dress_requirements_1");
+
+                entity.Property(e => e.AcademicDressRequirements2)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("Academic_dress_requirements_2");
+
+                entity.Property(e => e.AwardId).HasColumnName("AwardID");
+
+                entity.Property(e => e.Awarded).HasColumnType("date");
+
+                entity.Property(e => e.Completion).HasColumnType("date");
+
+                entity.Property(e => e.IncludeInSdr)
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasColumnName("Include_in_SDR")
+                    .IsFixedLength();
+
+                entity.Property(e => e.Major1)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("Major_1");
+
+                entity.Property(e => e.Major2)
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasColumnName("Major_2");
+
+                entity.Property(e => e.PersonCode).HasColumnName("Person_code");
+
+                entity.Property(e => e.YearAchieved)
+                    .HasColumnType("date")
+                    .HasColumnName("Year_achieved");
+
+                entity.HasOne(d => d.Award)
+                    .WithMany(p => p.GraduandAwards)
+                    .HasForeignKey(d => d.AwardId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Graduand_Award_Award");
+
+                entity.HasOne(d => d.PersonCodeNavigation)
+                    .WithMany(p => p.GraduandAwards)
+                    .HasForeignKey(d => d.PersonCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Graduand_Award_Graduand");
             });
 
             modelBuilder.Entity<Graduation>(entity =>

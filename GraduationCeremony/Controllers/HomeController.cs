@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using OfficeOpenXml;
 using GraduationCeremony.Models.DB;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Reflection.PortableExecutable;
 
 
 namespace GraduationCeremony.Controllers
@@ -45,54 +48,74 @@ namespace GraduationCeremony.Controllers
                         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                         ExcelPackage package = new ExcelPackage();
                         package.Load(stream);
-                        //checking if excel has worksheet
+
                         if (package.Workbook.Worksheets.Count > 0)
                         {
                             ExcelWorksheet worksheet = package.Workbook.Worksheets.First();
-                            //checks if the worksheet is not empty
+
                             if (worksheet != null && worksheet.Dimension != null)
                             {
-                                //list for Awards
                                 var awards = new List<Award>();
-                                //list for graduands
                                 var graduands = new List<Graduand>();
-                                //storing error messages
+
                                 var errors = new HashSet<string>();
 
                                 int noOfRow = worksheet.Dimension.End.Row;
 
-                                //starting from row 2 since row 1 is heading          
+                                var processedAwardCodes = new HashSet<string>();
+
                                 for (int r = 2; r <= noOfRow; r++)
                                 {
                                     var award = ExtractAward(worksheet, r);
                                     var graduand = ExtractGraduand(worksheet, r);
-                                    var awardErrors = ValidateAward(award);
 
-                                    if (awardErrors.Count == 0)
+                                    if (award != null)
                                     {
-                                        awards.Add(award);
+                                        if (processedAwardCodes.Add(award.AwardCode))
+                                        {
+                                            var awardErrors = ValidateAward(award);
+
+                                            if (awardErrors.Count == 0)
+                                            {
+                                                awards.Add(award);
+                                                graduands.Add(graduand);
+                                            }
+                                            else
+                                            {
+                                                errors.UnionWith(awardErrors);
+                                            }
+                                        }
                                     }
                                     else
-                                    {
-                                        //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
-                                        errors.UnionWith(awardErrors);
+                                    { 
+                                        errors.Add("Award not found for row " + r);
                                     }
-                                    graduands.Add(graduand);                        
                                 }
-                                
 
-                                if (errors.Count > 0)
+                                if (errors.Count == 0)
                                 {
-                                    ViewBag.Errors = errors;
-                                }
-                                else
-                                {
-                                    //for add range: https://stackoverflow.com/questions/38887434/cannot-convert-from-string-to-system-collections-generic-list-string
-                                    //adding to DB
                                     _context.Awards.AddRange(awards);
                                     _context.Graduands.AddRange(graduands);
                                     _context.SaveChanges();
-                                    ViewBag.SuccessMessage = "Excel is successfully uploaded";
+
+                                    // add GraduandAward records
+                                 /*   var graduandAwards = new List<GraduandAward>();
+                                    for (int r = 2; r <= noOfRow; r++)
+                                    {
+                                        var graduandAward = ExtractGraduandAward(worksheet, r);
+                                        if (graduandAward != null)
+                                        {
+                                            graduandAwards.Add(graduandAward);
+                                        }
+                                    }*/
+
+                                  //  _context.GraduandAwards.AddRange(graduandAwards);
+                                  //  _context.SaveChanges(); // Save GraduandAward records
+                                }
+
+                                else
+                                {
+                                    ViewBag.Errors = errors;
                                 }
                             }
                             else
@@ -100,7 +123,7 @@ namespace GraduationCeremony.Controllers
                                 ViewBag.ErrorMessage = "This Excel is empty.";
                             }
                         }
-                   }
+                    }
                 }
             }
             catch (Exception ex)
@@ -110,6 +133,8 @@ namespace GraduationCeremony.Controllers
 
             return View("ImportExcel");
         }
+
+
 
         //retrieving the actual values by row
         private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)
@@ -159,18 +184,20 @@ namespace GraduationCeremony.Controllers
         //worksheet parameter to have the extracting work
         private Award ExtractAward(ExcelWorksheet worksheet, int row)
         {
-            //creating new Award object to store each one
+            // Create a new Award object
             Award award = new Award
             {
-                AwardCode = GetValue(worksheet, row, 5),
+                AwardCode = GetValue(worksheet, row, 5), 
                 QualificationCode = GetValue(worksheet, row, 6),
                 AwardDescription = GetValue(worksheet, row, 7),
                 Level = GetValue(worksheet, row, 8),
                 Credits = int.Parse(GetValue(worksheet, row, 11)),
                 School = GetValue(worksheet, row, 36)
             };
+
             return award;
         }
+
 
         // Validation method for Award 
         private List<string> ValidateAward(Award award)
@@ -204,6 +231,37 @@ namespace GraduationCeremony.Controllers
 
             return errors;
         }
+
+        private GraduandAward ExtractGraduandAward(ExcelWorksheet worksheet, int row)
+        {
+            string awardCode = GetValue(worksheet, row, 5); 
+
+            // check if an Award with the same AwardCode exists in the database
+            var award = _context.Awards.FirstOrDefault(a => a.AwardCode == awardCode);
+
+            // create a new GraduandAward object
+            GraduandAward graduandAward = new GraduandAward
+            {
+                PersonCode = int.Parse(GetValue(worksheet, row, 1)),
+                Major1 = GetValue(worksheet, row, 9),
+                Major2 = GetValue(worksheet, row, 10),
+                Completion = DateTime.Parse(GetValue(worksheet, row, 12)),
+                Awarded = DateTime.Parse(GetValue(worksheet, row, 13)),
+                YearAchieved = DateTime.Parse(GetValue(worksheet, row, 14)),
+                IncludeInSdr = GetValue(worksheet, row, 15),
+                AcademicDressRequirements1 = GetValue(worksheet, row, 37),
+                AcademicDressRequirements2 = GetValue(worksheet, row, 38)
+            };
+
+            if (award != null)
+            {
+                // award found
+                graduandAward.AwardId = award.AwardId;
+            }
+
+            return graduandAward;
+        }
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

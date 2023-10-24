@@ -5,6 +5,11 @@ namespace GraduationCeremony.Models.DB
 {
     public partial class Graduand
     {
+        public Graduand()
+        {
+            GraduandAwards = new HashSet<GraduandAward>();
+        }
+
         public int PersonCode { get; set; }
         public string Forenames { get; set; } = null!;
         public string Surname { get; set; } = null!;
@@ -32,5 +37,7 @@ namespace GraduationCeremony.Models.DB
         public string? School { get; set; }
         public string? Comments { get; set; }
         public string? DateRecordAddedToMasterList { get; set; }
+
+        public virtual ICollection<GraduandAward> GraduandAwards { get; set; }
     }
 }
