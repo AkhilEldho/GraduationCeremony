@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Versioning;
 using System.Collections;
 using System.Drawing.Printing;
+using System.Linq;
 using System.Security.Principal;
 
 namespace GraduationCeremony.Controllers
@@ -12,8 +14,6 @@ namespace GraduationCeremony.Controllers
     public class CheckInController : Controller
     {
         private readonly GraduationContext _context;
-
-        public ArrayList students = new ArrayList();
 
         public CheckInController(GraduationContext context)
         {
@@ -30,12 +30,9 @@ namespace GraduationCeremony.Controllers
             var graduants = from g in _context.Graduations select g;
             if (!String.IsNullOrEmpty(searchString))
             {
-                graduants = graduants.Where(s => s.CollegeEmail.Contains(searchString));
-
-                //Adding to checkin list
-                students.Add(graduants);
-
                 var grads = await graduants.ToListAsync();
+
+                graduants = graduants.Where(s => s.CollegeEmail.Contains(searchString));
 
                 grads = grads
                         .OrderBy(item => item.Level)
@@ -62,6 +59,19 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
+        public async void checkIn(int personCode)
+        {
+            var graduants = from g in _context.Graduations select g;
+            var grads = await graduants.ToListAsync();
+
+            graduants = graduants.Where(s => s.PersonCode == personCode);
+
+            Graduation student = (Graduation)graduants.Where(s => s.PersonCode == personCode);
+
+            CheckedIn();
+
+        }
+
         public IActionResult CheckedIn()
         {
             return View();
@@ -70,7 +80,8 @@ namespace GraduationCeremony.Controllers
         //TEST URL: localhost:7204/CheckIn/CheckedInList
         public IActionResult CheckedInList()
         {
-            return View(students);
+
+            return View();
         }
 
 
@@ -79,6 +90,8 @@ namespace GraduationCeremony.Controllers
         {
             return View();
         }
+
+
 
         // GET: CheckInController/Create
         public ActionResult Create()

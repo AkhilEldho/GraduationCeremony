@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using GraduationCeremony.Models.DB;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using X.PagedList;
 
 namespace GraduationCeremony.Controllers
 {
@@ -23,8 +24,11 @@ namespace GraduationCeremony.Controllers
         [Authorize]
         // GET: Graduation
         //Sorting the graduants for the presenter 
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int? page)
         {
+            // if no page was specified in the querystring, deafult to the first page 
+            var pageNumber = page ?? 1; 
+
             var graduants = from g in _context.Graduations select g;
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -51,7 +55,7 @@ namespace GraduationCeremony.Controllers
                         .ThenBy(item => item.Forenames).ToList();
                 }
 
-                return View(graduations);
+                return View(graduations.ToPagedList(pageNumber, 10));
             }
 
             return View();

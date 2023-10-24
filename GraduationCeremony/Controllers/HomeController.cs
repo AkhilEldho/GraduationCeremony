@@ -24,13 +24,8 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
-        [Authorize(Roles ="Staff")]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         //import excel view
+        [Authorize(Roles = "Staff")]
         public IActionResult ImportExcel()
         {
             return View();

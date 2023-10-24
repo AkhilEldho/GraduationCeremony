@@ -1,4 +1,7 @@
-﻿@model IEnumerable<GraduationCeremony.Models.DB.Graduation>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Web.Common;
+@model IPagedList<GraduationCeremony.Models.DB.Graduation>
 
 @{
     ViewData["Title"] = "Index";
@@ -22,7 +25,6 @@
             <div id="autoSuggestContainer" style="position:absolute;display:none;z-index:100;">
             </div>
         </div>
-
     </p>
 </form>
 
@@ -31,124 +33,124 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PersonCode)
+                @Html.DisplayNameFor(model => model.First().PersonCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Forenames)
+                @Html.DisplayNameFor(model => model.First().Forenames)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Surname)
+                @Html.DisplayNameFor(model => model.First().Surname)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nsn)
+                @Html.DisplayNameFor(model => model.First().Nsn)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AwardCode)
+                @Html.DisplayNameFor(model => model.First().AwardCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QualificationCode)
+                @Html.DisplayNameFor(model => model.First().QualificationCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AwardDescription)
+                @Html.DisplayNameFor(model => model.First().AwardDescription)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Level)
+                @Html.DisplayNameFor(model => model.First().Level)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Major1)
+                @Html.DisplayNameFor(model => model.First().Major1)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Major2)
+                @Html.DisplayNameFor(model => model.First().Major2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Credits)
+                @Html.DisplayNameFor(model => model.First().Credits)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Completion)
+                @Html.DisplayNameFor(model => model.First().Completion)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Awarded)
+                @Html.DisplayNameFor(model => model.First().Awarded)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearArchieved)
+                @Html.DisplayNameFor(model => model.First().YearArchieved)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IncludeInSdr)
+                @Html.DisplayNameFor(model => model.First().IncludeInSdr)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Status)
+                @Html.DisplayNameFor(model => model.First().Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BadDebtStatus)
+                @Html.DisplayNameFor(model => model.First().BadDebtStatus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
+                @Html.DisplayNameFor(model => model.First().DateOfBirth)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ethnicity1)
+                @Html.DisplayNameFor(model => model.First().Ethnicity1)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ethnicity2)
+                @Html.DisplayNameFor(model => model.First().Ethnicity2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ethnicity3)
+                @Html.DisplayNameFor(model => model.First().Ethnicity3)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Iwi1)
+                @Html.DisplayNameFor(model => model.First().Iwi1)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Iwi2)
+                @Html.DisplayNameFor(model => model.First().Iwi2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Iwi3)
+                @Html.DisplayNameFor(model => model.First().Iwi3)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine1)
+                @Html.DisplayNameFor(model => model.First().AddressLine1)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine2)
+                @Html.DisplayNameFor(model => model.First().AddressLine2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine3)
+                @Html.DisplayNameFor(model => model.First().AddressLine3)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AddressLine4)
+                @Html.DisplayNameFor(model => model.First().AddressLine4)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Town)
+                @Html.DisplayNameFor(model => model.First().Town)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostCode)
+                @Html.DisplayNameFor(model => model.First().PostCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CollegeEmail)
+                @Html.DisplayNameFor(model => model.First().CollegeEmail)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalEmail)
+                @Html.DisplayNameFor(model => model.First().PersonalEmail)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Mobile)
+                @Html.DisplayNameFor(model => model.First().Mobile)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Telephone)
+                @Html.DisplayNameFor(model => model.First().Telephone)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Campus)
+                @Html.DisplayNameFor(model => model.First().Campus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.School)
+                @Html.DisplayNameFor(model => model.First().School)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AcademicDressRequirements1)
+                @Html.DisplayNameFor(model => model.First().AcademicDressRequirements1)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AcademicDressRequirements2)
+                @Html.DisplayNameFor(model => model.First().AcademicDressRequirements2)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Comments)
+                @Html.DisplayNameFor(model => model.First().Comments)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateRecordAddedToMasterList)
+                @Html.DisplayNameFor(model => model.First().DateRecordAddedToMasterList)
             </th>
             <th></th>
         </tr>
@@ -286,6 +288,17 @@
     </tbody>
 </table>
 
+@*code for display number of pages *@
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+    })
+
+
+@*Javascript for the auto suggestion*@
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
         if (searchString.length < 3) {
