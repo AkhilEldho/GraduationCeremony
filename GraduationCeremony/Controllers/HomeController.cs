@@ -55,8 +55,16 @@ namespace GraduationCeremony.Controllers
 
                             if (worksheet != null && worksheet.Dimension != null)
                             {
+                                //getting all the list to search if excel data exists in db already
+                                var awardsFullList = from g in _context.Awards select g;
                                 var awards = new List<Award>();
+
+
+                                var graduandsFullList = from g in _context.Graduands select g;
                                 var graduands = new List<Graduand>();
+
+
+                                var gradAwardsFullList = from g in _context.GraduandAwards select g;
                                 var graduandAwards = new List<GraduandAward>();
 
                                 var errors = new HashSet<string>();
