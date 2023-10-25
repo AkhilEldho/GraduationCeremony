@@ -142,20 +142,20 @@ namespace GraduationCeremony.Models.DB
 
                 entity.ToTable("Award");
 
-                entity.Property(e => e.AwardCode).HasMaxLength(15);
+                entity.Property(e => e.AwardCode).HasMaxLength(150);
 
                 entity.Property(e => e.AwardDescription)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("Award_description");
 
-                entity.Property(e => e.Level).HasMaxLength(10);
+                entity.Property(e => e.Level).HasMaxLength(150);
 
                 entity.Property(e => e.QualificationCode)
-                    .HasMaxLength(15)
+                    .HasMaxLength(150)
                     .HasColumnName("Qualification_code");
 
                 entity.Property(e => e.School)
-                    .HasMaxLength(15)
+                    .HasMaxLength(150)
                     .IsUnicode(false);
             });
 
@@ -312,12 +312,6 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Town)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.PersonCodeNavigation)
-                    .WithOne(p => p.Graduand)
-                    .HasForeignKey<Graduand>(d => d.PersonCode)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Graduand_CheckIn");
             });
 
             modelBuilder.Entity<GraduandAward>(entity =>
@@ -347,18 +341,6 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.YearAchieved)
                     .HasColumnType("date")
                     .HasColumnName("Year_achieved");
-
-                entity.HasOne(d => d.AwardCodeNavigation)
-                    .WithMany(p => p.GraduandAwards)
-                    .HasForeignKey(d => d.AwardCode)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Graduand_Award_Award");
-
-                entity.HasOne(d => d.PersonCodeNavigation)
-                    .WithMany(p => p.GraduandAwards)
-                    .HasForeignKey(d => d.PersonCode)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Graduand_Award_Graduand");
             });
 
             modelBuilder.Entity<Graduation>(entity =>

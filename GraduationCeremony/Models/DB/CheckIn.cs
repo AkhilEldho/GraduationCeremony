@@ -16,7 +16,5 @@ namespace GraduationCeremony.Models.DB
         public DateTime? DateOfBirth { get; set; }
         public string? CollegeEmail { get; set; }
         public int? Mobile { get; set; }
-
-        public virtual Graduand? Graduand { get; set; }
     }
 }
