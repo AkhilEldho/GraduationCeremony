@@ -13,9 +13,9 @@ namespace GraduationCeremony.Controllers
 {
     public class CheckInController : Controller
     {
-        private readonly GraduationContext _context;
+        private readonly S232_Project01_TestContext _context;
 
-        public CheckInController(GraduationContext context)
+        public CheckInController(S232_Project01_TestContext context)
         {
             _context = context;
         }

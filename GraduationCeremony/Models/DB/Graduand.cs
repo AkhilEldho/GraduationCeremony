@@ -32,12 +32,10 @@ namespace GraduationCeremony.Models.DB
         public string? CollegeEmail { get; set; }
         public string? PersonalEmail { get; set; }
         public string? Mobile { get; set; }
-        public string? Telephone { get; set; }
         public string? Campus { get; set; }
         public string? School { get; set; }
-        public string? Comments { get; set; }
-        public string? DateRecordAddedToMasterList { get; set; }
 
+        public virtual CheckIn PersonCodeNavigation { get; set; } = null!;
         public virtual ICollection<GraduandAward> GraduandAwards { get; set; }
     }
 }

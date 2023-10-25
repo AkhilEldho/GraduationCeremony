@@ -17,18 +17,16 @@ namespace GraduationCeremony.Models.DB
         public string? Major2 { get; set; }
         public short? Credits { get; set; }
         public DateTime? Completion { get; set; }
-        public DateTime? Awarded { get; set; }
-        public DateTime? YearArchieved { get; set; }
-        public bool? IncludeInSdr { get; set; }
-        public string? Status { get; set; }
+        public string? Awarded { get; set; }
+        public short? YearArchieved { get; set; }
         public byte? BadDebtStatus { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
         public string? Ethnicity2 { get; set; }
         public string? Ethnicity3 { get; set; }
         public string? Iwi1 { get; set; }
-        public short? Iwi2 { get; set; }
-        public short? Iwi3 { get; set; }
+        public string? Iwi2 { get; set; }
+        public string? Iwi3 { get; set; }
         public string? AddressLine1 { get; set; }
         public string? AddressLine2 { get; set; }
         public string? AddressLine3 { get; set; }
@@ -38,12 +36,7 @@ namespace GraduationCeremony.Models.DB
         public string? CollegeEmail { get; set; }
         public string? PersonalEmail { get; set; }
         public int? Mobile { get; set; }
-        public string? Telephone { get; set; }
         public string? Campus { get; set; }
         public string? School { get; set; }
-        public string? AcademicDressRequirements1 { get; set; }
-        public string? AcademicDressRequirements2 { get; set; }
-        public string? Comments { get; set; }
-        public DateTime? DateRecordAddedToMasterList { get; set; }
     }
 }

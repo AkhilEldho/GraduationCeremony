@@ -57,6 +57,7 @@ namespace GraduationCeremony.Controllers
                             {
                                 var awards = new List<Award>();
                                 var graduands = new List<Graduand>();
+                                var graduandAwards = new List<GraduandAward>();
 
                                 var errors = new HashSet<string>();
 
@@ -66,8 +67,9 @@ namespace GraduationCeremony.Controllers
 
                                 for (int r = 2; r <= noOfRow; r++)
                                 {
-                                    var award = ExtractAward(worksheet, r);
-                                    var graduand = ExtractGraduand(worksheet, r);
+                                    Award award = ExtractAward(worksheet, r);
+                                    Graduand graduand = ExtractGraduand(worksheet, r);
+                                    GraduandAward graduandAward = ExtractGraduandAward(worksheet, r);
 
                                     if (award != null)
                                     {
@@ -77,8 +79,18 @@ namespace GraduationCeremony.Controllers
 
                                             if (awardErrors.Count == 0)
                                             {
-                                                awards.Add(award);
-                                                graduands.Add(graduand);
+                                                if(!awards.Contains(award))
+                                                {
+                                                    awards.Add(award);
+                                                }
+                                                if(!graduands.Contains(graduand))
+                                                {
+                                                    graduands.Add(graduand);
+                                                }
+                                                if(!graduandAwards.Contains(graduandAward))
+                                                {
+                                                    graduandAwards.Add(graduandAward);
+                                                }
                                             }
                                             else
                                             {
@@ -95,22 +107,11 @@ namespace GraduationCeremony.Controllers
                                 if (errors.Count == 0)
                                 {
                                     _context.Awards.AddRange(awards);
-                                    _context.Graduands.AddRange(graduands);
                                     _context.SaveChanges();
 
-                                    // add GraduandAward records
-                                 /*   var graduandAwards = new List<GraduandAward>();
-                                    for (int r = 2; r <= noOfRow; r++)
-                                    {
-                                        var graduandAward = ExtractGraduandAward(worksheet, r);
-                                        if (graduandAward != null)
-                                        {
-                                            graduandAwards.Add(graduandAward);
-                                        }
-                                    }*/
-
-                                  //  _context.GraduandAwards.AddRange(graduandAwards);
-                                  //  _context.SaveChanges(); // Save GraduandAward records
+                                    _context.Graduands.AddRange(graduands);
+                                    _context.GraduandAwards.AddRange(graduandAwards);
+                                    _context.SaveChanges();
                                 }
 
                                 else
@@ -170,11 +171,8 @@ namespace GraduationCeremony.Controllers
                 CollegeEmail = GetValue(worksheet, row, 31),
                 PersonalEmail = GetValue(worksheet, row, 32),
                 Mobile = GetValue(worksheet, row, 33),
-                Telephone = GetValue(worksheet, row, 34),
                 Campus = GetValue(worksheet, row, 35),
                 School = GetValue(worksheet, row, 36),
-                Comments = GetValue(worksheet, row, 39),
-                DateRecordAddedToMasterList = GetValue(worksheet, row, 40),
             };
             return graduand;
         }
@@ -242,21 +240,19 @@ namespace GraduationCeremony.Controllers
             // create a new GraduandAward object
             GraduandAward graduandAward = new GraduandAward
             {
+                AwardCode = GetValue(worksheet, row, 5),
                 PersonCode = int.Parse(GetValue(worksheet, row, 1)),
                 Major1 = GetValue(worksheet, row, 9),
                 Major2 = GetValue(worksheet, row, 10),
                 Completion = DateTime.Parse(GetValue(worksheet, row, 12)),
                 Awarded = DateTime.Parse(GetValue(worksheet, row, 13)),
                 YearAchieved = DateTime.Parse(GetValue(worksheet, row, 14)),
-                IncludeInSdr = GetValue(worksheet, row, 15),
-                AcademicDressRequirements1 = GetValue(worksheet, row, 37),
-                AcademicDressRequirements2 = GetValue(worksheet, row, 38)
             };
 
             if (award != null)
             {
                 // award found
-                graduandAward.AwardId = award.AwardId;
+                graduandAward.AwardCode = award.AwardCode;
             }
 
             return graduandAward;
