@@ -107,8 +107,6 @@ namespace GraduationCeremony.Controllers
                                 if (errors.Count == 0)
                                 {
                                     _context.Awards.AddRange(awards);
-                                    _context.SaveChanges();
-
                                     _context.Graduands.AddRange(graduands);
                                     _context.GraduandAwards.AddRange(graduandAwards);
                                     _context.SaveChanges();

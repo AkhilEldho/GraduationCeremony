@@ -320,7 +320,7 @@ namespace GraduationCeremony.Models.DB
 
                 entity.Property(e => e.GraduandAwardId).HasColumnName("Graduand_Award_ID");
 
-                entity.Property(e => e.AwardCode).HasMaxLength(15);
+                entity.Property(e => e.AwardCode).HasMaxLength(150);
 
                 entity.Property(e => e.Awarded).HasColumnType("date");
 
@@ -341,6 +341,18 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.YearAchieved)
                     .HasColumnType("date")
                     .HasColumnName("Year_achieved");
+
+                entity.HasOne(d => d.AwardCodeNavigation)
+                    .WithMany(p => p.GraduandAwards)
+                    .HasForeignKey(d => d.AwardCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Graduand_Award_Award");
+
+                entity.HasOne(d => d.PersonCodeNavigation)
+                    .WithMany(p => p.GraduandAwards)
+                    .HasForeignKey(d => d.PersonCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Graduand_Award_Graduand");
             });
 
             modelBuilder.Entity<Graduation>(entity =>
