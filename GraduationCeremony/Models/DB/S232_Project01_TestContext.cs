@@ -305,8 +305,6 @@ namespace GraduationCeremony.Models.DB
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Status).HasMaxLength(50);
-
                 entity.Property(e => e.Surname).HasMaxLength(50);
 
                 entity.Property(e => e.Town)

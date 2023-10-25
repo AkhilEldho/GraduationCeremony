@@ -110,6 +110,8 @@ namespace GraduationCeremony.Controllers
                                     _context.Graduands.AddRange(graduands);
                                     _context.GraduandAwards.AddRange(graduandAwards);
                                     _context.SaveChanges();
+
+                                    ViewBag.Errors = "Upload Successful";
                                 }
 
                                 else
@@ -151,7 +153,6 @@ namespace GraduationCeremony.Controllers
                 Forenames = GetValue(worksheet, row, 2),
                 Surname = GetValue(worksheet, row, 3),
                 Nsn = int.Parse(GetValue(worksheet, row, 4)),
-                Status = GetValue(worksheet, row, 16),
                 BadDebtStatus = GetValue(worksheet, row, 17),
                 DateOfBirth = DateTime.Parse(GetValue(worksheet, row, 18)),
                 Ethnicity1 = GetValue(worksheet, row, 19),

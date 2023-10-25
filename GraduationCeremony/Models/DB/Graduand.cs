@@ -14,7 +14,6 @@ namespace GraduationCeremony.Models.DB
         public string Forenames { get; set; } = null!;
         public string Surname { get; set; } = null!;
         public int Nsn { get; set; }
-        public string Status { get; set; } = null!;
         public string? BadDebtStatus { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
