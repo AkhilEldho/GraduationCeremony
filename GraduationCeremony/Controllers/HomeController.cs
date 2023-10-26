@@ -7,7 +7,7 @@ using GraduationCeremony.Models.DB;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection.PortableExecutable;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace GraduationCeremony.Controllers
 {
@@ -37,7 +37,7 @@ namespace GraduationCeremony.Controllers
 
         //based from: https://medium.com/c-sharp-progarmming/convert-excel-to-data-table-in-asp-net-core-using-ep-plus-b59533e162b3
         [HttpPost]
-        public IActionResult Upload(FileUploadModel model)
+        public async Task<IActionResult> UploadAsync(FileUploadModel model)
         {
             try
             {
@@ -55,23 +55,28 @@ namespace GraduationCeremony.Controllers
 
                             if (worksheet != null && worksheet.Dimension != null)
                             {
-                                //getting all the list to search if excel data exists in db already
-                                var awardsFullList = from g in _context.Awards select g;
-                                var awards = new List<Award>();
+                                //getting existing data from db
+                                var awardsFull = from g in _context.Awards select g;
+                                var graduandsFull = from g in _context.Graduands select g;
+                                var gradAwardsFull = from g in _context.GraduandAwards select g;
 
+                                //converting db to list
+                                List<Award>awardsFullList = await awardsFull.ToListAsync();
+                                List<Graduand>graduandsFullList = await graduandsFull.ToListAsync();
+                                List<GraduandAward>graduandAwardsFullList = await gradAwardsFull.ToListAsync();
 
-                                var graduandsFullList = from g in _context.Graduands select g;
-                                var graduands = new List<Graduand>();
-
-
-                                var gradAwardsFullList = from g in _context.GraduandAwards select g;
-                                var graduandAwards = new List<GraduandAward>();
+                                //new list to save the excel data
+                                List<Award> awards = new List<Award>();
+                                List<Graduand> graduands = new List<Graduand>();
+                                List<GraduandAward> graduandAwards = new List<GraduandAward>();
 
                                 var errors = new HashSet<string>();
 
                                 int noOfRow = worksheet.Dimension.End.Row;
 
                                 var processedAwardCodes = new HashSet<string>();
+                                var processedGraduandCodes = new HashSet<string>();
+                                var processedGraduandAwardCodes = new HashSet<string>();
 
                                 for (int r = 2; r <= noOfRow; r++)
                                 {
@@ -79,6 +84,7 @@ namespace GraduationCeremony.Controllers
                                     Graduand graduand = ExtractGraduand(worksheet, r);
                                     GraduandAward graduandAward = ExtractGraduandAward(worksheet, r);
 
+                                    //validating award
                                     if (award != null)
                                     {
                                         if (processedAwardCodes.Add(award.AwardCode))
@@ -87,17 +93,10 @@ namespace GraduationCeremony.Controllers
 
                                             if (awardErrors.Count == 0)
                                             {
-                                                if(!awards.Contains(award))
+                                                //checking if data exists already
+                                                if(awardsFullList.Find(x => x.AwardCode == award.AwardCode) == null)
                                                 {
                                                     awards.Add(award);
-                                                }
-                                                if(!graduands.Contains(graduand))
-                                                {
-                                                    graduands.Add(graduand);
-                                                }
-                                                if(!graduandAwards.Contains(graduandAward))
-                                                {
-                                                    graduandAwards.Add(graduandAward);
                                                 }
                                             }
                                             else
@@ -110,18 +109,56 @@ namespace GraduationCeremony.Controllers
                                     { 
                                         errors.Add("Award not found for row " + r);
                                     }
+
+                                    //validating graduand
+                                    if(graduand != null)
+                                    {
+                                        //checking if data exists already
+                                        if (processedGraduandCodes.Add(graduand.PersonCode.ToString()))
+                                        {
+                                            if (graduandsFullList.Find(x => x.PersonCode == graduand.PersonCode) == null)
+                                            {
+                                                graduands.Add(graduand);
+                                            }
+                                        }
+
+                                    }
+
+                                    //validating graduand award
+                                    if (graduandAward != null)
+                                    {
+                                        //checking if data exists already
+                                        if (processedGraduandAwardCodes.Add(graduandAward.PersonCode.ToString()))
+                                        {
+                                            if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode) == null)
+                                            {
+                                                graduandAwards.Add(graduandAward);
+                                            }
+                                        }
+
+                                    }
                                 }
 
-                                if (errors.Count == 0)
+                                //only saving those with changes
+                                if (awards.Count != awardsFullList.Count())
                                 {
                                     _context.Awards.AddRange(awards);
-                                    _context.Graduands.AddRange(graduands);
-                                    _context.GraduandAwards.AddRange(graduandAwards);
                                     _context.SaveChanges();
-
-                                    ViewBag.Errors = "Upload Successful";
                                 }
 
+                                //only saving those with changes
+                                if (graduands.Count != graduandsFullList.Count())
+                                {
+                                    _context.Graduands.AddRange(graduands);
+                                    _context.SaveChanges();
+                                }
+
+                                //only saving those with changes
+                                if (graduandAwards.Count != graduandAwardsFullList.Count())
+                                {
+                                    _context.GraduandAwards.AddRange(graduandAwards);
+                                    _context.SaveChanges();
+                                }
                                 else
                                 {
                                     ViewBag.Errors = errors;
