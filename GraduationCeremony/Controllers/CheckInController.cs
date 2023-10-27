@@ -27,19 +27,56 @@ namespace GraduationCeremony.Controllers
 
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
-            var graduants = from g in _context.Graduations select g;
+            //getting all the relevant tables to search
+            var graduants = from g in _context.Graduands select g;
+            var graduantAwards = from g in _context.GraduandAwards select g;
+            var awards = from g in _context.Awards select g;
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                var grads = await graduants.ToListAsync();
+                //converting db to list for easier search
+                List<Graduand> grads = await graduants.ToListAsync();
+                List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
+                List<Award> awardsList = await awards.ToListAsync();
 
-                graduants = graduants.Where(s => s.CollegeEmail.Contains(searchString));
+                Graduand grad = new Graduand();
+                GraduandAward gradAward = new GraduandAward();
+                Award award = new Award();
 
-                grads = grads
-                        .OrderBy(item => item.Level)
-                        .ThenBy(item => item.AwardDescription)
-                        .ThenBy(item => item.Forenames).ToList();
+                //searching the grad
+                grad = grads.Find(g => g.CollegeEmail.Contains(searchString));
 
-                return View(grads);
+                if(grad != null)
+                {
+                    gradAward = gradAwards.Find(g => g.PersonCode == grad.PersonCode);
+                    award = awardsList.Find(g => g.AwardCode == gradAward.AwardCode);
+
+                    //Saving them as checkin object
+                    //might be able to simplify it 
+                    CheckIn studentCheckIn = new CheckIn();
+                    studentCheckIn.PersonCode = grad.PersonCode;
+                    studentCheckIn.Forenames = grad.Forenames;
+                    studentCheckIn.Surname = grad.Surname;
+                    studentCheckIn.Nsn = grad.Nsn;
+
+                    studentCheckIn.AwardCode = award.AwardCode;
+                    studentCheckIn.QualificationCode = award.QualificationCode;
+                    studentCheckIn.AwardDescription = award.AwardDescription;
+                    studentCheckIn.Level = award.Level;
+
+                    studentCheckIn.DateOfBirth = grad.DateOfBirth;
+                    studentCheckIn.Mobile = int.Parse(grad.Mobile);
+                    studentCheckIn.CollegeEmail = grad.CollegeEmail;
+
+                    List<CheckIn> checksIn = new List<CheckIn>();
+                    checksIn.Add(studentCheckIn);
+
+                    return View(checksIn);
+                }
+                else
+                {
+                    return View(grads);
+                }
             }
             else
             {
@@ -59,17 +96,45 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
-        public async void checkIn(int personCode)
+        //Function which adds the student to the presenters list
+        public async Task<IActionResult> checkIn(int PersonCode)
         {
-            var graduants = from g in _context.Graduations select g;
-            var grads = await graduants.ToListAsync();
+            //get the details and add it to presenters list
+            var graduants = from g in _context.Graduands select g;
+            var graduantAwards = from g in _context.GraduandAwards select g;
+            var awards = from g in _context.Awards select g;
 
-            graduants = graduants.Where(s => s.PersonCode == personCode);
+            List<Graduand> grads = await graduants.ToListAsync();
+            List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
+            List<Award> awardsList = await awards.ToListAsync();
 
-            Graduation student = (Graduation)graduants.Where(s => s.PersonCode == personCode);
+            Graduand grad = grads.Find(x => x.PersonCode == PersonCode);
+            GraduandAward gradAward = gradAwards.Find(x => x.PersonCode == PersonCode);
+            Award award = awardsList.Find(x => x.AwardCode == gradAward.AwardCode);
 
-            CheckedIn();
+            if (grad != null)
+            {
+                CheckIn student = new CheckIn();
+                student.PersonCode = PersonCode;
+                student.Forenames = grad.Forenames;
+                student.Surname = grad.Surname;
+                student.Nsn = grad.Nsn;
 
+                student.AwardCode = award.AwardCode;
+                student.QualificationCode = award.QualificationCode;
+                student.AwardDescription = award.AwardDescription;
+                student.Level = award.Level;
+
+                student.DateOfBirth = grad.DateOfBirth;
+                student.Mobile = int.Parse(grad.Mobile);
+                student.CollegeEmail = grad.CollegeEmail;
+
+                _context.CheckIns.Add(student);
+                _context.SaveChanges();
+
+            }
+
+            return CheckedIn();
         }
 
         public IActionResult CheckedIn()
@@ -77,11 +142,15 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
-        //TEST URL: localhost:7204/CheckIn/CheckedInList
-        public IActionResult CheckedInList()
+        //The view for the presenters
+        public async Task<IActionResult> CheckedInList()
         {
+            var checkInFull = from g in _context.CheckIns select g;
+            
+            List<CheckIn> checkIn = new List<CheckIn>();
+            checkIn = await checkInFull.ToListAsync();
 
-            return View();
+            return View(checkIn);
         }
 
 
