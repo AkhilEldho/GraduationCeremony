@@ -27,6 +27,9 @@ namespace GraduationCeremony.Controllers
 
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
+            //removing extra space  
+            searchString = searchString?.Trim();
+
             //getting all the relevant tables to search
             var graduants = from g in _context.Graduands select g;
             var graduantAwards = from g in _context.GraduandAwards select g;
@@ -65,7 +68,7 @@ namespace GraduationCeremony.Controllers
                     studentCheckIn.Level = award.Level;
 
                     studentCheckIn.DateOfBirth = grad.DateOfBirth;
-                    studentCheckIn.Mobile = int.Parse(grad.Mobile);
+                    studentCheckIn.Mobile = grad.Mobile;
                     studentCheckIn.CollegeEmail = grad.CollegeEmail;
 
                     List<CheckIn> checksIn = new List<CheckIn>();
@@ -126,15 +129,15 @@ namespace GraduationCeremony.Controllers
                 student.Level = award.Level;
 
                 student.DateOfBirth = grad.DateOfBirth;
-                student.Mobile = int.Parse(grad.Mobile);
+                student.Mobile = grad.Mobile;
                 student.CollegeEmail = grad.CollegeEmail;
 
                 _context.CheckIns.Add(student);
                 _context.SaveChanges();
 
             }
-
-            return CheckedIn();
+            //returning CheckedIn view
+            return View("CheckedIn");
         }
 
         public IActionResult CheckedIn()

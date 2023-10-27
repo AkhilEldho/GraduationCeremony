@@ -171,15 +171,16 @@ namespace GraduationCeremony.Models.DB
                     .HasColumnName("PERSON_CODE");
 
                 entity.Property(e => e.AwardCode)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("AWARD_CODE");
 
                 entity.Property(e => e.AwardDescription)
-                    .HasMaxLength(100)
+                    .HasMaxLength(150)
                     .HasColumnName("AWARD_DESCRIPTION");
 
                 entity.Property(e => e.CollegeEmail)
-                    .HasMaxLength(1)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
                     .HasColumnName("COLLEGE_EMAIL");
 
                 entity.Property(e => e.DateOfBirth)
@@ -191,15 +192,18 @@ namespace GraduationCeremony.Models.DB
                     .HasColumnName("FORENAMES");
 
                 entity.Property(e => e.Level)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("LEVEL");
 
-                entity.Property(e => e.Mobile).HasColumnName("MOBILE");
+                entity.Property(e => e.Mobile)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("MOBILE");
 
                 entity.Property(e => e.Nsn).HasColumnName("NSN");
 
                 entity.Property(e => e.QualificationCode)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .HasColumnName("QUALIFICATION_CODE");
 
                 entity.Property(e => e.Surname)
@@ -255,34 +259,34 @@ namespace GraduationCeremony.Models.DB
                     .HasColumnName("Date_of_Birth");
 
                 entity.Property(e => e.Ethnicity1)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Ethnicity_1");
 
                 entity.Property(e => e.Ethnicity2)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Ethnicity_2");
 
                 entity.Property(e => e.Ethnicity3)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Ethnicity_3");
 
                 entity.Property(e => e.Forenames).HasMaxLength(50);
 
                 entity.Property(e => e.Iwi1)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Iwi_1");
 
                 entity.Property(e => e.Iwi2)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Iwi_2");
 
                 entity.Property(e => e.Iwi3)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Iwi_3");
 
@@ -325,12 +329,12 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Completion).HasColumnType("date");
 
                 entity.Property(e => e.Major1)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Major_1");
 
                 entity.Property(e => e.Major2)
-                    .HasMaxLength(50)
+                    .HasMaxLength(150)
                     .IsUnicode(false)
                     .HasColumnName("Major_2");
 

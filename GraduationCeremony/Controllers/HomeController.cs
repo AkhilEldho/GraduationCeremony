@@ -101,6 +101,7 @@ namespace GraduationCeremony.Controllers
                                             }
                                             else
                                             {
+                                                //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
                                                 errors.UnionWith(awardErrors);
                                             }
                                         }
@@ -142,6 +143,8 @@ namespace GraduationCeremony.Controllers
                                 //only saving those with changes
                                 if (awards.Count != awardsFullList.Count())
                                 {
+                                    //for add range: https://stackoverflow.com/questions/38887434/cannot-convert-from-string-to-system-collections-generic-list-string
+                                    //adding to DB
                                     _context.Awards.AddRange(awards);
                                     _context.SaveChanges();
                                 }
