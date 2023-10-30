@@ -106,10 +106,12 @@ namespace GraduationCeremony.Controllers
             var graduants = from g in _context.Graduands select g;
             var graduantAwards = from g in _context.GraduandAwards select g;
             var awards = from g in _context.Awards select g;
+            var checkIn = from g in _context.CheckIns select g;
 
             List<Graduand> grads = await graduants.ToListAsync();
             List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
             List<Award> awardsList = await awards.ToListAsync();
+            List<CheckIn> checkInList = await checkIn.ToListAsync();
 
             Graduand grad = grads.Find(x => x.PersonCode == PersonCode);
             GraduandAward gradAward = gradAwards.Find(x => x.PersonCode == PersonCode);
@@ -131,10 +133,14 @@ namespace GraduationCeremony.Controllers
                 student.DateOfBirth = grad.DateOfBirth;
                 student.Mobile = grad.Mobile;
                 student.CollegeEmail = grad.CollegeEmail;
+                student.OrderInList = gradAward.GraduandAwardId;
 
-                _context.CheckIns.Add(student);
-                _context.SaveChanges();
-
+                if(checkInList.Find(x => x.OrderInList == student.OrderInList) == null)
+                {
+                    _context.CheckIns.Add(student);
+                    _context.CheckIns.OrderBy(item => item.OrderInList);
+                    _context.SaveChanges();
+                }
             }
             //returning CheckedIn view
             return View("CheckedIn");

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection.PortableExecutable;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace GraduationCeremony.Controllers
 {
@@ -159,6 +160,13 @@ namespace GraduationCeremony.Controllers
                                 //only saving those with changes
                                 if (graduandAwards.Count != graduandAwardsFullList.Count())
                                 {
+                                    //ordering the items
+                                    graduandAwards = graduandAwards
+                                        .OrderBy(item => item.AwardCodeNavigation.Level)
+                                        .ThenBy(item => item.AwardCodeNavigation.AwardDescription)
+                                        .ThenBy(item => item.PersonCodeNavigation.Forenames)
+                                        .ToList();
+
                                     _context.GraduandAwards.AddRange(graduandAwards);
                                     _context.SaveChanges();
                                 }
@@ -182,8 +190,6 @@ namespace GraduationCeremony.Controllers
 
             return View("ImportExcel");
         }
-
-
 
         //retrieving the actual values by row
         private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)

@@ -17,10 +17,88 @@ body {
   margin-bottom: 60px;
 }
 
-.divider:after,
-.divider:before {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eee;
+.navbar-light .navbar-brand.site-logo, footer .navbar-brand.site-logo {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border: 2px solid;
+    padding: 3px 5px;
+    color: #fff;
 }
+
+    .navbar-light .navbar-brand.site-logo:hover, footer .navbar-brand.site-logo:hover {
+        color: rgba(255,255,255,0.5);
+    }
+
+nav.main-nav {
+    padding: 0;
+    box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 50%) !important;
+}
+
+    nav.main-nav > div {
+        background: #333;
+        padding: 10px 15px;
+    }
+
+    nav.main-nav.navbar-light .navbar-nav .nav-link {
+        color: #fff;
+        letter-spacing: 0.5px;
+        padding: 5px 15px;
+        font-weight: 600;
+    }
+
+        nav.main-nav.navbar-light .navbar-nav .nav-link:hover {
+            background: #fff;
+            color: #333 !important;
+        }
+
+
+
+
+.pagination-container > .pagination {
+    justify-content: center !important;
+    margin-top: 20px;
+}
+
+    .pagination-container > .pagination > li > .page-link {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        color: #333;
+    }
+
+    .pagination-container > .pagination > li.active > .page-link {
+        background: #333;
+        color: #fff;
+    }
+
+    .pagination-container > .pagination > li > .page-link:focus {
+        box-shadow: none !important;
+    }
+
+
+footer {
+    background: #333;
+    padding: 50px 50px 0px 50px;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+    footer .footer-copyright {
+        margin-bottom: 0;
+        border-top: 1px solid #fff;
+        margin-top: 20px;
+    }
+
+    footer svg {
+        margin-right: 15px;
+        color: #fff;
+    }
+
+    footer .footer-logo {
+        margin-bottom: 10px;
+    }
+
+

@@ -13,8 +13,9 @@ namespace GraduationCeremony.Models.DB
         public string QualificationCode { get; set; } = null!;
         public string AwardDescription { get; set; } = null!;
         public string Level { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; }
-        public string CollegeEmail { get; set; } = null!;
+        public DateTime? DateOfBirth { get; set; }
+        public string? CollegeEmail { get; set; }
         public string? Mobile { get; set; }
+        public int OrderInList { get; set; }
     }
 }

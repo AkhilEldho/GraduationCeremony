@@ -10,6 +10,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.OrderInList)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Forenames)
             </th>
             <th>
@@ -45,6 +48,9 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <th>
+                @Html.DisplayFor(modelItem => item.OrderInList)
+            </th>
             <td>
                 @Html.DisplayFor(modelItem => item.Forenames)
             </td>

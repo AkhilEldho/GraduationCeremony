@@ -162,7 +162,7 @@ namespace GraduationCeremony.Models.DB
             modelBuilder.Entity<CheckIn>(entity =>
             {
                 entity.HasKey(e => e.PersonCode)
-                    .HasName("PK__CheckIn__F2E6F31C55197C43");
+                    .HasName("PK__CheckIn__F2E6F31C63F9CAC6");
 
                 entity.ToTable("CheckIn");
 
