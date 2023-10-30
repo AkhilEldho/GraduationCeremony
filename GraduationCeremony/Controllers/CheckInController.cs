@@ -158,6 +158,7 @@ namespace GraduationCeremony.Controllers
             
             List<CheckIn> checkIn = new List<CheckIn>();
             checkIn = await checkInFull.ToListAsync();
+            checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
 
             return View(checkIn);
         }
