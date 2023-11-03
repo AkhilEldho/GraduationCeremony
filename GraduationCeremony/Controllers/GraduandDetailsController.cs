@@ -35,13 +35,29 @@ namespace GraduationCeremony.Controllers
 
         [HttpGet]
         //NOT WORKING :((
-        public ActionResult Edit(GraduandDetails graduandDetails)
+        public ActionResult Edit(int personCode)
         {
+            int code = personCode;
+
+            var result = (from g in _context.Graduands
+                          join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                          join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                          where g.PersonCode == personCode
+                          select new GraduandDetails
+                          {
+                              graduands = g,
+                              awards = a,
+                              graduandAwards = ga
+                          }).FirstOrDefault();
+
+            GraduandDetails graduandDetails = result;
+
             if (ModelState.IsValid)
             {
-                var graduand = _context.Graduands.FirstOrDefault(g => g.PersonCode == graduandDetails.PersonCode);
+                var graduand = _context.Graduands.FirstOrDefault(g => g.PersonCode == graduandDetails.graduands.PersonCode);
                 var award = _context.Awards.FirstOrDefault(a => a.AwardCode == graduandDetails.awards.AwardCode);
-                var graduandAward = _context.GraduandAwards.FirstOrDefault(ga => ga.PersonCode == graduandDetails.PersonCode);
+                var graduandAward = _context.GraduandAwards.FirstOrDefault(ga => ga.PersonCode == graduandDetails.graduands.PersonCode);
+
                 if (graduand == null)
                 {
                     return NotFound();
@@ -50,9 +66,10 @@ namespace GraduationCeremony.Controllers
                 {
                     graduand.Forenames = graduandDetails.graduands.Forenames;
                 }
+
                 _context.SaveChanges();
 
-                return RedirectToAction("Index");
+                return View(graduandDetails);
             }
             return View(graduandDetails);
         }

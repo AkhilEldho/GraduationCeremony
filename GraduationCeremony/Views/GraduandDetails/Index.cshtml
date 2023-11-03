@@ -31,7 +31,7 @@
                 <td>@item.awards.QualificationCode</td>
                 <td>@item.awards.Level</td>
                 <td>@item.graduandAwards.Major1</td>
-                <td> <a asp-action="Edit" asp-route-graduandDetails="@item.PersonCode">Edit</a></td>
+                <td> <a asp-controller="GraduandDetails" asp-action="Edit" asp-route-personCode="@item.graduands.PersonCode">Edit</a></td>
             </tr>
         }
     </tbody>

@@ -87,7 +87,6 @@
             <td>
                 <!-- https://stackoverflow.com/questions/30020892/taghelper-for-passing-route-values-as-part-of-a-link -->
                 <a asp-controller="CheckIn" asp-action="checkIn" asp-route-PersonCode="@item.PersonCode" class="btn btn-primary">Check In</a>         
-                <div class="alert alert-danger">@item.PersonCode</div>
             </td>
             <td>
                 <a asp-action="Details" asp-route-id="@item.PersonCode">Details</a>
