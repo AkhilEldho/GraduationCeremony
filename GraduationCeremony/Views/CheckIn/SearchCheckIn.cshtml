@@ -1,98 +1,66 @@
-﻿@model IEnumerable<GraduationCeremony.Models.DB.CheckIn>
+﻿@model GraduationCeremony.Models.DB.CheckIn
 
 @{
-    ViewData["Title"] = "SearchCheckIn";
+    ViewData["Title"] = "CheckIn Details";
 }
 
-<h1>SearchCheckIn</h1>
+<div class="container">
+    <h1 class="mt-4">Check-In Details</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PersonCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Forenames)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Surname)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Nsn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AwardCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QualificationCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AwardDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Level)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CollegeEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mobile)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Forenames)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nsn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwardCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QualificationCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AwardDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Level)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CollegeEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Mobile)
-            </td>
-            <td>
-                <!-- https://stackoverflow.com/questions/30020892/taghelper-for-passing-route-values-as-part-of-a-link -->
-                <a asp-controller="CheckIn" asp-action="checkIn" asp-route-PersonCode="@item.PersonCode" class="btn btn-primary">Check In</a>         
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.PersonCode">Details</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card">
+        <div class="card-header">
+            Personal Information
+        </div>
+        <div class="card-body">
+            <ul>
+                <li><strong>Person Code:</strong> @Html.DisplayFor(model => model.PersonCode)</li>
+                <li><strong>Forenames:</strong> @Html.DisplayFor(model => model.Forenames)</li>
+                <li><strong>Surname:</strong> @Html.DisplayFor(model => model.Surname)</li>
+                <li><strong>NSN:</strong> @Html.DisplayFor(model => model.Nsn)</li>
+                <li><strong>Date of Birth:</strong> @Html.DisplayFor(model => model.DateOfBirth)</li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="card mt-4">
+        <div class="card-header">
+            Award Information
+        </div>
+        <div class="card-body">
+            <ul>
+                <li><strong>Award Code:</strong> @Html.DisplayFor(model => model.AwardCode)</li>
+                <li><strong>Qualification Code:</strong> @Html.DisplayFor(model => model.QualificationCode)</li>
+                <li><strong>Award Description:</strong> @Html.DisplayFor(model => model.AwardDescription)</li>
+                <li><strong>Level:</strong> @Html.DisplayFor(model => model.Level)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            Contact Information
+        </div>
+        <div class="card-body">
+            <ul>
+                <li><strong>College Email:</strong> @Html.DisplayFor(model => model.CollegeEmail)</li>
+                <li><strong>Mobile:</strong> @Html.DisplayFor(model => model.Mobile)</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <div class="alert alert-danger error-message">@ViewBag.Message</div>
+            <a asp-action="Edit" asp-route-id="@Model.PersonCode" class="btn btn-primary ml-2">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+        }
+        @if (string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <a asp-controller="CheckIn" asp-action="CheckIn" asp-route-PersonCode="@Model.PersonCode" class="btn btn-success">Check In</a>
+            <a asp-action="Edit" asp-route-id="@Model.PersonCode" class="btn btn-primary ml-2">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+        }
+    </div>
+
+</div>

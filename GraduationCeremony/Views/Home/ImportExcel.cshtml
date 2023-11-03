@@ -1,36 +1,87 @@
-﻿
-<form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
-    <label for="file">Select Excel File:</label>
-    <input type="file" name="file" id="file" class="form-control" />
+﻿<style>
+    .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #dcdcdc;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .file-input {
+        margin-bottom: 10px;
+    }
+
+    .submit-button {
+        margin-top: 10px;
+    }
+
+    .alert {
+        margin-top: 10px;
+        text-align: center;
+        padding: 10px;
+    }
+
+    .success-message {
+        background-color: #dff0d8;
+        border-color: #3c763d;
+        color: #3c763d;
+    }
+
+    .error-message {
+        background-color: #f2dede;
+        border-color: #a94442;
+        color: #a94442;
+    }
+
+    .error-heading {
+        font-size: 1.2rem;
+    }
+
+    .error-list {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+</style>
+
+<div class="container form-container">
+    <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file">Select Excel File:</label>
+            <input type="file" name="file" id="file" class="form-control file-input" />
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary submit-button">Import Excel</button>
+    </form>
+
     <br />
-    <button type="submit" class="btn btn-primary">Import Excel</button>
-</form>
 
-<br />
-@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
-{
-    <div class="alert alert-success">@ViewBag.SuccessMessage</div>
-}
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success success-message">@ViewBag.SuccessMessage</div>
+    }
 
-@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-{
-    <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-}
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger error-message">@ViewBag.ErrorMessage</div>
+    }
 
+    @if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
+    {
+        <div class="alert alert-danger error-message">
+            <h4 class="error-heading">Error/s:</h4>
+            <ul class="error-list">
+                @foreach (var error in ViewBag.Errors)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        </div>
+    }
 
-@if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
-{
-    <div class="alert alert-danger">
-        <h4>Error/s:</h4>
-        <ul>
-            @foreach (var error in ViewBag.Errors)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    </div>
-}
-@if (ViewBag.AwardError != null)
-{
-    <div class="alert alert-danger">@ViewBag.AwardError</div>
-}
+    @if (ViewBag.AwardError != null)
+    {
+        <div class="alert alert-danger error-message">@ViewBag.AwardError</div>
+    }
+</div>

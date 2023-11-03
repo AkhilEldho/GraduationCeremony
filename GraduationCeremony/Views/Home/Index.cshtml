@@ -2,23 +2,25 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
+<div class="container text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-<form id="searchForm" action="/Graduation/Index" method="get" autocomplete="off">
-    <p>
-        Search Graduants Name:
-        <div>
-            <input type="text" id="searchString" name="searchString"
-                   autocomplete="off" onkeyup="XAjaxRequest(this.value);"
-                   style="width: 180px" />
-            <input type="submit" value="Search" />
-            <br />
-            <div id="autoSuggestContainer" style="position:absolute;display:none;z-index:100;">
+<div class="container mt-4">
+    <form id="searchForm" action="/Graduation/Index" method="get" autocomplete="off">
+        <div class="form-group">
+            <label for="searchString">Search Graduants Name:</label>
+            <div class="input-group">
+                <input type="text" id="searchString" name="searchString" class="form-control"
+                       autocomplete="off" onkeyup="XAjaxRequest(this.value);" style="width: 180px" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
             </div>
         </div>
-
-    </p>
-</form>
+        <div class="position-relative">
+            <div id="autoSuggestContainer" class="position-absolute" style="display:none; z-index: 100;"></div>
+        </div>
+    </form>
+</div>

@@ -71,10 +71,16 @@ namespace GraduationCeremony.Controllers
                     studentCheckIn.Mobile = grad.Mobile;
                     studentCheckIn.CollegeEmail = grad.CollegeEmail;
 
-                    List<CheckIn> checksIn = new List<CheckIn>();
-                    checksIn.Add(studentCheckIn);
+                    var checkedIn = from c in _context.CheckIns select c;
+                    List<CheckIn> list = await checkedIn.ToListAsync();
+                    CheckIn stud = list.Find(c => c.PersonCode == studentCheckIn.PersonCode);
 
-                    return View(checksIn);
+                    if(stud != null)
+                    {
+                        ViewBag.Message = "Checked In";
+                    }
+
+                    return View(studentCheckIn);
                 }
                 else
                 {
@@ -100,7 +106,7 @@ namespace GraduationCeremony.Controllers
         }
 
         //Function which adds the student to the presenters list
-        public async Task<IActionResult> checkIn(int PersonCode)
+        public async void checkIn(int PersonCode)
         {
             //get the details and add it to presenters list
             var graduants = from g in _context.Graduands select g;
@@ -140,22 +146,36 @@ namespace GraduationCeremony.Controllers
                     _context.CheckIns.Add(student);
                     _context.CheckIns.OrderBy(item => item.OrderInList);
                     _context.SaveChanges();
+
+                    CheckedIn(student.OrderInList);
+                }
+                else
+                {
+                    ViewBag.Message = "Already Checked In";
                 }
             }
-            //returning CheckedIn view
-            return View("CheckedIn");
+            else
+            {
+                ViewBag.Message = "Student Not Found";
+            }
         }
 
-        public IActionResult CheckedIn()
+        public async Task<IActionResult> CheckedIn(int order)
         {
-            return View();
+            var checkInFull = from g in _context.CheckIns select g;
+            List<CheckIn> checkInList = new List<CheckIn>();
+            checkInList = await checkInFull.ToListAsync();
+
+            CheckIn student = checkInList.FirstOrDefault(x => x.OrderInList == order);
+
+            return View(student);
         }
 
         //The view for the presenters
         public async Task<IActionResult> CheckedInList()
         {
             var checkInFull = from g in _context.CheckIns select g;
-            
+
             List<CheckIn> checkIn = new List<CheckIn>();
             checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
@@ -215,24 +235,40 @@ namespace GraduationCeremony.Controllers
         }
 
         // GET: CheckInController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> DeleteAsync(int id)
         {
-            return View();
+            if (id == null || _context.CheckIns == null)
+            {
+                return NotFound();
+            }
+
+            var checkInFull = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
+
+            if (checkInFull == null)
+            {
+                return NotFound();
+            }
+
+            return View(checkInFull);
         }
 
-        // POST: CheckInController/Delete/5
-        [HttpPost]
+        // POST: Graduation/Delete/5
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            try
+            if (_context.Graduations == null)
             {
-                return RedirectToAction(nameof(Index));
+                return Problem("Entity set 'S232_Project01_TestContext.Graduations'  is null.");
             }
-            catch
+            var graduation = await _context.Graduations.FindAsync(id);
+            if (graduation != null)
             {
-                return View();
+                _context.Graduations.Remove(graduation);
             }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }
