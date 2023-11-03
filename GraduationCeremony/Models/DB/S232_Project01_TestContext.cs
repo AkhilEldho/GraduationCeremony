@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using GraduationCeremony.Models.DB;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -27,6 +28,9 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
         public virtual DbSet<Graduation> Graduations { get; set; } = null!;
+
+        //added ViewModel
+        public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
