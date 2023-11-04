@@ -17,7 +17,7 @@ namespace GraduationCeremony.Models.DB
         public int Nsn { get; set; }
         public string? BadDebtStatus { get; set; }
         //removing the time
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
         public string? Ethnicity2 { get; set; }

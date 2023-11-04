@@ -15,7 +15,7 @@ namespace GraduationCeremony.Models.DB
         public string AwardDescription { get; set; } = null!;
         public string Level { get; set; } = null!;
         //removing the time
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public string? CollegeEmail { get; set; }
         public string? Mobile { get; set; }
