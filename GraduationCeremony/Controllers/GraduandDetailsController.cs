@@ -113,6 +113,9 @@ namespace GraduationCeremony.Controllers
             {
                 try
                 {
+                    // remove spaces in awardcode if user added one
+                    graduandDetailsVM.graduandAwards.AwardCode = graduandDetailsVM.graduandAwards.AwardCode.Trim();
+
                     var grad = _context.Graduands.SingleOrDefault(g => g.PersonCode == graduandDetailsVM.graduandAwards.PersonCode);
                     var gradAwards = _context.GraduandAwards.SingleOrDefault(ga => ga.PersonCode == graduandDetailsVM.graduandAwards.PersonCode);
                     var award = _context.Awards.SingleOrDefault(a => a.AwardCode == graduandDetailsVM.awards.AwardCode);
@@ -130,6 +133,7 @@ namespace GraduationCeremony.Controllers
                         //updating graduandawards
                         gradAwards.Major1 = graduandDetailsVM.graduandAwards.Major1;
                         gradAwards.Major2 = graduandDetailsVM.graduandAwards.Major2;
+
 
                         // if user changed award code 
                         if (gradAwards.AwardCode != graduandDetailsVM.graduandAwards.AwardCode)
