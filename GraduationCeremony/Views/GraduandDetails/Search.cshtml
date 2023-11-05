@@ -1,0 +1,44 @@
+﻿@model List<GraduationCeremony.Models.DB.GraduandDetails>
+
+<h1>Graduand Details</h1>
+
+<div class="container">
+    <table class="table table-striped">
+        @if (!string.IsNullOrEmpty(ViewBag.Message))
+        {
+            <div class="alert alert-danger error-message">@ViewBag.Message</div>
+        }
+        <thead class="thead-dark">
+            <tr>
+                <th>Forename</th>
+                <th>Surname</th>
+                <th>Person Code</th>
+                <th>Date of Birth</th>
+                <th>Award Code</th>
+                <th>Award Description</th>
+                <th>Qualification Code</th>
+                <th>Level</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.graduands.Forenames</td>
+                    <td>@item.graduands.Surname</td>
+                    <td>@item.graduandAwards.PersonCode</td>
+                    <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
+                    <td>@item.awards.AwardCode</td>
+                    <td>@item.awards.AwardDescription</td>
+                    <td>@item.awards.QualificationCode</td>
+                    <td>@item.awards.Level</td>
+                    <td>
+                        <a asp-controller="GraduandDetails" asp-action="Edit" asp-route-personCode="@item.graduands.PersonCode" class="btn btn-primary">Edit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

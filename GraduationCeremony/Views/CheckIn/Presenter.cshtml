@@ -1,0 +1,201 @@
+﻿@model IEnumerable<GraduationCeremony.Models.DB.CheckIn>
+
+@{
+    ViewData["Title"] = "Presenter";
+}
+
+<h1>Presenter</h1>
+@* 
+    CODE THAT WORKS 
+    COMMENTED OUT TO TRY DIFFERENT LAYOUTS
+
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Forenames)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Surname)</th>
+            <th>@Html.DisplayNameFor(model => model.First().AwardDescription)</th>
+            <th>@Html.DisplayNameFor(model => model.First().Level)</th>
+            <!-- Add other table headers -->
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+         https://stackoverflow.com/questions/22313842/how-to-apply-indexing-to-ienumerable-expression-type-and-display-data-side-by-si 
+
+            <tr class="person-row" style="display: @(i == 0 ? "table-row" : "none")">
+                <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).Forenames)</td>
+                <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).Surname)</td>
+                <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).AwardDescription)</td>
+                <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).Level)</td>
+                <!-- Add other table data -->
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-between">
+    <button id="prevButton" class="btn" style="background-color: #ff5733; color: #fff;">Previous Person</button>
+    <button id="nextButton" class="btn" style="background-color: #3374ff; color: #fff;">Next Person</button>
+</div> 
+
+<div class="person-profile-container">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
+            <div class="person-details">
+                <div class="person-name">@Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</div>
+                <div class="person-award">
+                    <div class="award-description">@Model.ElementAt(i).AwardDescription</div>
+                    <div class="award-level">@Model.ElementAt(i).Level</div>
+                </div>
+            </div>
+            <div class="person-actions">
+                <a asp-action="Edit" asp-route-id="@Model.ElementAt(i).PersonCode" class="btn btn-primary">Edit</a>
+                <a asp-action="Details" asp-route-id="@Model.ElementAt(i).PersonCode" class="btn btn-info">Details</a>
+                <a asp-action="Delete" asp-route-id="@Model.ElementAt(i).PersonCode" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="d-flex justify-content-between">
+    <button id="prevButton" class="btn" style="background-color: #ff5733; color: #fff;">Previous Person</button>
+    <button id="nextButton" class="btn" style="background-color: #3374ff; color: #fff;">Next Person</button>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        var currentPersonIndex = 0;
+        var personRows = document.querySelectorAll(".person-row");
+
+        function updateDisplay() {
+            for (var i = 0; i < personRows.length; i++) {
+                if (i === currentPersonIndex) {
+                    personRows[i].style.display = "table-row";
+                } else {
+                    personRows[i].style.display = "none";
+                }
+            }
+        }
+
+        function fetchDataAndUpdate() {
+            // Use AJAX to fetch the updated data
+            $.ajax({
+                url: "/Graduation/GetUpdatedPersons",
+                type: "GET",
+                success: function (data) {
+                    // Update the table with new data
+                    // need to handle the table update here
+
+                    // Ensure the current index is within bounds
+                    currentPersonIndex = Math.min(currentPersonIndex, Model.length - 1);
+
+                    updateDisplay();
+                }
+            });
+        }
+
+        // check for updates (every 5 seconds)
+        setInterval(fetchDataAndUpdate, 5000);
+
+        // Event listeners for Next and Previous Buttons
+        document.getElementById("nextButton").addEventListener("click", function () {
+            if (currentPersonIndex < personRows.length - 1) {
+                currentPersonIndex++;
+                updateDisplay();
+            }
+        });
+
+        document.getElementById("prevButton").addEventListener("click", function () {
+            if (currentPersonIndex > 0) {
+                currentPersonIndex--;
+                updateDisplay();
+            }
+        });
+
+        // Initial data fetch and update
+        fetchDataAndUpdate();
+    </script>
+}
+</script>
+*@
+
+<div class="person-profile-container">
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+        <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
+            <div class="person-details">
+                <div class="person-name">@Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</div>
+                <div class="person-award">
+                    <div class="award-description">@Model.ElementAt(i).AwardDescription</div>
+                    <div class="award-level">@Model.ElementAt(i).Level</div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="d-flex justify-content-between">
+    <button id="prevButton" class="btn" style="background-color: #ff5733; color: #fff;">Previous Person</button>
+    <button id="nextButton" class="btn" style="background-color: #3374ff; color: #fff;">Next Person</button>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        var currentPersonIndex = 0;
+        var personProfiles = document.querySelectorAll(".person-profile");
+
+        function updateDisplay() {
+            for (var i = 0; i < personProfiles.length; i++) {
+                if (i === currentPersonIndex) {
+                    personProfiles[i].style.display = "block";
+                } else {
+                    personProfiles[i].style.display = "none";
+                }
+            }
+        }
+
+        function fetchDataAndUpdate() {
+            // Use AJAX to fetch the updated data
+            $.ajax({
+                url: "/Graduation/GetUpdatedPersons",
+                type: "GET",
+                success: function (data) {
+                    // Update the table with new data
+
+                    // Ensure the current index is within bounds
+                    currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
+
+                    updateDisplay();
+                }
+            });
+        }
+
+        // Check for updates (every 5 seconds)
+        setInterval(fetchDataAndUpdate, 5000);
+
+        // Event listeners for Next and Previous Buttons
+        document.getElementById("nextButton").addEventListener("click", function () {
+            if (currentPersonIndex < personProfiles.length - 1) {
+                currentPersonIndex++;
+                updateDisplay();
+            }
+        });
+
+        document.getElementById("prevButton").addEventListener("click", function () {
+            if (currentPersonIndex > 0) {
+                currentPersonIndex--;
+                updateDisplay();
+            }
+        });
+
+        // Initial data fetch and update
+        fetchDataAndUpdate();
+    </script>
+}
+</script>
+

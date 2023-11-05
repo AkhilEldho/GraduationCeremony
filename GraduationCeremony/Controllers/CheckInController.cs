@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
+using OfficeOpenXml.Style;
 using System.Collections;
 using System.Drawing.Printing;
 using System.Linq;
@@ -87,19 +88,13 @@ namespace GraduationCeremony.Controllers
                     return View(grads);
                 }
             }
+            else if (String.IsNullOrEmpty(searchString))
+            {
+                //show error message
+            }
             else
             {
-                var graduations = await _context.Graduations.ToListAsync();
-
-                if (graduations != null)
-                {
-                    graduations = graduations
-                        .OrderBy(item => item.Level)
-                        .ThenBy(item => item.AwardDescription)
-                        .ThenBy(item => item.Forenames).ToList();
-                }
-
-                return View(graduations);
+                //show error message
             }
 
             return View();
@@ -170,6 +165,27 @@ namespace GraduationCeremony.Controllers
 
             return View(student);
         }
+
+        //view with next button
+        public async Task<IActionResult> Presenter()
+        {
+            var checkInFull = from g in _context.CheckIns select g;
+            checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
+            List<CheckIn> checkInList = new List<CheckIn>();
+            checkInList = await checkInFull.ToListAsync();
+
+            return View(checkInList);
+        }
+
+        [HttpGet]
+        public IActionResult GetUpdatedPersons()
+        {
+            // Fetch the updated list of persons from your data source
+            var updatedPersons = _context.CheckIns.ToListAsync();
+
+            return Json(updatedPersons);
+        }
+
 
         //The view for the presenters
         public async Task<IActionResult> CheckedInList()
@@ -257,14 +273,14 @@ namespace GraduationCeremony.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Graduations == null)
+            if (_context.CheckIns == null)
             {
-                return Problem("Entity set 'S232_Project01_TestContext.Graduations'  is null.");
+                return Problem("Entity set 'S232_Project01_TestContext.CheckIn'  is null.");
             }
-            var graduation = await _context.Graduations.FindAsync(id);
-            if (graduation != null)
+            var student = await _context.CheckIns.FindAsync(id);
+            if (student != null)
             {
-                _context.Graduations.Remove(graduation);
+                _context.CheckIns.Remove(student);
             }
 
             await _context.SaveChangesAsync();

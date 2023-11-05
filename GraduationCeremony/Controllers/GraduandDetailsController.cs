@@ -32,6 +32,38 @@ namespace GraduationCeremony.Controllers
 
             return View(result);
         }
+
+        //searching for graduand
+        public IActionResult Search(string searchString)
+        {
+            var result = (from g in _context.Graduands
+                          join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                          join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                          select new GraduandDetails
+                          {
+                              graduands = g,
+                              awards = a,
+                              graduandAwards = ga
+                          })
+                         .OrderBy(item => item.awards.Level)
+                        .ThenBy(item => item.awards.AwardDescription)
+                        .ThenBy(item => item.graduands.Forenames).ToList();
+
+            List<GraduandDetails> grad = result;
+            string search = searchString;
+            grad = grad.Where(g => g.graduands.Forenames.Contains(searchString.Trim())).ToList();
+
+            if(grad.Count == 0)
+            {
+                ViewBag.Message = "Student " + searchString + " Not Found";
+                return View(result);
+            }
+            else
+            {
+                return View(grad);
+            }
+        }
+
         //COULDNT MAKE THIS WORK WITH THE NAVIGATION FOR HTTPOST SO COMMENTED AND EDITED :(
         /* [HttpGet]
          public ActionResult Edit(int personCode)
