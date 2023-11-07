@@ -27,7 +27,7 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
 
-        //view model
+        //custom views
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -168,9 +168,7 @@ namespace GraduationCeremony.Models.DB
 
                 entity.ToTable("CheckIn");
 
-                entity.Property(e => e.CheckId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("CheckID");
+                entity.Property(e => e.CheckId).HasColumnName("CheckID");
 
                 entity.Property(e => e.AwardCode)
                     .HasMaxLength(150)
