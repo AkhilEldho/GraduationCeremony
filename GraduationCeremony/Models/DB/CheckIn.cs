@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -14,6 +15,8 @@ namespace GraduationCeremony.Models.DB
         public string QualificationCode { get; set; } = null!;
         public string AwardDescription { get; set; } = null!;
         public string Level { get; set; } = null!;
+        //removing the time
+        [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public string? CollegeEmail { get; set; }
         public string? Mobile { get; set; }
