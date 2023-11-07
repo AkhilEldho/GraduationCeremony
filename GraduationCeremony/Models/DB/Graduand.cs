@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -8,6 +7,7 @@ namespace GraduationCeremony.Models.DB
     {
         public Graduand()
         {
+            CheckIns = new HashSet<CheckIn>();
             GraduandAwards = new HashSet<GraduandAward>();
         }
 
@@ -16,8 +16,6 @@ namespace GraduationCeremony.Models.DB
         public string Surname { get; set; } = null!;
         public int Nsn { get; set; }
         public string? BadDebtStatus { get; set; }
-        //removing the time
-        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
         public string? Ethnicity2 { get; set; }
@@ -37,6 +35,7 @@ namespace GraduationCeremony.Models.DB
         public string? Campus { get; set; }
         public string? School { get; set; }
 
+        public virtual ICollection<CheckIn> CheckIns { get; set; }
         public virtual ICollection<GraduandAward> GraduandAwards { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using GraduationCeremony.Models.DB;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -27,9 +26,8 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<CheckIn> CheckIns { get; set; } = null!;
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
-        public virtual DbSet<Graduation> Graduations { get; set; } = null!;
 
-        //added ViewModel
+        //view model
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -165,14 +163,14 @@ namespace GraduationCeremony.Models.DB
 
             modelBuilder.Entity<CheckIn>(entity =>
             {
-                entity.HasKey(e => e.PersonCode)
-                    .HasName("PK__CheckIn__F2E6F31C63F9CAC6");
+                entity.HasKey(e => e.CheckId)
+                    .HasName("PK__CheckIn__86815706152DBA84");
 
                 entity.ToTable("CheckIn");
 
-                entity.Property(e => e.PersonCode)
+                entity.Property(e => e.CheckId)
                     .ValueGeneratedNever()
-                    .HasColumnName("PERSON_CODE");
+                    .HasColumnName("CheckID");
 
                 entity.Property(e => e.AwardCode)
                     .HasMaxLength(150)
@@ -206,6 +204,8 @@ namespace GraduationCeremony.Models.DB
 
                 entity.Property(e => e.Nsn).HasColumnName("NSN");
 
+                entity.Property(e => e.PersonCode).HasColumnName("PERSON_CODE");
+
                 entity.Property(e => e.QualificationCode)
                     .HasMaxLength(150)
                     .HasColumnName("QUALIFICATION_CODE");
@@ -213,6 +213,12 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Surname)
                     .HasMaxLength(50)
                     .HasColumnName("SURNAME");
+
+                entity.HasOne(d => d.PersonCodeNavigation)
+                    .WithMany(p => p.CheckIns)
+                    .HasForeignKey(d => d.PersonCode)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CheckIn_Graduand");
             });
 
             modelBuilder.Entity<Graduand>(entity =>
@@ -359,136 +365,6 @@ namespace GraduationCeremony.Models.DB
                     .HasForeignKey(d => d.PersonCode)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Graduand_Award_Graduand");
-            });
-
-            modelBuilder.Entity<Graduation>(entity =>
-            {
-                entity.HasKey(e => e.PersonCode)
-                    .HasName("PK__Graduati__F2E6F31CD9B61427");
-
-                entity.ToTable("Graduation");
-
-                entity.Property(e => e.PersonCode)
-                    .ValueGeneratedNever()
-                    .HasColumnName("PERSON_CODE");
-
-                entity.Property(e => e.AddressLine1)
-                    .HasMaxLength(50)
-                    .HasColumnName("ADDRESS_LINE_1");
-
-                entity.Property(e => e.AddressLine2)
-                    .HasMaxLength(50)
-                    .HasColumnName("ADDRESS_LINE_2");
-
-                entity.Property(e => e.AddressLine3)
-                    .HasMaxLength(50)
-                    .HasColumnName("ADDRESS_LINE_3");
-
-                entity.Property(e => e.AddressLine4)
-                    .HasMaxLength(50)
-                    .HasColumnName("ADDRESS_LINE_4");
-
-                entity.Property(e => e.AwardCode)
-                    .HasMaxLength(50)
-                    .HasColumnName("AWARD_CODE");
-
-                entity.Property(e => e.AwardDescription)
-                    .HasMaxLength(100)
-                    .HasColumnName("AWARD_DESCRIPTION");
-
-                entity.Property(e => e.Awarded)
-                    .HasMaxLength(50)
-                    .HasColumnName("AWARDED");
-
-                entity.Property(e => e.BadDebtStatus).HasColumnName("BAD_DEBT_STATUS");
-
-                entity.Property(e => e.Campus)
-                    .HasMaxLength(50)
-                    .HasColumnName("CAMPUS");
-
-                entity.Property(e => e.CollegeEmail)
-                    .HasMaxLength(50)
-                    .HasColumnName("COLLEGE_EMAIL");
-
-                entity.Property(e => e.Completion)
-                    .HasColumnType("date")
-                    .HasColumnName("COMPLETION");
-
-                entity.Property(e => e.Credits).HasColumnName("CREDITS");
-
-                entity.Property(e => e.DateOfBirth)
-                    .HasColumnType("date")
-                    .HasColumnName("DATE_OF_BIRTH");
-
-                entity.Property(e => e.Ethnicity1)
-                    .HasMaxLength(50)
-                    .HasColumnName("ETHNICITY1");
-
-                entity.Property(e => e.Ethnicity2)
-                    .HasMaxLength(50)
-                    .HasColumnName("ETHNICITY2");
-
-                entity.Property(e => e.Ethnicity3)
-                    .HasMaxLength(50)
-                    .HasColumnName("ETHNICITY3");
-
-                entity.Property(e => e.Forenames)
-                    .HasMaxLength(50)
-                    .HasColumnName("FORENAMES");
-
-                entity.Property(e => e.Iwi1)
-                    .HasMaxLength(100)
-                    .HasColumnName("IWI_1");
-
-                entity.Property(e => e.Iwi2)
-                    .HasMaxLength(50)
-                    .HasColumnName("IWI_2");
-
-                entity.Property(e => e.Iwi3)
-                    .HasMaxLength(50)
-                    .HasColumnName("IWI_3");
-
-                entity.Property(e => e.Level)
-                    .HasMaxLength(50)
-                    .HasColumnName("LEVEL");
-
-                entity.Property(e => e.Major1)
-                    .HasMaxLength(50)
-                    .HasColumnName("MAJOR_1");
-
-                entity.Property(e => e.Major2)
-                    .HasMaxLength(50)
-                    .HasColumnName("MAJOR_2");
-
-                entity.Property(e => e.Mobile).HasColumnName("MOBILE");
-
-                entity.Property(e => e.Nsn).HasColumnName("NSN");
-
-                entity.Property(e => e.PersonalEmail)
-                    .HasMaxLength(50)
-                    .HasColumnName("PERSONAL_EMAIL");
-
-                entity.Property(e => e.PostCode)
-                    .HasMaxLength(10)
-                    .HasColumnName("POST_CODE");
-
-                entity.Property(e => e.QualificationCode)
-                    .HasMaxLength(50)
-                    .HasColumnName("QUALIFICATION_CODE");
-
-                entity.Property(e => e.School)
-                    .HasMaxLength(50)
-                    .HasColumnName("SCHOOL");
-
-                entity.Property(e => e.Surname)
-                    .HasMaxLength(50)
-                    .HasColumnName("SURNAME");
-
-                entity.Property(e => e.Town)
-                    .HasMaxLength(52)
-                    .HasColumnName("TOWN");
-
-                entity.Property(e => e.YearArchieved).HasColumnName("YEAR_ARCHIEVED");
             });
 
             OnModelCreatingPartial(modelBuilder);

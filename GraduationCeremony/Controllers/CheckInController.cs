@@ -172,6 +172,9 @@ namespace GraduationCeremony.Controllers
             var checkInFull = from g in _context.CheckIns select g;
             checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
             List<CheckIn> checkInList = new List<CheckIn>();
+
+
+
             checkInList = await checkInFull.ToListAsync();
 
             return View(checkInList);
