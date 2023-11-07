@@ -101,7 +101,7 @@ namespace GraduationCeremony.Controllers
         }
 
         //Function which adds the student to the presenters list
-        public async void checkIn(int PersonCode)
+        public async Task checkIn(int PersonCode)
         {
             //get the details and add it to presenters list
             var graduants = from g in _context.Graduands select g;
