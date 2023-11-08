@@ -51,11 +51,11 @@ namespace GraduationCeremony.Controllers
 
             List<GraduandDetails> grad = result;
             string search = searchString;
-            grad = grad.Where(g => g.graduands.Forenames.Contains(searchString.Trim())).ToList();
+            grad = grad.Where(g => g.graduands.CollegeEmail.ToLower().Contains(searchString.ToLower().Trim())).ToList();
 
             if(grad.Count == 0)
             {
-                ViewBag.Message = "Student " + searchString + " Not Found";
+                ViewBag.Message = "Student " + searchString + " not found enter email correctly";
                 return View(result);
             }
             else

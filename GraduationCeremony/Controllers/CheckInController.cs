@@ -48,7 +48,7 @@ namespace GraduationCeremony.Controllers
                 Award award = new Award();
 
                 //searching the grad
-                grad = grads.Find(g => g.CollegeEmail.Contains(searchString));
+                grad = grads.Find(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()));
 
                 if(grad != null)
                 {
@@ -88,20 +88,12 @@ namespace GraduationCeremony.Controllers
                     return View(grads);
                 }
             }
-            else if (String.IsNullOrEmpty(searchString))
-            {
-                //show error message
-            }
-            else
-            {
-                //show error message
-            }
 
             return View();
         }
 
         //Function which adds the student to the presenters list
-        public async Task checkIn(int PersonCode)
+        public async Task<IActionResult> CheckIn(int PersonCode)
         {
             //get the details and add it to presenters list
             var graduants = from g in _context.Graduands select g;
@@ -138,11 +130,11 @@ namespace GraduationCeremony.Controllers
 
                 if(checkInList.Find(x => x.OrderInList == student.OrderInList) == null)
                 {
-                    _context.CheckIns.Add(student);
+                    await _context.CheckIns.AddAsync(student);
                     _context.CheckIns.OrderBy(item => item.OrderInList);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
-                    CheckedIn(student.OrderInList);
+                    return View(student);
                 }
                 else
                 {
@@ -153,27 +145,16 @@ namespace GraduationCeremony.Controllers
             {
                 ViewBag.Message = "Student Not Found";
             }
+
+            return View();
         }
 
-        public async Task<IActionResult> CheckedIn(int order)
-        {
-            var checkInFull = from g in _context.CheckIns select g;
-            List<CheckIn> checkInList = new List<CheckIn>();
-            checkInList = await checkInFull.ToListAsync();
-
-            CheckIn student = checkInList.FirstOrDefault(x => x.OrderInList == order);
-
-            return View(student);
-        }
-
-        //view with next button
+        //view with next button for presenters
         public async Task<IActionResult> Presenter()
         {
             var checkInFull = from g in _context.CheckIns select g;
             checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
             List<CheckIn> checkInList = new List<CheckIn>();
-
-
 
             checkInList = await checkInFull.ToListAsync();
 
@@ -181,16 +162,16 @@ namespace GraduationCeremony.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUpdatedPersons()
+        public async Task<IActionResult> GetUpdatedPersons()
         {
-            // Fetch the updated list of persons from your data source
-            var updatedPersons = _context.CheckIns.ToListAsync();
+            // the updated list of persons from your data source
+            var updatedPersons = await _context.CheckIns.ToListAsync();
 
             return Json(updatedPersons);
         }
 
 
-        //The view for the presenters
+        //The view to see list of people checked in
         public async Task<IActionResult> CheckedInList()
         {
             var checkInFull = from g in _context.CheckIns select g;
@@ -208,8 +189,6 @@ namespace GraduationCeremony.Controllers
         {
             return View();
         }
-
-
 
         // GET: CheckInController/Create
         public ActionResult Create()
