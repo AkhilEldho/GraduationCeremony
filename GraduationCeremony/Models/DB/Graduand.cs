@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -16,6 +17,8 @@ namespace GraduationCeremony.Models.DB
         public string Surname { get; set; } = null!;
         public int Nsn { get; set; }
         public string? BadDebtStatus { get; set; }
+        //removing the time
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
         public string? Ethnicity2 { get; set; }
