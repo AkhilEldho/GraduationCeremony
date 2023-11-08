@@ -17,7 +17,7 @@ namespace GraduationCeremony.Models.DB
         public string Surname { get; set; } = null!;
         public int Nsn { get; set; }
         public string? BadDebtStatus { get; set; }
-        //removing the time
+        //removing the time for date
         [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }

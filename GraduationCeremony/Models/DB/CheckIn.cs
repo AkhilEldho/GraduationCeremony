@@ -15,7 +15,7 @@ namespace GraduationCeremony.Models.DB
         public string QualificationCode { get; set; } = null!;
         public string AwardDescription { get; set; } = null!;
         public string Level { get; set; } = null!;
-        //removing the time
+        //removing the time for date
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public string? CollegeEmail { get; set; }
