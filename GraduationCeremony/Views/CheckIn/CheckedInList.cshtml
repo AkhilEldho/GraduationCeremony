@@ -1,5 +1,7 @@
-﻿@model IEnumerable<GraduationCeremony.Models.DB.CheckIn>
-
+﻿@model IPagedList<GraduationCeremony.Models.DB.CheckIn>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
 @{
     ViewData["Title"] = "Checked-In List";
 }
@@ -53,3 +55,11 @@
         </table>
     </div>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+    })

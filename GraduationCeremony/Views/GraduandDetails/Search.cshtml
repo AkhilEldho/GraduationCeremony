@@ -73,46 +73,50 @@
 </form>
 
 <div class="container">
-    <table class="table table-striped table-fit">
-        @if (!string.IsNullOrEmpty(ViewBag.Message))
-        {
-            <div class="alert alert-danger error-message">@ViewBag.Message</div>
-        }
-        <thead class="thead-dark">
-            <tr>
-                <th>Forename</th>
-                <th>Surname</th>
-                <th>Person Code</th>
-                <th>Date of Birth</th>
-                <th>Award Code</th>
-                <th>Award Description</th>
-                <th>Qualification Code</th>
-                <th>Level</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-danger error-message">@ViewBag.Message</div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-fit">
+            <thead class="thead-dark">
                 <tr>
-                    <td>@item.graduands.Forenames</td>
-                    <td>@item.graduands.Surname</td>
-                    <td>@item.graduandAwards.PersonCode</td>
-                    <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
-                    <td>@item.awards.AwardCode</td>
-                    <td>@item.awards.AwardDescription</td>
-                    <td>@item.awards.QualificationCode</td>
-                    <td>@item.awards.Level</td>
-                    <td>@item.graduands.CollegeEmail</td>
-                    <td>
-                        <a asp-controller="GraduandDetails" asp-action="Edit" asp-route-personCode="@item.graduands.PersonCode" class="btn btn-primary">Edit</a>
-                    </td>
+                    <th>Forename</th>
+                    <th>Surname</th>
+                    <th>Person Code</th>
+                    <th>Date of Birth</th>
+                    <th>Award Code</th>
+                    <th>Award Description</th>
+                    <th>Qualification Code</th>
+                    <th>Level</th>
+                    <th>Email</th>
+                    <th>Action</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.graduands.Forenames</td>
+                        <td>@item.graduands.Surname</td>
+                        <td>@item.graduandAwards.PersonCode</td>
+                        <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
+                        <td>@item.awards.AwardCode</td>
+                        <td>@item.awards.AwardDescription</td>
+                        <td>@item.awards.QualificationCode</td>
+                        <td>@item.awards.Level</td>
+                        <td>@item.graduands.CollegeEmail</td>
+                        <td>
+                            <a asp-controller="GraduandDetails" asp-action="Edit" asp-route-personCode="@item.graduands.PersonCode" class="btn btn-primary">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 @Html.PagedListPager(Model, page => Url.Action("Index",
         new { Page = page }),
@@ -121,11 +125,6 @@
             LiElementClasses = new string[] { "page-item" },
             PageClasses = new string[] { "page-link" }
     })
-
-<th>
-    @Html.DisplayNameFor(model =>  model.First().graduands.Forenames)
-</th>
-
 
 <a asp-action="Index" class="btn btn-warning">Back to list</a>
 

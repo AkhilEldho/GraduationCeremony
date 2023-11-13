@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Versioning;
 using OfficeOpenXml.Style;
@@ -9,6 +10,7 @@ using System.Collections;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Security.Principal;
+using X.PagedList;
 
 namespace GraduationCeremony.Controllers
 {
@@ -21,76 +23,95 @@ namespace GraduationCeremony.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string? message)
         {
-            return View();
+            if (string.IsNullOrEmpty(message))
+            {
+                return View();
+            }
+            else
+            {
+                ViewBag.Message = message;
+                return View();
+            }
         }
 
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
-            //removing extra space  
-            searchString = searchString?.Trim();
-
-            //getting all the relevant tables to search
-            var graduants = from g in _context.Graduands select g;
-            var graduantAwards = from g in _context.GraduandAwards select g;
-            var awards = from g in _context.Awards select g;
-
-            if (!String.IsNullOrEmpty(searchString))
+            try
             {
-                //converting db to list for easier search
-                List<Graduand> grads = await graduants.ToListAsync();
-                List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
-                List<Award> awardsList = await awards.ToListAsync();
+                // Removing extra space  
+                searchString = searchString?.Trim();
 
-                Graduand grad = new Graduand();
-                GraduandAward gradAward = new GraduandAward();
-                Award award = new Award();
-
-                //searching the grad
-                grad = grads.Find(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()));
-
-                if(grad != null)
+                if (string.IsNullOrEmpty(searchString))
                 {
-                    gradAward = gradAwards.Find(g => g.PersonCode == grad.PersonCode);
-                    award = awardsList.Find(g => g.AwardCode == gradAward.AwardCode);
+                    // Handle empty or null search string
+                    ViewBag.Message = "Error: Please enter a valid search string.";
+                    return View("Index");
+                }
 
-                    //Saving them as checkin object
-                    //might be able to simplify it 
-                    CheckIn studentCheckIn = new CheckIn();
-                    studentCheckIn.PersonCode = grad.PersonCode;
-                    studentCheckIn.Forenames = grad.Forenames;
-                    studentCheckIn.Surname = grad.Surname;
-                    studentCheckIn.Nsn = grad.Nsn;
+                // Getting all the relevant tables to search
+                var graduants = _context.Graduands.AsQueryable();
+                var graduantAwards = _context.GraduandAwards.AsQueryable();
+                var awards = _context.Awards.AsQueryable();
 
-                    studentCheckIn.AwardCode = award.AwardCode;
-                    studentCheckIn.QualificationCode = award.QualificationCode;
-                    studentCheckIn.AwardDescription = award.AwardDescription;
-                    studentCheckIn.Level = award.Level;
+                // Search for the grad
+                var grad = await graduants
+                    .Where(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()))
+                    .FirstOrDefaultAsync();
 
-                    studentCheckIn.DateOfBirth = grad.DateOfBirth;
-                    studentCheckIn.Mobile = grad.Mobile;
-                    studentCheckIn.CollegeEmail = grad.CollegeEmail;
+                if (grad != null)
+                {
+                    var gradAward = await graduantAwards
+                        .Where(g => g.PersonCode == grad.PersonCode)
+                        .FirstOrDefaultAsync();
 
-                    var checkedIn = from c in _context.CheckIns select c;
-                    List<CheckIn> list = await checkedIn.ToListAsync();
-                    CheckIn stud = list.Find(c => c.PersonCode == studentCheckIn.PersonCode);
+                    var award = await awards
+                        .Where(g => g.AwardCode == gradAward.AwardCode)
+                        .FirstOrDefaultAsync();
 
-                    if(stud != null)
+                    if (gradAward != null && award != null)
                     {
-                        ViewBag.Message = "Checked In";
+                        var studentCheckIn = new CheckIn
+                        {
+                            PersonCode = grad.PersonCode,
+                            Forenames = grad.Forenames,
+                            Surname = grad.Surname,
+                            Nsn = grad.Nsn,
+                            AwardCode = award.AwardCode,
+                            QualificationCode = award.QualificationCode,
+                            AwardDescription = award.AwardDescription,
+                            Level = award.Level,
+                            DateOfBirth = grad.DateOfBirth,
+                            Mobile = grad.Mobile,
+                            CollegeEmail = grad.CollegeEmail
+                        };
+
+                        var checkedIn = await _context.CheckIns
+                            .Where(c => c.PersonCode == studentCheckIn.PersonCode)
+                            .FirstOrDefaultAsync();
+
+                        if (checkedIn != null)
+                        {
+                            ViewBag.Message = "Checked In";
+                        }
+
+                        return View(studentCheckIn);
                     }
+                }
 
-                    return View(studentCheckIn);
-                }
-                else
-                {
-                    return View(grads);
-                }
+                // Handle the case when grad, gradAward, or award is null
+                ViewBag.Message = "Error: Graduation record not found.";
+                return View("Index");
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                ViewBag.Message = $"Error: {ex.Message}";
+                return View("Index");
+            }
         }
+
 
         public async Task<IActionResult> CheckIn(int PersonCode)
         {
@@ -187,8 +208,11 @@ namespace GraduationCeremony.Controllers
             }
         }
 
-        public async Task<IActionResult> CheckedInList()
-        { 
+        public async Task<IActionResult> CheckedInList(int? page)
+        {
+            // if no page was specified in the querystring, deafult to the first page
+            var pageNumber = page ?? 1;
+
             //retrieve checkin table
             var checkInFull = from g in _context.CheckIns select g;
 
@@ -203,7 +227,7 @@ namespace GraduationCeremony.Controllers
             checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
 
-            return View(checkIn);
+            return View(checkIn.ToPagedList(1, 10));
         }
 
         /*  OLD CODE

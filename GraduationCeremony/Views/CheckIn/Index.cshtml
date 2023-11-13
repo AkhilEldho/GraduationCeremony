@@ -18,6 +18,11 @@
                 <div id="autoSuggestContainer" class="auto-suggest-container">
                 </div>
             </form>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="alert alert-danger error-message">@ViewBag.Message</div>
+            }
         </div>
     </div>
 </div>

@@ -31,7 +31,7 @@ namespace GraduationCeremony.Controllers
                         .ThenBy(item => item.awards.AwardDescription)
                         .ThenBy(item => item.graduands.Forenames).ToList();
 
-            return View(result);
+            return View(result.ToPagedList(1, 10));
         }
 
         //searching for graduand
