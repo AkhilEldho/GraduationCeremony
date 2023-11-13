@@ -4,87 +4,67 @@
     ViewData["Title"] = "CheckIn";
 }
 
-<h1>CheckIn</h1>
-
-<div>
-    <h4>CheckIn</h4>
+<div class="container">
+    <h1>CheckIn</h1>
+    <h4>Remeber your order number</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Forenames)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Forenames)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nsn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nsn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AwardCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AwardCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QualificationCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QualificationCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AwardDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AwardDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Level)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Level)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CollegeEmail)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CollegeEmail)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
-        <dt class = "col-sm-2">
+    <div class="row">
+        <div class="col-sm-2">
             @Html.DisplayNameFor(model => model.OrderInList)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+        <div class="col-sm-10">
             @Html.DisplayFor(model => model.OrderInList)
-        </dd>
-        <dt class = "col-sm-2">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Forenames)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.Forenames)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Surname)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.Surname)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
             @Html.DisplayNameFor(model => model.GraduandAward.PersonCode)
-        </dt>
-        <dd class = "col-sm-10">
+        </div>
+        <div class="col-sm-10">
             @Html.DisplayFor(model => model.GraduandAward.PersonCode)
-        </dd>
-    </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Level)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayNameFor(model => model.Level)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AwardDescription)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayNameFor(model => model.AwardDescription)
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <a asp-action="Edit" asp-route-id="@Model?.CheckId" class="btn btn-primary">Edit</a> |
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.CheckId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+

@@ -1,41 +1,45 @@
-/* styles.css */
+/* site.css */
 html {
-    font-size: 14px;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
+    font-size: 16px;
 }
 
 body {
     margin-bottom: 60px;
+    background-color: #333; /* Darker background color */
+    color: #fff; /* White text */
 }
 
 /* Navbar styling */
 .navbar {
-    background-color: #713232;
+    background: linear-gradient(to right, #d9534f, #713232);
     color: #fff;
     font-weight: 600;
     letter-spacing: 0.5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
 }
 
-    .navbar .navbar-nav .nav-link {
-        color: #fff;
-        letter-spacing: 0.5px;
-        font-weight: 600;
-        padding: 5px 15px;
-    }
+.navbar-brand {
+    font-size: 1.5rem;
+}
 
-        .navbar .navbar-nav .nav-link:hover {
-            background: #fff;
-            color: #333 !important;
-        }
-
-/* styles for the responsive navigation button */
 .navbar-toggler-icon {
     background-color: #fff;
 }
+
+.navbar-toggler {
+    border-color: #fff;
+}
+
+.navbar-nav .nav-link {
+    color: #fff;
+    font-weight: 600;
+    padding: 5px 15px;
+}
+
+    .navbar-nav .nav-link:hover {
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff !important;
+    }
 
 /* Add media query for adjusting navbar styles on larger screens */
 @media (min-width: 768px) {
@@ -44,8 +48,150 @@ body {
     }
 }
 
-/*to make the table columns text wrap*/
-.table-fit {
-    width: 1px;
-    white-space: nowrap;
+/* Presenter styling */
+.person-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.card {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #d9534f;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.display-4 {
+    font-size: 3rem;
+    color: #d9534f;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.search-form {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Search Form Styling */
+.search-input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 2px solid #d9534f;
+    border-radius: 5px;
+    background-color: #fff; /* White background color for better visibility */
+    color: #333; /* Darker text color */
+}
+
+.search-button {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+    .search-button:hover {
+        background-color: #713232; /* Darker shade on hover */
+    }
+
+.auto-suggest-container {
+    position: absolute;
+    display: none;
+    z-index: 100;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Fancier Button Styles */
+.btn {
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+#prevButton {
+    background-color: #d9534f;
+    color: #fff;
+    border: 1px solid #d9534f;
+}
+
+    #prevButton:hover {
+        background-color: #713232; /* Darker shade on hover */
+        border: 1px solid #713232;
+    }
+
+#nextButton {
+    background-color: #3374ff;
+    color: #fff;
+    border: 1px solid #3374ff;
+}
+
+    #nextButton:hover {
+        background-color: #1a52cc; /* Darker shade on hover */
+        border: 1px solid #1a52cc;
+    }
+
+.text-black {
+    color: #000 !important; /* Override Bootstrap's text color */
+}
+
+/* Add this to match the styling of Details view with site.css */
+
+/* Details Page styling */
+.container {
+    margin-top: 20px;
+    background-color: #444; /* Darker background color */
+    color: #fff;
+    border: 1px solid #d9534f;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+/* Override card header and other title text color */
+.card-header,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+    color: #000; /* Set the desired text color */
+}
+
+/* Override text color for specific elements in searchCheckIn view */
+.card-body li {
+    color: #000; /* Set the desired text color */
+}
+
+/* Override alert text color */
+.alert-danger {
+    color: #000 !important; /* Important to override Bootstrap styles */
+}
+
+.row {
+    margin-bottom: 10px;
+}
+
+.col-sm-2 {
+    font-weight: bold;
+}
+
+.col-sm-10 {
+    margin-bottom: 10px;
 }

@@ -1,4 +1,7 @@
-﻿@model List<GraduationCeremony.Models.DB.GraduandDetails>
+﻿@model IPagedList<GraduationCeremony.Models.DB.GraduandDetails>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Web.Common;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -110,6 +113,19 @@
         </tbody>
     </table>
 </div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+        new { Page = page }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+    })
+
+<th>
+    @Html.DisplayNameFor(model =>  model.First().graduands.Forenames)
+</th>
+
 
 <a asp-action="Index" class="btn btn-warning">Back to list</a>
 

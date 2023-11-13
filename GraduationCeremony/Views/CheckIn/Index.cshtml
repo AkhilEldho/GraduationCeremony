@@ -1,70 +1,23 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<style>
-    .container {
-        text-align: center;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+<div class="person-profile-container">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="display-4 text-danger">CHECK IN</h1>
 
-    .display-4 {
-        font-size: 2.5rem;
-    }
-
-    .intro-text {
-        font-size: 1.2rem;
-    }
-
-    .search-form {
-        text-align: center;
-        margin-top: 20px;
-    }
-
-    .search-input {
-        width: 100%;
-        max-width: 300px;
-        padding: 10px;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-    }
-
-    .search-button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .auto-suggest-container {
-        position: absolute;
-        display: none;
-        z-index: 100;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        width: 100%;
-        max-width: 300px;
-    }
-</style>
-
-<div class="container">
-    <h1 class="display-4">CHECK IN</h1>
-    <p class="intro-text">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+            <form id="searchForm" action="/CheckIn/SearchCheckIn" method="get" autocomplete="off" class="search-form">
+                <div class="form-group">
+                    <input type="text" id="searchString" name="searchString" class="form-control search-input"
+                           autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger search-button">Search</button>
+                </div>
+                <div id="autoSuggestContainer" class="auto-suggest-container">
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
-
-<form id="searchForm" action="/CheckIn/SearchCheckIn" method="get" autocomplete="off" class="search-form">
-    <div class="form-group">
-        <input type="text" id="searchString" name="searchString" class="search-input"
-               autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter your email" required/>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="search-button">Search</button>
-    </div>
-    <div id="autoSuggestContainer" class="auto-suggest-container">
-    </div>
-</form>

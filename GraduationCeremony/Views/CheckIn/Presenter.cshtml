@@ -4,6 +4,8 @@
     ViewData["Title"] = "Presenter";
 }
 
+<link rel="stylesheet" href="~/css/Presenter.css" asp-append-version="true">
+
 <h1>Presenter</h1>
 
 <div class="person-profile-container">
@@ -14,14 +16,14 @@
             <div class="card">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
-                        @* Giving unique id to keep track *@
+                        <li class="list-group-item text-black"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+                        <!-- Giving unique id to keep track -->
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
-                        <li class="list-group-item" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
-                        <li class="list-group-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
-                        <li class="list-group-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
-                        <li class="list-group-item"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
+                        <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
+                        <li class="list-group-item text-black"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
+                        <li class="list-group-item text-black"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
+                        <li class="list-group-item text-black"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
                     </ul>
                 </div>
             </div>
@@ -30,9 +32,11 @@
 </div>
 
 <div class="d-flex justify-content-between">
-    <button id="prevButton" class="btn" style="background-color: #ff5733; color: #fff;">Previous Person</button>
-    <button id="nextButton" class="btn" style="background-color: #3374ff; color: #fff;">Next Person</button>
+    <button id="prevButton" class="btn">Previous Person</button>
+    <button id="nextButton" class="btn">Next Person</button>
 </div>
+
+
 
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Xml.Linq;
+using X.PagedList;
 
 namespace GraduationCeremony.Controllers
 {
@@ -34,8 +35,11 @@ namespace GraduationCeremony.Controllers
         }
 
         //searching for graduand
-        public IActionResult Search(string searchString)
+        public IActionResult Search(string searchString, int? page)
         {
+            // if no page was specified in the querystring, deafult to the first page
+            var pageNumber = page ?? 1;  
+
             var result = (from g in _context.Graduands
                           join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
                           join a in _context.Awards on ga.AwardCode equals a.AwardCode
@@ -63,11 +67,11 @@ namespace GraduationCeremony.Controllers
             if (grad.Count == 0)
             {
                 ViewBag.Message = "Student " + searchString + " not found. Please enter email correctly";
-                return View(result);
+                return View(result.ToPagedList(pageNumber, 10));
             }
             else
             {
-                return View(grad);
+                return View(grad.ToPagedList(pageNumber, 10));
             }
         }
 
