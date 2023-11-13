@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NuGet.Versioning;
 using OfficeOpenXml.Style;
 using System.Collections;
@@ -34,6 +35,19 @@ namespace GraduationCeremony.Controllers
                 ViewBag.Message = message;
                 return View();
             }
+        }
+        //auto suggest
+        public string SearchGraduandByEmail(string searchString)
+        {
+            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p0";
+
+            string wrapEmail = "%" + searchString + "%";
+
+            List<Graduand> graduands = _context.Graduands.FromSqlRaw(sql, wrapEmail).ToList();
+
+            string json = JsonConvert.SerializeObject(graduands);
+
+            return json;
         }
 
         public async Task<IActionResult> SearchCheckIn(string searchString)
