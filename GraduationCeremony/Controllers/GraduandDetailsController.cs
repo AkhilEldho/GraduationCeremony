@@ -10,12 +10,13 @@ namespace GraduationCeremony.Controllers
     public class GraduandDetailsController : Controller
     {
         private readonly S232_Project01_TestContext _context;
+        private readonly ILogger<GraduandDetailsController> _logger;
 
-        public GraduandDetailsController(S232_Project01_TestContext context)
+        public GraduandDetailsController(S232_Project01_TestContext context, ILogger<GraduandDetailsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
-
         public IActionResult Index()
         {
             var result = (from g in _context.Graduands
@@ -34,117 +35,95 @@ namespace GraduationCeremony.Controllers
             return View(result.ToPagedList(1, 10));
         }
 
-        //searching for graduand
         public IActionResult Search(string searchString, int? page)
         {
-            // if no page was specified in the querystring, deafult to the first page
-            var pageNumber = page ?? 1;  
-
-            var result = (from g in _context.Graduands
-                          join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                          join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                          select new GraduandDetails
-                          {
-                              graduands = g,
-                              awards = a,
-                              graduandAwards = ga
-                          })
-                         .OrderBy(item => item.awards.Level)
-                        .ThenBy(item => item.awards.AwardDescription)
-                        .ThenBy(item => item.graduands.Forenames).ToList();
-
-            List<GraduandDetails> grad = result;
-            string search = searchString;
-
-            //only requires to search the name so everything past @ symbol won't be needed
-            string searchQuery = searchString.ToLower().Trim();
-
-            grad = grad
-                .Where(g => g.graduands.CollegeEmail.ToLower().Split('@')[0].Split('.').Any(email => email.StartsWith(searchQuery)))
-                .ToList();
-
-
-            if (grad.Count == 0)
+            try
             {
-                ViewBag.Message = "Student " + searchString + " not found. Please enter email correctly";
-                return View(result.ToPagedList(pageNumber, 10));
+                // If no page was specified in the query string, default to the first page
+                var pageNumber = page ?? 1;
+
+                // Your existing query to fetch graduands
+                var result = (from g in _context.Graduands
+                              join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                              join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                              select new GraduandDetails
+                              {
+                                  graduands = g,
+                                  awards = a,
+                                  graduandAwards = ga
+                              })
+                             .OrderBy(item => item.awards.Level)
+                            .ThenBy(item => item.awards.AwardDescription)
+                            .ThenBy(item => item.graduands.Forenames).ToList();
+
+                // Cleaning the input from user
+                string searchEmail = searchString?.ToLower().Trim();
+
+                // Filter results based on the search query
+                var search = result
+                    .Where(g => g.graduands.CollegeEmail.ToLower().Split('@')[0].Split('.').Any(email => email.StartsWith(searchEmail)))
+                    .ToList();
+
+                if (search.Count == 0)
+                {
+                    // No results found
+                    ViewBag.Message = "Student " + searchString + " not found. Please enter email correctly";
+                }
+
+                return View(search.ToPagedList(pageNumber, 10));
             }
-            else
+            catch (Exception ex)
             {
-                return View(grad.ToPagedList(pageNumber, 10));
+                // Log the exception or handle it appropriately
+                ViewBag.Message = $"Error: {ex.Message}";
+                return View("Error");
             }
         }
-
-        //COULDNT MAKE THIS WORK WITH THE NAVIGATION FOR HTTPOST SO COMMENTED AND EDITED :(
-        /* [HttpGet]
-         public ActionResult Edit(int personCode)
-         {
-             int code = personCode;
-
-             var result = (from g in _context.Graduands
-                           join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                           join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                           where g.PersonCode == personCode
-                           select new GraduandDetails
-                           {
-                               graduands = g,
-                               awards = a,
-                               graduandAwards = ga
-                           }).FirstOrDefault();
-
-             GraduandDetails graduandDetails = result;
-
-             if (ModelState.IsValid)
-             {
-                 var graduand = _context.Graduands.FirstOrDefault(g => g.PersonCode == graduandDetails.graduands.PersonCode);
-                 var award = _context.Awards.FirstOrDefault(a => a.AwardCode == graduandDetails.awards.AwardCode);
-                 var graduandAward = _context.GraduandAwards.FirstOrDefault(ga => ga.PersonCode == graduandDetails.graduands.PersonCode);
-
-                 if (graduand == null)
-                 {
-                     return NotFound();
-                 }
-                 if (graduand != null)
-                 {
-                     graduand.Forenames = graduandDetails.graduands.Forenames;
-                 }
-
-                 _context.SaveChanges();
-
-                 return View(graduandDetails);
-             }
-             return View(graduandDetails);
-         }*/
 
         [HttpGet]
         public IActionResult Edit(int? personCode)
         {
-            if (personCode == null)
+            try
             {
-                return NotFound();
+                if (personCode == null)
+                {
+                    return NotFound();
+                }
+
+                // Creating a new GraduandDetails ViewModel
+                var graduandDetailsVM = new GraduandDetails();
+
+                // Check if the personCode exists in the GraduandAwards table
+                var gradAwards = _context.GraduandAwards
+                    .Include(g => g.PersonCodeNavigation) // accessing graduands table
+                    .Include(a => a.AwardCodeNavigation)  // accessing awards table
+                    .SingleOrDefault(ga => ga.PersonCode == personCode);
+
+                if (gradAwards == null)
+                {
+                    //COPY PASTED THIS FROM ONLINE
+                    // Log the occurrence for debugging purposes
+                    _logger.LogError($"Edit: GraduandAwards not found for PersonCode {personCode}");
+
+                    // Return a user-friendly error page or redirect to an error page
+                    return View("Index");
+                }
+
+                graduandDetailsVM.graduandAwards = gradAwards;
+                graduandDetailsVM.graduands = gradAwards.PersonCodeNavigation; // populating graduand attributes
+                graduandDetailsVM.awards = gradAwards.AwardCodeNavigation;     // populating award attributes
+
+                return View(graduandDetailsVM);
             }
-
-            //creating new GraduandDetails ViewModel
-            var graduandDetailsVM = new GraduandDetails();
-
-            var gradAwards = _context.GraduandAwards
-                .Include(g => g.PersonCodeNavigation) //accessing graduands table
-                .Include(a => a.AwardCodeNavigation) //accessing awards table
-                .SingleOrDefault(ga => ga.PersonCode == personCode);
-
-            if (gradAwards == null)
+            catch (Exception ex)
             {
-                //NEED TO HAVE BETTER VALIDATION
-                return NotFound();
+                //COPY PASTED THIS FROM ONLINE
+                // Log the exception for further investigation
+                _logger.LogError($"Edit: An error occurred - {ex.Message}");
+
+                // Return a user-friendly error page or redirect to an error page
+                return View("Error");
             }
-
-            graduandDetailsVM.graduandAwards = gradAwards;
-
-            graduandDetailsVM.graduands = gradAwards.PersonCodeNavigation; //populating graduand attributes
-
-            graduandDetailsVM.awards = gradAwards.AwardCodeNavigation; //populating award attributes
-
-            return View(graduandDetailsVM);
         }
 
 
@@ -152,64 +131,83 @@ namespace GraduationCeremony.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(GraduandDetails graduandDetailsVM)
         {
-            if (ModelState.IsValid)
+            try
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    // remove spaces in awardcode if user added one
-                    graduandDetailsVM.graduandAwards.AwardCode = graduandDetailsVM.graduandAwards.AwardCode.Trim();
+                    // Remove spaces in award code if user added any
+                    graduandDetailsVM.graduandAwards.AwardCode = graduandDetailsVM.graduandAwards.AwardCode?.Trim();
 
+                    // Fetch existing entities from the database
                     var grad = _context.Graduands.SingleOrDefault(g => g.PersonCode == graduandDetailsVM.graduandAwards.PersonCode);
                     var gradAwards = _context.GraduandAwards.SingleOrDefault(ga => ga.PersonCode == graduandDetailsVM.graduandAwards.PersonCode);
                     var award = _context.Awards.SingleOrDefault(a => a.AwardCode == graduandDetailsVM.awards.AwardCode);
 
+                    // Check if entities exist in the database
                     if (grad != null && award != null && gradAwards != null)
                     {
-                        //updating graduands
+                        // Update graduand properties
                         grad.Forenames = graduandDetailsVM.graduands.Forenames;
                         grad.Surname = graduandDetailsVM.graduands.Surname;
                         grad.DateOfBirth = graduandDetailsVM.graduands.DateOfBirth;
-                        //updating awards
+
+                        // Update award properties
                         award.AwardDescription = graduandDetailsVM.awards.AwardDescription;
                         award.QualificationCode = graduandDetailsVM.awards.QualificationCode;
                         award.Level = graduandDetailsVM.awards.Level;
-                        //updating graduandawards
+
+                        // Update graduand awards properties
                         gradAwards.Major1 = graduandDetailsVM.graduandAwards.Major1;
                         gradAwards.Major2 = graduandDetailsVM.graduandAwards.Major2;
 
-
-                        // if user changed award code 
+                        // Check if the user changed the award code 
                         if (gradAwards.AwardCode != graduandDetailsVM.graduandAwards.AwardCode)
                         {
-                            //to find if there is a matching award code in the database that the user entered
+                            // Find if there is a matching award code in the database that the user entered
                             var newAward = _context.Awards.SingleOrDefault(a => a.AwardCode == graduandDetailsVM.graduandAwards.AwardCode);
 
                             if (newAward != null)
                             {
-                                // update graduandAward award code with new awardcode
+                                // Update graduandAward award code with the new award code
                                 gradAwards.AwardCode = graduandDetailsVM.graduandAwards.AwardCode;
 
-                                // update award attributes to get the new award descriptions etc.
+                                // Update award attributes to get the new award descriptions, etc.
                                 gradAwards.AwardCodeNavigation = newAward;
                             }
                             else
                             {
-                                //NEED VALIDATION LIKE VIEWBAG ETC TO VALIDATE AWARD CODE ETC
+                                // Add a model state error for invalid award code
+                                ModelState.AddModelError("graduandAwards.AwardCode", "Invalid Award Code entered.");
                                 return View(graduandDetailsVM);
                             }
                         }
-                    }
-                    _context.SaveChanges();
-                    return RedirectToAction("Index");
-                }
 
-                catch (Exception ex)
-                {
-                    return NotFound();
+                        // Save changes to the database
+                        _context.SaveChanges();
+
+                        // Redirect to the Index action after successful update
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        // Return a not found view if entities are not found in the database
+                        return NotFound();
+                    }
                 }
+                // ModelState is not valid, return the current view with validation errors
+                return View(graduandDetailsVM);
             }
-            return View(graduandDetailsVM);
+            catch (Exception ex)
+            {
+                // Log the exception for further investigation
+                _logger.LogError($"An error occurred while processing the Edit request - {ex.Message}");
+
+                // Return a different view with an error message or redirect to an error page
+                ViewBag.ErrorMessage = "An error occurred while processing your request.";
+                return View("Error");
+            }
         }
+
 
     }
 }

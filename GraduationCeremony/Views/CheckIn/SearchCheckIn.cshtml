@@ -52,13 +52,11 @@
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {
             <div class="alert alert-danger error-message">@ViewBag.Message</div>
-            <a asp-action="Edit" asp-route-id="@Model.PersonCode" class="btn btn-primary ml-2">Edit</a>
             <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
         }
         @if (string.IsNullOrEmpty(ViewBag.Message))
         {
             <a asp-controller="CheckIn" asp-action="CheckIn" asp-route-PersonCode="@Model.PersonCode" class="btn btn-success">Check In</a>
-            <a asp-action="Edit" asp-route-id="@Model.PersonCode" class="btn btn-primary ml-2">Edit</a>
             <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
         }
     </div>

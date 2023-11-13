@@ -115,55 +115,19 @@ namespace GraduationCeremony.Controllers
 
         public async Task<IActionResult> CheckIn(int PersonCode)
         {
-            //get the details and add it to presenters list
-            var graduants = from g in _context.Graduands select g;
-            var graduantAwards = from g in _context.GraduandAwards select g;
-            var awards = from g in _context.Awards select g;
-            var checkIn = from g in _context.CheckIns select g;
-
-            List<Graduand> grads = await graduants.ToListAsync();
-            List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
-            List<Award> awardsList = await awards.ToListAsync();
-            List<CheckIn> checkInList = await checkIn.ToListAsync();
-
-            Graduand grad = grads.Find(x => x.PersonCode == PersonCode);
-            GraduandAward gradAward = gradAwards.Find(x => x.PersonCode == PersonCode);
-            Award award = awardsList.Find(x => x.AwardCode == gradAward.AwardCode);
-
-            if (grad != null && gradAward != null)
+            try
             {
-                //if student has existing checkin record
-                CheckIn student = await _context.CheckIns.FirstOrDefaultAsync(x => x.PersonCode == PersonCode);
+                // Get the details and add them to presenters list
+                var grad = await _context.Graduands.FirstOrDefaultAsync(x => x.PersonCode == PersonCode);
+                var gradAward = await _context.GraduandAwards.FirstOrDefaultAsync(x => x.PersonCode == PersonCode);
+                var award = await _context.Awards.FirstOrDefaultAsync(x => x.AwardCode == gradAward.AwardCode);
 
-                if (student != null)
+                // Check if the student has an existing check-in record
+                var student = await _context.CheckIns.FirstOrDefaultAsync(x => x.PersonCode == PersonCode);
+
+                if (student == null)
                 {
-                    // retrieve latest
-                    student.Forenames = grad.Forenames;
-                    student.PersonCode = PersonCode;
-                    student.Forenames = grad.Forenames;
-                    student.Surname = grad.Surname;
-                    student.Nsn = grad.Nsn;
-
-                    student.AwardCode = award.AwardCode;
-                    student.QualificationCode = award.QualificationCode;
-                    student.AwardDescription = award.AwardDescription;
-                    student.Level = award.Level;
-
-                    student.GraduandAwardId = gradAward.GraduandAwardId;
-                    student.Major1 = gradAward.Major1;
-                    student.Major2 = gradAward.Major2;
-
-                    student.DateOfBirth = grad.DateOfBirth;
-                    student.Mobile = grad.Mobile;
-                    student.CollegeEmail = grad.CollegeEmail;
-                    student.OrderInList = gradAward.GraduandAwardId;
-
-                    //save updated to db
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    // create new checkin record if not
+                    // Create a new check-in record if it doesn't exist
                     student = new CheckIn
                     {
                         PersonCode = PersonCode,
@@ -183,30 +147,30 @@ namespace GraduationCeremony.Controllers
                         OrderInList = gradAward.GraduandAwardId,
                     };
 
-                    //NO CLUE WHAT THIS DO
-                    if (checkInList.Find(x => x.OrderInList == student.OrderInList) == null)
+                    // Check if a record with the same OrderInList already exists
+                    if (await _context.CheckIns.AnyAsync(x => x.OrderInList == student.OrderInList))
                     {
-                        await _context.CheckIns.AddAsync(student);
-                        _context.CheckIns.OrderBy(item => item.OrderInList);
-                        await _context.SaveChangesAsync();
-
-                        return View(student);
+                        ViewBag.Message = "Already Checked In";
                     }
                     else
                     {
-                        // where is this supposed to be :(
-                        ViewBag.Message = "Already Checked In";
+                        // Add the new check-in record, order the list, and save changes
+                        _context.CheckIns.Add(student);
+                        _context.CheckIns.OrderBy(item => item.OrderInList);
+                        await _context.SaveChangesAsync();
                     }
                 }
-                return RedirectToAction("CheckedInList");
+
+                return View(student);
             }
-            else
+            catch (Exception ex)
             {
-                // where is this supposed to be :(
-                ViewBag.Message = "Student Not Found";
-                return NotFound();  
+                // Log the exception or handle it appropriately
+                ViewBag.Message = $"Error: {ex.Message}";
+                return View("Index");
             }
         }
+
 
         public async Task<IActionResult> CheckedInList(int? page)
         {
@@ -218,95 +182,9 @@ namespace GraduationCeremony.Controllers
 
             List<CheckIn> checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
-            //check changes and update
-            foreach (var student in checkIn)
-            {
-                await CheckIn(student.PersonCode);
-            }
-
-            checkIn = await checkInFull.ToListAsync();
-            checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
 
             return View(checkIn.ToPagedList(1, 10));
         }
-
-        /*  OLD CODE
-         *  //Function which adds the student to the presenters list
-             public async Task<IActionResult> CheckIn(int PersonCode)
-             {
-                 //get the details and add it to presenters list
-                 var graduants = from g in _context.Graduands select g;
-                 var graduantAwards = from g in _context.GraduandAwards select g;
-                 var awards = from g in _context.Awards select g;
-                 var checkIn = from g in _context.CheckIns select g;
-
-                 List<Graduand> grads = await graduants.ToListAsync();
-                 List<GraduandAward> gradAwards = await graduantAwards.ToListAsync();
-                 List<Award> awardsList = await awards.ToListAsync();
-                 List<CheckIn> checkInList = await checkIn.ToListAsync();
-
-                 Graduand grad = grads.Find(x => x.PersonCode == PersonCode);
-                 GraduandAward gradAward = gradAwards.Find(x => x.PersonCode == PersonCode);
-                 Award award = awardsList.Find(x => x.AwardCode == gradAward.AwardCode);
-
-                 if (grad != null)
-                 {
-                     CheckIn student = new CheckIn();
-                     student.PersonCode = PersonCode;
-                     student.Forenames = grad.Forenames;
-                     student.Surname = grad.Surname;
-                     student.Nsn = grad.Nsn;
-
-                     student.AwardCode = award.AwardCode;
-                     student.QualificationCode = award.QualificationCode;
-                     student.AwardDescription = award.AwardDescription;
-                     student.Level = award.Level;
-
-                     student.GraduandAwardId = gradAward.GraduandAwardId;
-                     student.Major1 = gradAward.Major1;
-                     student.Major2 = gradAward.Major2;
-
-                     student.DateOfBirth = grad.DateOfBirth;
-                     student.Mobile = grad.Mobile;
-                     student.CollegeEmail = grad.CollegeEmail;
-                     student.OrderInList = gradAward.GraduandAwardId;
-
-
-                     if(checkInList.Find(x => x.OrderInList == student.OrderInList) == null)
-                     {
-                         await _context.CheckIns.AddAsync(student);
-                         _context.CheckIns.OrderBy(item => item.OrderInList);
-                         await _context.SaveChangesAsync();
-
-                         return View(student);
-                     }
-                     else
-                     {
-                         ViewBag.Message = "Already Checked In";
-                     }
-                 }
-                 else
-                 {
-                     ViewBag.Message = "Student Not Found";
-                 }
-
-                 return View();
-             }
-     */
-
-
-        /*        //The view to see list of people checked in
-                public async Task<IActionResult> CheckedInList()
-                {
-                    var checkInFull = from g in _context.CheckIns select g;
-
-                    List<CheckIn> checkIn = new List<CheckIn>();
-                    checkIn = await checkInFull.ToListAsync();
-                    checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
-
-                    return View(checkIn);
-                }*/
-
 
         //view with next button for presenters
         public async Task<IActionResult> Presenter()
@@ -391,6 +269,12 @@ namespace GraduationCeremony.Controllers
             {
                 return NotFound();
             }
+            else
+            {
+                _context.CheckIns.Remove(checkInFull);
+            }
+
+            await _context.SaveChangesAsync();
 
             return View(checkInFull);
         }

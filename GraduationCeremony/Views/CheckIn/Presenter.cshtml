@@ -22,6 +22,14 @@
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
                         <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
                         <li class="list-group-item text-black"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
+                        @if (!string.IsNullOrEmpty(@Model.ElementAt(i).Major1))
+                        {
+                            <li class="list-group-item text-black"><strong>Major:</strong> @Model.ElementAt(i).Major1</li>
+                        }
+                        @if (!string.IsNullOrEmpty(@Model.ElementAt(i).Major2))
+                        {
+                            <li class="list-group-item text-black"><strong>Major 2:</strong> @Model.ElementAt(i).Major2</li>
+                        }
                         <li class="list-group-item text-black"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
                         <li class="list-group-item text-black"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
                     </ul>
@@ -138,7 +146,7 @@
 
             var pronunciation = syllables.join("-");
             // Update the content of the pronunciation element
-            pronunciationElement.innerText = "Pronunciation: " + pronunciation;
+            pronunciationElement.innerText = pronunciation;
         }
 
         // Initial data fetch and update
