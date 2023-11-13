@@ -9,18 +9,19 @@
 <div class="person-profile-container">
     @for (int i = 0; i < Model.Count(); i++)
     {
+        <!-- Inside the loop -->
         <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
             <div class="card">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item" id="name"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
-                        <li class="list-group-item" id="pronunciation"><strong>Pronunciation:</strong></li>
+                        <li class="list-group-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+                        @* Giving unique id to keep track *@
+                        <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
+                        <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
+                        <li class="list-group-item" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
                         <li class="list-group-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
                         <li class="list-group-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
                         <li class="list-group-item"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
-                        <li class="list-group-item"><strong>Date of Birth:</strong> @Model.ElementAt(i).DateOfBirth</li>
-                        <li class="list-group-item"><strong>College Email:</strong> @Model.ElementAt(i).CollegeEmail</li>
-                        <li class="list-group-item"><strong>Mobile:</strong> @Model.ElementAt(i).Mobile</li>
                     </ul>
                 </div>
             </div>
@@ -65,32 +66,6 @@
             });
         }
 
-        // Function to get the pronunciation of a word
-        function GetPronunciation(word) {
-            var vowels = ['a', 'e', 'i', 'o', 'u'];
-            var syllables = [];
-            var currentSyllable = "";
-
-            for (var i = 0; i < word.length; i++) {
-                var letter = word[i].toLowerCase();
-                if (vowels.indexOf(letter) !== -1) {
-                    if (currentSyllable) {
-                        syllables.push(currentSyllable);
-                        currentSyllable = "";
-                    }
-                }
-                currentSyllable += word[i];
-            }
-
-            if (currentSyllable) {
-                syllables.push(currentSyllable);
-            }
-
-            var pronunciation = syllables.join("-");
-            // Update the content of the pronunciation element
-            document.getElementById("pronunciation").innerText = "Pronunciation: " + pronunciation;
-        }
-
         // Check for updates (every 5 seconds)
         setInterval(fetchDataAndUpdate, 5000);
 
@@ -99,7 +74,11 @@
             if (currentPersonIndex < personProfiles.length - 1) {
                 currentPersonIndex++;
                 // Call GetPronunciation when switching to the next person
-                GetPronunciation(document.getElementById('name').innerText);
+                GetPronunciation(
+                    document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
+                    document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
+                    document.getElementById('pronunciation_' + currentPersonIndex)
+                );
                 updateDisplay();
             }
         });
@@ -107,11 +86,56 @@
         document.getElementById("prevButton").addEventListener("click", function () {
             if (currentPersonIndex > 0) {
                 currentPersonIndex--;
+
                 // Call GetPronunciation when switching to the previous person
-                GetPronunciation(document.getElementById('name').innerText);
+                GetPronunciation(
+                    document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
+                    document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
+                    document.getElementById('pronunciation_' + currentPersonIndex)
+                );
+
                 updateDisplay();
             }
         });
+
+        // Function to get the pronunciation of a word
+        function GetPronunciation(forenames, surname, pronunciationElement) {
+            var vowels = ['a', 'e', 'i', 'o', 'u'];
+            var syllables = [];
+            var currentSyllable = "";
+
+            // Trim leading and trailing whitespaces
+            var trimmedForenames = forenames.trim();
+            var trimmedSurname = surname.trim();
+
+            // Combine forenames and surname
+            var fullName = trimmedForenames + " " + trimmedSurname;
+
+            // Handle case where either forenames or surname is empty
+            if (fullName.length === 0) {
+                pronunciationElement.innerText = "Pronunciation: [Empty Name]";
+                return;
+            }
+
+            for (var i = 0; i < fullName.length; i++) {
+                var letter = fullName[i].toLowerCase();
+                if (vowels.indexOf(letter) !== -1) {
+                    if (currentSyllable) {
+                        syllables.push(currentSyllable);
+                        currentSyllable = "";
+                    }
+                }
+                currentSyllable += fullName[i];
+            }
+
+            if (currentSyllable) {
+                syllables.push(currentSyllable);
+            }
+
+            var pronunciation = syllables.join("-");
+            // Update the content of the pronunciation element
+            pronunciationElement.innerText = "Pronunciation: " + pronunciation;
+        }
 
         // Initial data fetch and update
         fetchDataAndUpdate();
