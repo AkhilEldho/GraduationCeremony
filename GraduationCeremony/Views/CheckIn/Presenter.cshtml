@@ -13,8 +13,8 @@
             <div class="card">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
-                        <li class="list-group-item"><strong>Name:</strong> @GetPronunciation(Model.ElementAt(i).Forenames) @GetPronunciation(Model.ElementAt(i).Surname)</li>
+                        <li class="list-group-item" id="name"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+                        <li class="list-group-item" id="pronunciation"><strong>Pronunciation:</strong></li>
                         <li class="list-group-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
                         <li class="list-group-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
                         <li class="list-group-item"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
@@ -65,27 +65,6 @@
             });
         }
 
-        // Check for updates (every 5 seconds)
-        setInterval(fetchDataAndUpdate, 5000);
-
-        // Event listeners for Next and Previous Buttons
-        document.getElementById("nextButton").addEventListener("click", function () {
-            if (currentPersonIndex < personProfiles.length - 1) {
-                currentPersonIndex++;
-                updateDisplay();
-            }
-        });
-
-        document.getElementById("prevButton").addEventListener("click", function () {
-            if (currentPersonIndex > 0) {
-                currentPersonIndex--;
-                updateDisplay();
-            }
-        });
-
-        // Initial data fetch and update
-        fetchDataAndUpdate();
-
         // Function to get the pronunciation of a word
         function GetPronunciation(word) {
             var vowels = ['a', 'e', 'i', 'o', 'u'];
@@ -108,9 +87,34 @@
             }
 
             var pronunciation = syllables.join("-");
-            // For simplicity, let's return the word itself
-            return pronunciation;
+            // Update the content of the pronunciation element
+            document.getElementById("pronunciation").innerText = "Pronunciation: " + pronunciation;
         }
+
+        // Check for updates (every 5 seconds)
+        setInterval(fetchDataAndUpdate, 5000);
+
+        // Event listeners for Next and Previous Buttons
+        document.getElementById("nextButton").addEventListener("click", function () {
+            if (currentPersonIndex < personProfiles.length - 1) {
+                currentPersonIndex++;
+                // Call GetPronunciation when switching to the next person
+                GetPronunciation(document.getElementById('name').innerText);
+                updateDisplay();
+            }
+        });
+
+        document.getElementById("prevButton").addEventListener("click", function () {
+            if (currentPersonIndex > 0) {
+                currentPersonIndex--;
+                // Call GetPronunciation when switching to the previous person
+                GetPronunciation(document.getElementById('name').innerText);
+                updateDisplay();
+            }
+        });
+
+        // Initial data fetch and update
+        fetchDataAndUpdate();
     </script>
 }
 </script>
