@@ -10,15 +10,18 @@
     @for (int i = 0; i < Model.Count(); i++)
     {
         <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
-            <div class="person-details">
-                <div class="person-name" id="firstName">@Model.ElementAt(i).Forenames </div>
-                <div class="person-name" id="lastName">@Model.ElementAt(i).Surname</div>
-
-                <div id="forename"></div>
-
-                <div class="person-award">
-                    <div class="award-description">@Model.ElementAt(i).AwardDescription</div>
-                    <div class="award-level">@Model.ElementAt(i).Level</div>
+            <div class="card">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+                        <li class="list-group-item"><strong>Name:</strong> @GetPronunciation(Model.ElementAt(i).Forenames) @GetPronunciation(Model.ElementAt(i).Surname)</li>
+                        <li class="list-group-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
+                        <li class="list-group-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
+                        <li class="list-group-item"><strong>Person Code:</strong> @Model.ElementAt(i).PersonCode</li>
+                        <li class="list-group-item"><strong>Date of Birth:</strong> @Model.ElementAt(i).DateOfBirth</li>
+                        <li class="list-group-item"><strong>College Email:</strong> @Model.ElementAt(i).CollegeEmail</li>
+                        <li class="list-group-item"><strong>Mobile:</strong> @Model.ElementAt(i).Mobile</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -82,9 +85,32 @@
 
         // Initial data fetch and update
         fetchDataAndUpdate();
+
+        // Function to get the pronunciation of a word
+        function GetPronunciation(word) {
+            var vowels = ['a', 'e', 'i', 'o', 'u'];
+            var syllables = [];
+            var currentSyllable = "";
+
+            for (var i = 0; i < word.length; i++) {
+                var letter = word[i].toLowerCase();
+                if (vowels.indexOf(letter) !== -1) {
+                    if (currentSyllable) {
+                        syllables.push(currentSyllable);
+                        currentSyllable = "";
+                    }
+                }
+                currentSyllable += word[i];
+            }
+
+            if (currentSyllable) {
+                syllables.push(currentSyllable);
+            }
+
+            var pronunciation = syllables.join("-");
+            // For simplicity, let's return the word itself
+            return pronunciation;
+        }
     </script>
 }
 </script>
-
-
-
