@@ -123,10 +123,15 @@ namespace GraduationCeremony.Controllers
                 student.AwardDescription = award.AwardDescription;
                 student.Level = award.Level;
 
+                student.GraduandAwardId = gradAward.GraduandAwardId;
+                student.Major1 = gradAward.Major1;
+                student.Major2 = gradAward.Major2;
+
                 student.DateOfBirth = grad.DateOfBirth;
                 student.Mobile = grad.Mobile;
                 student.CollegeEmail = grad.CollegeEmail;
                 student.OrderInList = gradAward.GraduandAwardId;
+
 
                 if(checkInList.Find(x => x.OrderInList == student.OrderInList) == null)
                 {

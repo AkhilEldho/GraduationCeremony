@@ -15,13 +15,16 @@ namespace GraduationCeremony.Models.DB
         public string QualificationCode { get; set; } = null!;
         public string AwardDescription { get; set; } = null!;
         public string Level { get; set; } = null!;
-        //removing the time for date
+        //removing the time
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public string? CollegeEmail { get; set; }
         public string? Mobile { get; set; }
         public int OrderInList { get; set; }
+        public string? Major1 { get; set; }
+        public string? Major2 { get; set; }
+        public int GraduandAwardId { get; set; }
 
-        public virtual Graduand PersonCodeNavigation { get; set; } = null!;
+        public virtual GraduandAward GraduandAward { get; set; } = null!;
     }
 }

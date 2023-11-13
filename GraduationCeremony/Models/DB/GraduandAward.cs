@@ -5,6 +5,11 @@ namespace GraduationCeremony.Models.DB
 {
     public partial class GraduandAward
     {
+        public GraduandAward()
+        {
+            CheckIns = new HashSet<CheckIn>();
+        }
+
         public int GraduandAwardId { get; set; }
         public string AwardCode { get; set; } = null!;
         public int PersonCode { get; set; }
@@ -14,10 +19,10 @@ namespace GraduationCeremony.Models.DB
         public DateTime? Awarded { get; set; }
         public DateTime YearAchieved { get; set; }
 
-        /* public virtual Award AwardCodeNavigation { get; set; } = null!;
-         public virtual Graduand PersonCodeNavigation { get; set; } = null!;*/
-
-        public virtual Award? AwardCodeNavigation { get; set; }
+        /*        public virtual Award AwardCodeNavigation { get; set; } = null!;
+                public virtual Graduand PersonCodeNavigation { get; set; } = null!;*/
+        public virtual Award? AwardCodeNavigation { get; set; } 
         public virtual Graduand? PersonCodeNavigation { get; set; } 
+        public virtual ICollection<CheckIn> CheckIns { get; set; }
     }
 }

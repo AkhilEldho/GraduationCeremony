@@ -27,7 +27,8 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
 
-        //custom views
+        //custom view model
+
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -191,9 +192,21 @@ namespace GraduationCeremony.Models.DB
                     .HasMaxLength(50)
                     .HasColumnName("FORENAMES");
 
+                entity.Property(e => e.GraduandAwardId).HasColumnName("GRADUAND_AWARD_ID");
+
                 entity.Property(e => e.Level)
                     .HasMaxLength(150)
                     .HasColumnName("LEVEL");
+
+                entity.Property(e => e.Major1)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("MAJOR_1");
+
+                entity.Property(e => e.Major2)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("MAJOR_2");
 
                 entity.Property(e => e.Mobile)
                     .HasMaxLength(50)
@@ -212,11 +225,11 @@ namespace GraduationCeremony.Models.DB
                     .HasMaxLength(50)
                     .HasColumnName("SURNAME");
 
-                entity.HasOne(d => d.PersonCodeNavigation)
+                entity.HasOne(d => d.GraduandAward)
                     .WithMany(p => p.CheckIns)
-                    .HasForeignKey(d => d.PersonCode)
+                    .HasForeignKey(d => d.GraduandAwardId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CheckIn_Graduand");
+                    .HasConstraintName("FK_CheckIn_Graduand_Award");
             });
 
             modelBuilder.Entity<Graduand>(entity =>

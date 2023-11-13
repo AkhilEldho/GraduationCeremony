@@ -22,6 +22,8 @@
                     <th>Date of Birth</th>
                     <th>College Email</th>
                     <th>Mobile</th>
+                    <th>Major 1</th>
+                    <th>Major 2</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -40,6 +42,8 @@
                         <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
                         <td>@Html.DisplayFor(modelItem => item.CollegeEmail)</td>
                         <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Major1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Major2)</td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.PersonCode" class="btn btn-primary btn-sm">Edit</a>
                             <a asp-action="Details" asp-route-id="@item.PersonCode" class="btn btn-info btn-sm">Details</a>
