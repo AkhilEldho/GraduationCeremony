@@ -51,11 +51,18 @@ namespace GraduationCeremony.Controllers
 
             List<GraduandDetails> grad = result;
             string search = searchString;
-            grad = grad.Where(g => g.graduands.CollegeEmail.ToLower().Contains(searchString.ToLower().Trim())).ToList();
 
-            if(grad.Count == 0)
+            //only requires to search the name so everything past @ symbol won't be needed
+            string searchQuery = searchString.ToLower().Trim();
+
+            grad = grad
+                .Where(g => g.graduands.CollegeEmail.ToLower().Split('@')[0].Split('.').Any(email => email.StartsWith(searchQuery)))
+                .ToList();
+
+
+            if (grad.Count == 0)
             {
-                ViewBag.Message = "Student " + searchString + " not found enter email correctly";
+                ViewBag.Message = "Student " + searchString + " not found. Please enter email correctly";
                 return View(result);
             }
             else

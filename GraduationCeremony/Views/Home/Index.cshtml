@@ -68,3 +68,47 @@
     </div>
 </form>
 
+
+@*auto suggestion*@
+<script type="text/javascript">
+    function XAjaxRequest(searchString) {
+        if (searchString.length < 1) {
+            autoSuggestContainer.innerHTML = "";
+            autoSuggestContainer.classList.remove("show-border");
+            return;
+        } else {
+            autoSuggestContainer.classList.add("show-border");
+        }
+
+
+        //alert("testing searchString=" + searchString);
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        var url = "/Product/IndexAJAX?searchString=" + searchString;
+        // open connection, GET is quick and simple, false: sync page will freeze
+        xmlhttp.open("GET", url, false);
+        // send the request to IndexAJAX
+        xmlhttp.send();
+        document.getElementById("autoSuggestContainer").style.display = "block";
+        //need to clear out the container for a fresh auto-suggest list
+        //else the auto-suggest list can keep growing and growing with additional user keyups
+        document.getElementById("autoSuggestContainer").innerHTML = "";
+
+        var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
+
+        var autoSuggestions = "";
+
+        for (var i = 0; i < messageObject.length; i++) {
+            //HTML code generation demo
+            //Works together with the ".innerHTML" statement after the end of this "for" block
+            autoSuggestions +=
+                "<input type=\"button\" value=\"" + messageObject[i].Name + "\" "
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
+                + "style=\"background-color: #f2f2f2;\" />";
+
+            autoSuggestions += "<br />";
+        }
+        //place the generated buttons HTML code inside the display div
+        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+    }
+</script>
