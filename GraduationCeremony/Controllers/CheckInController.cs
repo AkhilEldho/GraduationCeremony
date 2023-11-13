@@ -188,7 +188,7 @@ namespace GraduationCeremony.Controllers
         }
 
         public async Task<IActionResult> CheckedInList()
-        {
+        { 
             //retrieve checkin table
             var checkInFull = from g in _context.CheckIns select g;
 
