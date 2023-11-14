@@ -61,6 +61,34 @@
                 }
             }
         }
+        /** NEED TO MODIFY
+         *         function fetchDataAndUpdate() {
+            // Use AJAX to fetch the updated data
+            $.ajax({
+                url: "/CheckIn/GetUpdatedPersons",
+                type: "GET",
+                success: function (data) {
+                    // Ensure the current index is within bounds
+                    currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
+
+                    // Update the table with new data
+                    if (data.length > personProfiles.length) {
+                        // If new data is available, update the profiles and display the new person
+                        personProfiles = document.querySelectorAll(".person-profile");
+                        updateDisplay();
+
+                        // Call GetPronunciation for the new person
+                        GetPronunciation(
+                            document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
+                            document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
+                            document.getElementById('pronunciation_' + currentPersonIndex)
+                        );
+                    }
+                }
+            });
+        }
+         */
+
 
         function fetchDataAndUpdate() {
             // Use AJAX to fetch the updated data
