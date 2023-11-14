@@ -24,6 +24,7 @@ namespace GraduationCeremony.Controllers
             _context = context;
         }
 
+        //CHECK IN HOME
         public IActionResult Index(string? message)
         {
             if (string.IsNullOrEmpty(message))
@@ -37,7 +38,7 @@ namespace GraduationCeremony.Controllers
             }
         }
 
-        //auto suggest for checkin 
+        // AUTO SUGGEST FOR CHECKIN 
         public string SearchGraduandByName(string searchString)
         {
             string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p1";
@@ -51,8 +52,7 @@ namespace GraduationCeremony.Controllers
             return json;
         }
 
-
-
+        // SEARCHING FOR GRADUAND
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
             try
@@ -144,8 +144,7 @@ namespace GraduationCeremony.Controllers
             }
         }
 
-
-
+        // CHECKING IN 
         public async Task<IActionResult> CheckIn(int PersonCode)
         {
             try
@@ -204,7 +203,7 @@ namespace GraduationCeremony.Controllers
             }
         }
 
-
+        // LIST FOR THE STAFF TO SEE
         public async Task<IActionResult> CheckedInList(int? page)
         {
             // if no page was specified in the querystring, deafult to the first page
@@ -219,7 +218,7 @@ namespace GraduationCeremony.Controllers
             return View(checkIn.ToPagedList(1, 10));
         }
 
-        //view with next button for presenters
+        // PRESENTERS VIEW
         public async Task<IActionResult> Presenter()
         {
             var checkInFull = from g in _context.CheckIns select g;
@@ -231,6 +230,7 @@ namespace GraduationCeremony.Controllers
             return View(checkInList);
         }
 
+        // JAVA SCRIPT UPDATE
         [HttpGet]
         public async Task<IActionResult> GetUpdatedPersons()
         {

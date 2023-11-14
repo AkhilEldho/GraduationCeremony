@@ -105,17 +105,6 @@ body {
         background-color: #713232; /* Darker shade on hover */
     }
 
-/*.auto-suggest-container {
-    position: absolute;
-    display: none;
-    z-index: 100;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 400px;
-}*/
-
 /* Fancier Button Styles */
 .btn {
     font-weight: 600;
@@ -173,6 +162,25 @@ body {
 .h6 {
     color: #000; /* Set the desired text color */
 }
+
+.table-bordered {
+    border-color: #d9534f; /* Set border color to a dark red color */
+}
+
+.table th,
+.table td {
+    color: #e9ecef; /* Set text color to black */
+}
+
+.table th {
+    background-color: #343a40; /* Dark background color for table header */
+    color: #fff; /* Text color for table header */
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef; /* Light gray background on hover */
+}
+
 
 /* Override text color for specific elements in searchCheckIn view */
 .card-body li {
