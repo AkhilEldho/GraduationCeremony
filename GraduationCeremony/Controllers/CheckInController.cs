@@ -81,9 +81,10 @@ namespace GraduationCeremony.Controllers
                 var graduantAwards = _context.GraduandAwards.AsQueryable();
                 var awards = _context.Awards.AsQueryable();
 
+                //CHANGED THINGS IN HERE
                 // Search for the grad
-                var grad = await graduants
-                    .Where(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()) || 
+                Graduand grad = await graduants
+                    .Where(g => g.CollegeEmail.ToLower() == searchString.ToLower() || 
                     g.Forenames.ToLower() == firstName.ToLower() ||
                     g.Surname.ToLower() == lastName.ToLower())
                     .FirstOrDefaultAsync();

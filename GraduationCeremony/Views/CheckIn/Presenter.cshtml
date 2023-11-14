@@ -73,6 +73,8 @@
                     // Ensure the current index is within bounds
                     currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
 
+                    alert("called");
+
                     updateDisplay();
                 }
             });
@@ -91,8 +93,9 @@
                     document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
-                updateDisplay();
+                
             }
+            fetchDataAndUpdate();
         });
 
         document.getElementById("prevButton").addEventListener("click", function () {
@@ -106,7 +109,7 @@
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
 
-                updateDisplay();
+                fetchDataAndUpdate();
             }
         });
 
