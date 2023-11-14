@@ -88,7 +88,7 @@
         //alert("testing searchString=" + searchString);
         var xmlhttp;
         xmlhttp = new XMLHttpRequest();
-        var url = "/CheckIn/SearchGraduandByEmail?searchString=" + searchString;
+        var url = "/CheckIn/SearchGraduandByName?searchString=" + searchString;
         // open connection, GET is quick and simple, false: sync page will freeze
         xmlhttp.open("GET", url, false);
         // send the request to IndexAJAX
@@ -106,7 +106,7 @@
             //HTML code generation demo
             //Works together with the ".innerHTML" statement after the end of this "for" block
             autoSuggestions +=
-                "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " +messageObject[i].Surname +"\" "
+                "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " + messageObject[i].Surname + "\" "
                 + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
                 + "style=\"background-color:transparent;\" />";
 

@@ -36,19 +36,22 @@ namespace GraduationCeremony.Controllers
                 return View();
             }
         }
-        //auto suggest
-        public string SearchGraduandByEmail(string searchString)
+
+        //auto suggest for checkin 
+        public string SearchGraduandByName(string searchString)
         {
-            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 AND Surname LIKE @p0";
+            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p1";
 
-            string wrapEmail = "%" + searchString + "%";
-
-            List<Graduand> graduands = _context.Graduands.FromSqlRaw(sql, wrapEmail).ToList();
-
+            //allow to search similar to startswith for both forenames or surname
+            string wrapSearchString = searchString + "%";
+            //surprised this one worked
+            List<Graduand> graduands = _context.Graduands.FromSqlRaw(sql, wrapSearchString, wrapSearchString).ToList();
             string json = JsonConvert.SerializeObject(graduands);
 
             return json;
         }
+
+
 
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
