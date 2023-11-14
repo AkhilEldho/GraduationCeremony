@@ -73,7 +73,7 @@ namespace GraduationCeremony.Controllers
 
                                 var errors = new HashSet<string>();
 
-                                int noOfRow = worksheet.Dimension.End.Row;
+                                int noOfRow = worksheet.Dimension.End.Row - 1;
 
                                 var processedAwardCodes = new HashSet<string>();
                                 var processedGraduandCodes = new HashSet<string>();
@@ -99,11 +99,11 @@ namespace GraduationCeremony.Controllers
                                                 {
                                                     awards.Add(award);
                                                 }
-                                            }
-                                            else
-                                            {
-                                                //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
-                                                errors.UnionWith(awardErrors);
+                                                else
+                                                {
+                                                    //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+                                                    errors.UnionWith(awardErrors);
+                                                }
                                             }
                                         }
                                     }
@@ -142,23 +142,28 @@ namespace GraduationCeremony.Controllers
                                 }
 
                                 //only saving those with changes
-                                if (awards.Count != awardsFullList.Count())
+                                if (awards.Count != 0)
                                 {
                                     //for add range: https://stackoverflow.com/questions/38887434/cannot-convert-from-string-to-system-collections-generic-list-string
                                     //adding to DB
                                     _context.Awards.AddRange(awards);
                                     _context.SaveChanges();
                                 }
+                                else
+                                    ViewBag.ErrorMessage = "No New Data Added \n";
+
 
                                 //only saving those with changes
-                                if (graduands.Count != graduandsFullList.Count())
+                                if (graduands.Count != 0)
                                 {
                                     _context.Graduands.AddRange(graduands);
                                     _context.SaveChanges();
                                 }
+                                else
+                                    ViewBag.ErrorMessage = "No New Data Added \n";
 
                                 //only saving those with changes
-                                if (graduandAwards.Count != graduandAwardsFullList.Count())
+                                if (graduandAwards.Count != 0)
                                 {
                                     //ordering the items
                                     graduandAwards = graduandAwards
@@ -171,9 +176,9 @@ namespace GraduationCeremony.Controllers
                                     _context.SaveChanges();
                                 }
                                 else
-                                {
-                                    ViewBag.Errors = errors;
-                                }
+                                    ViewBag.ErrorMessage = "No New Data Added \n";
+
+                                ViewBag.Errors = errors;
                             }
                             else
                             {

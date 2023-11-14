@@ -17,8 +17,10 @@ namespace GraduationCeremony.Controllers
             _context = context;
             _logger = logger;
         }
-        public IActionResult Index()
+        public IActionResult Index(int? page)
         {
+            var pageNumber = page ?? 1;
+
             var result = (from g in _context.Graduands
                           join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
                           join a in _context.Awards on ga.AwardCode equals a.AwardCode
@@ -32,7 +34,7 @@ namespace GraduationCeremony.Controllers
                         .ThenBy(item => item.awards.AwardDescription)
                         .ThenBy(item => item.graduands.Forenames).ToList();
 
-            return View(result.ToPagedList(1, 10));
+            return View(result.ToPagedList(pageNumber, 10));
         }
 
         public IActionResult Search(string searchString, int? page)
