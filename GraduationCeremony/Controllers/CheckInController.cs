@@ -87,7 +87,7 @@ namespace GraduationCeremony.Controllers
                 //CHANGED THINGS IN HERE
                 // Search for the grad
                 Graduand grad = await graduants
-                    .Where(g => g.CollegeEmail.ToLower() == searchString.ToLower() || 
+                    .Where(g => g.CollegeEmail.ToLower() == searchString.ToLower() ||
                     g.Forenames.ToLower() == firstName.ToLower() ||
                     g.Surname.ToLower() == lastName.ToLower())
                     .FirstOrDefaultAsync();
@@ -179,6 +179,7 @@ namespace GraduationCeremony.Controllers
                         OrderInList = gradAward.GraduandAwardId,
                     };
 
+
                     // Check if a record with the same OrderInList already exists
                     if (await _context.CheckIns.AnyAsync(x => x.OrderInList == student.OrderInList))
                     {
@@ -222,7 +223,8 @@ namespace GraduationCeremony.Controllers
         public async Task<IActionResult> Presenter()
         {
             var checkInFull = from g in _context.CheckIns select g;
-            checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
+            checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames).Join;
+
             List<CheckIn> checkInList = new List<CheckIn>();
 
             checkInList = await checkInFull.ToListAsync();
