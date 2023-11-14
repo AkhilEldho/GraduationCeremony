@@ -39,7 +39,7 @@ namespace GraduationCeremony.Controllers
         //auto suggest
         public string SearchGraduandByEmail(string searchString)
         {
-            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p0";
+            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 AND Surname LIKE @p0";
 
             string wrapEmail = "%" + searchString + "%";
 
@@ -56,6 +56,18 @@ namespace GraduationCeremony.Controllers
             {
                 // Removing extra space  
                 searchString = searchString?.Trim();
+                string[] nameParts = searchString?.Split(' ');
+
+                string firstName = "";
+                string lastName = "";
+
+                if (nameParts != null && nameParts.Length > 0)
+                {
+                    firstName = nameParts[0];
+
+                    // Combine the remaining parts as the last name
+                    lastName = string.Join(" ", nameParts.Skip(1));
+                }
 
                 if (string.IsNullOrEmpty(searchString))
                 {
@@ -71,7 +83,9 @@ namespace GraduationCeremony.Controllers
 
                 // Search for the grad
                 var grad = await graduants
-                    .Where(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()))
+                    .Where(g => g.CollegeEmail.ToLower().Contains(searchString.ToLower()) || 
+                    g.Forenames.ToLower() == firstName.ToLower() ||
+                    g.Surname.ToLower() == lastName.ToLower())
                     .FirstOrDefaultAsync();
 
                 if (grad != null)
@@ -115,7 +129,7 @@ namespace GraduationCeremony.Controllers
                 }
 
                 // Handle the case when grad, gradAward, or award is null
-                ViewBag.Message = "Error: Graduation record not found.";
+                ViewBag.Message = "Error: Graduand record not found.";
                 return View("Index");
             }
             catch (Exception ex)
@@ -125,6 +139,7 @@ namespace GraduationCeremony.Controllers
                 return View("Index");
             }
         }
+
 
 
         public async Task<IActionResult> CheckIn(int PersonCode)

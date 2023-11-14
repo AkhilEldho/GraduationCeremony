@@ -59,7 +59,7 @@ namespace GraduationCeremony.Controllers
                 // Cleaning the input from user
                 string searchEmail = searchString?.ToLower().Trim();
 
-                // Filter results based on the search query
+                // Filter results based on the search
                 var search = result
                     .Where(g => g.graduands.CollegeEmail.ToLower().Split('@')[0].Split('.').Any(email => email.StartsWith(searchEmail)))
                     .ToList();

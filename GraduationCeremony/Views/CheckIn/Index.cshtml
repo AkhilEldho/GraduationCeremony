@@ -62,6 +62,12 @@
                 </div> *@
                 <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
             </form>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="alert alert-danger error-message">@ViewBag.Message</div>
+            }
+
         </div>
     </div>
 </div>
@@ -100,7 +106,7 @@
             //HTML code generation demo
             //Works together with the ".innerHTML" statement after the end of this "for" block
             autoSuggestions +=
-                "<input type=\"button\" value=\"" + messageObject[i].CollegeEmail + "\" "
+                "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " +messageObject[i].Surname +"\" "
                 + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
                 + "style=\"background-color:transparent;\" />";
 
