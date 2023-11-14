@@ -27,8 +27,7 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
 
-        //custom view model
-
+        // Custom Views
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -220,6 +219,11 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.QualificationCode)
                     .HasMaxLength(150)
                     .HasColumnName("QUALIFICATION_CODE");
+
+                entity.Property(e => e.School)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("SCHOOL");
 
                 entity.Property(e => e.Surname)
                     .HasMaxLength(50)

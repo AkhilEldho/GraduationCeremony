@@ -176,12 +176,12 @@ namespace GraduationCeremony.Controllers
                         DateOfBirth = grad.DateOfBirth,
                         Mobile = grad.Mobile,
                         CollegeEmail = grad.CollegeEmail,
-                        OrderInList = gradAward.GraduandAwardId,
+                        School = grad.School,
                     };
 
 
                     // Check if a record with the same OrderInList already exists
-                    if (await _context.CheckIns.AnyAsync(x => x.OrderInList == student.OrderInList))
+                    if (await _context.CheckIns.AnyAsync(x => x.GraduandAwardId == student.GraduandAwardId))
                     {
                         ViewBag.Message = "Already Checked In";
                     }
@@ -189,7 +189,7 @@ namespace GraduationCeremony.Controllers
                     {
                         // Add the new check-in record, order the list, and save changes
                         _context.CheckIns.Add(student);
-                        _context.CheckIns.OrderBy(item => item.OrderInList);
+                        _context.CheckIns.OrderBy(item => item.GraduandAwardId);
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -214,7 +214,7 @@ namespace GraduationCeremony.Controllers
             var checkInFull = from g in _context.CheckIns select g;
 
             List<CheckIn> checkIn = await checkInFull.ToListAsync();
-            checkIn = checkIn.OrderBy(x => x.OrderInList).ToList();
+            checkIn = checkIn.OrderBy(x => x.GraduandAwardId).ToList();
 
             return View(checkIn.ToPagedList(1, 10));
         }
@@ -223,7 +223,18 @@ namespace GraduationCeremony.Controllers
         public async Task<IActionResult> Presenter()
         {
             var checkInFull = from g in _context.CheckIns select g;
-            checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames).Join;
+
+            var checkAndAward = from checkIn in _context.CheckIns
+                              join award in _context.Awards
+                              on checkIn.AwardCode equals award.AwardCode
+                              select new
+                              {
+                                  CheckIn = checkIn,
+                                  Award = award
+                              };
+
+
+            checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
 
             List<CheckIn> checkInList = new List<CheckIn>();
 
