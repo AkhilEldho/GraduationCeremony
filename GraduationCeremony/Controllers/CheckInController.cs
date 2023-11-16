@@ -127,7 +127,7 @@ namespace GraduationCeremony.Controllers
         }
 
 
-        // SEARCHING FOR GRADUAND
+        // SEARCHING SINGLE GRADUAND
         public async Task<IActionResult> SearchCheckIn(string searchString)
         {
             try

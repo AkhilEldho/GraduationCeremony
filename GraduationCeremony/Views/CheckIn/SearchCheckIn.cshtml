@@ -52,10 +52,12 @@
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {
             <div class="alert alert-danger error-message">@ViewBag.Message</div>
+            <div class="alert alert-danger error-message">Order In Queue @Model.GraduandAwardId </div>
             <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
         }
         @if (string.IsNullOrEmpty(ViewBag.Message))
         {
+            <input type="text" id="" />
             <a asp-controller="CheckIn" asp-action="CheckIn" asp-route-PersonCode="@Model.PersonCode" class="btn btn-success">Check In</a>
             <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
         }
