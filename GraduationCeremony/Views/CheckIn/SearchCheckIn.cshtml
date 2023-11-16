@@ -57,7 +57,7 @@
         }
         @if (string.IsNullOrEmpty(ViewBag.Message))
         {
-            <input type="text" id="pronunciation" />
+            <input type="text" id="pronunciation" placeholder="Enter name phonetics.. Jo-hn Sm-ith" />
             <a asp-controller="CheckIn" asp-action="CheckIn" asp-route-PersonCode="@Model.PersonCode" asp-route-pronunciation="" class="btn btn-success">Check In</a>
             <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
         }
