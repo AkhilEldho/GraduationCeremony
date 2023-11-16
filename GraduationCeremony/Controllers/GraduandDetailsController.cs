@@ -1,6 +1,7 @@
 ﻿using GraduationCeremony.Models.DB;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Net;
 using System.Xml.Linq;
 using X.PagedList;
@@ -37,42 +38,85 @@ namespace GraduationCeremony.Controllers
             return View(result.ToPagedList(pageNumber, 10));
         }
 
-        public IActionResult Search(string searchString, int? page)
+        // AUTO SUGGEST FOR GRADUANDDETAILS 
+        public string SearchGraduandDetailsByName(string searchString)
+        {
+            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p1";
+
+            string wrapSearchString = searchString + "%";
+
+            var graduandDetailsList = _context.Graduands
+            .FromSqlRaw(sql, wrapSearchString, wrapSearchString)
+            .Select(g => new GraduandDetails
+            {
+              PersonCode = g.PersonCode,
+              graduands = g
+            })
+            .ToList();
+
+            string json = JsonConvert.SerializeObject(graduandDetailsList);
+
+            return json;
+        }
+
+        public async Task<IActionResult> Search(string searchString, int? page)
         {
             try
             {
-                // If no page was specified in the query string, default to the first page
                 var pageNumber = page ?? 1;
 
-                // Your existing query to fetch graduands
-                var result = (from g in _context.Graduands
-                              join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                              join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                              select new GraduandDetails
-                              {
-                                  graduands = g,
-                                  awards = a,
-                                  graduandAwards = ga
-                              })
-                             .OrderBy(item => item.awards.Level)
-                            .ThenBy(item => item.awards.AwardDescription)
-                            .ThenBy(item => item.graduands.Forenames).ToList();
+                // Removing extra space  
+                searchString = searchString?.Trim();
+                string[] nameParts = searchString?.Split(' ');
 
-                // Cleaning the input from user
-                string searchEmail = searchString?.ToLower().Trim();
+                string firstName = "";
+                string lastName = "";
 
-                // Filter results based on the search
-                var search = result
-                    .Where(g => g.graduands.CollegeEmail.ToLower().Split('@')[0].Split('.').Any(email => email.StartsWith(searchEmail)))
-                    .ToList();
-
-                if (search.Count == 0)
+                if (nameParts != null && nameParts.Length > 0)
                 {
-                    // No results found
-                    ViewBag.Message = "Student " + searchString + " not found. Please enter email correctly";
+                    // if search string is a single character, use it for both first and last name
+                    if (nameParts[0].Length == 1)
+                    {
+                        firstName = nameParts[0];
+                        lastName = nameParts[0];
+                    }
+                    else
+                    {
+                        firstName = nameParts[0];
+                        lastName = string.Join(" ", nameParts.Skip(1));
+                    }
                 }
 
-                return View(search.ToPagedList(pageNumber, 10));
+                if (string.IsNullOrEmpty(searchString))
+                {
+                    // Handle empty or null search string
+                    ViewBag.Message = "Error: Please enter a valid search string.";
+                    return View("Index");
+                }
+                //searching by first name / last name
+                var result = await (from g in _context.Graduands
+                                   join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                                   join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                                   where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
+                                         (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
+                                   select new GraduandDetails
+                                   {
+                                       graduands = g,
+                                       awards = a,
+                                       graduandAwards = ga
+                                   })
+                      .OrderBy(item => item.awards.Level)
+                      .ThenBy(item => item.awards.AwardDescription)
+                      .ThenBy(item => item.graduands.Forenames)
+                      .ToListAsync();
+
+                if (result.Count == 0)
+                {
+                    // No results found
+                    ViewBag.Message = "Student " + searchString + " not found. Please enter name correctly";
+                }
+
+                return View(result.ToPagedList(pageNumber, 10));
             }
             catch (Exception ex)
             {

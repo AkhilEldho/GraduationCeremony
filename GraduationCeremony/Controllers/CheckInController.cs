@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using NuGet.Versioning;
@@ -45,12 +46,86 @@ namespace GraduationCeremony.Controllers
 
             //allow to search similar to startswith for both forenames or surname
             string wrapSearchString = searchString + "%";
-            //surprised this one worked
+
             List<Graduand> graduands = _context.Graduands.FromSqlRaw(sql, wrapSearchString, wrapSearchString).ToList();
             string json = JsonConvert.SerializeObject(graduands);
 
             return json;
         }
+
+        // AUTO SUGGEST FOR CHECKEDIN GRADUANDS 
+        public string SearchCheckedInGraduands(string searchString)
+        {
+            string sql = "SELECT * FROM CheckIn WHERE Forenames LIKE @p0 OR Surname LIKE @p1";
+
+            //allow to search similar to startswith for both forenames or surname
+            string wrapSearchString = searchString + "%";
+
+            List<CheckIn> checkin = _context.CheckIns.FromSqlRaw(sql, wrapSearchString, wrapSearchString).ToList();
+            string json = JsonConvert.SerializeObject(checkin);
+
+            return json;
+        }
+
+        // SEARCHING FOR CHECKEDIN GRADUANDS
+        public async Task<IActionResult> SearchCheckedIn(string searchString, int? page)
+        {
+            try
+            {
+                var pageNumber = page ?? 1;
+
+                // Removing extra space  
+                searchString = searchString?.Trim();
+                string[] nameParts = searchString?.Split(' ');
+
+                string firstName = "";
+                string lastName = "";
+
+                if (nameParts != null && nameParts.Length > 0)
+                {
+                    // if search string is a single character, use it for both first and last name
+                    if (nameParts[0].Length == 1)
+                    {
+                        firstName = nameParts[0];
+                        lastName = nameParts[0];
+                    }
+                    else
+                    {
+                        firstName = nameParts[0];
+                        lastName = string.Join(" ", nameParts.Skip(1));
+                    }
+                }
+
+                if (string.IsNullOrEmpty(searchString))
+                {
+                    // Handle empty or null search string
+                    ViewBag.Message = "Error: Please enter a valid search string.";
+                    return View("Index");
+                }
+                // search query using first name or last name 
+                List<CheckIn> checkInRecord = await _context.CheckIns
+                    .Where(x => (string.IsNullOrEmpty(firstName) || x.Forenames.ToLower().StartsWith(firstName.ToLower()) || x.Surname.ToLower().StartsWith(firstName.ToLower())) &&
+                                (string.IsNullOrEmpty(lastName) || x.Forenames.ToLower().StartsWith(lastName.ToLower()) || x.Surname.ToLower().StartsWith(lastName.ToLower())))
+                    .ToListAsync();
+
+                if (checkInRecord != null && checkInRecord.Count > 0)
+                {
+                    //returning as ipagedlist
+                    return View(checkInRecord.ToPagedList(pageNumber, 10));
+                } else
+                {
+                    ViewBag.Message = "Student " + searchString + " not found. Please enter name correctly";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                ViewBag.Message = $"Error: {ex.Message}";
+                return View("Index");
+            }
+            return View();
+        }
+
 
         // SEARCHING FOR GRADUAND
         public async Task<IActionResult> SearchCheckIn(string searchString)
