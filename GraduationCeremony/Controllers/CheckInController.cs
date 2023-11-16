@@ -147,13 +147,6 @@ namespace GraduationCeremony.Controllers
                     lastName = string.Join(" ", nameParts.Skip(1));
                 }
 
-                if (string.IsNullOrEmpty(searchString))
-                {
-                    // Handle empty or null search string
-                    ViewBag.Message = "Error: Please enter a valid search string.";
-                    return View("Index");
-                }
-
                 // Getting all the relevant tables to search
                 var graduants = _context.Graduands.AsQueryable();
                 var graduantAwards = _context.GraduandAwards.AsQueryable();
@@ -188,6 +181,7 @@ namespace GraduationCeremony.Controllers
                             AwardCode = award.AwardCode,
                             QualificationCode = award.QualificationCode,
                             AwardDescription = award.AwardDescription,
+                            GraduandAwardId = gradAward.GraduandAwardId,
                             Level = award.Level,
                             DateOfBirth = grad.DateOfBirth,
                             Mobile = grad.Mobile,
@@ -201,6 +195,7 @@ namespace GraduationCeremony.Controllers
                         if (checkedIn != null)
                         {
                             ViewBag.Message = "Checked In";
+
                         }
 
                         return View(studentCheckIn);
@@ -220,7 +215,7 @@ namespace GraduationCeremony.Controllers
         }
 
         // CHECKING IN 
-        public async Task<IActionResult> CheckIn(int PersonCode)
+        public async Task<IActionResult> CheckIn(int PersonCode, string pronunciation)
         {
             try
             {
