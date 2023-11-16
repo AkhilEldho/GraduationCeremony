@@ -187,6 +187,8 @@ namespace GraduationCeremony.Controllers
                         }
                     }
                 }
+                else
+                    ViewBag.ErrorMessage = "No File Was Selected";
             }
             catch (Exception ex)
             {
