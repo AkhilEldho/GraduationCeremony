@@ -16,10 +16,8 @@ namespace GraduationCeremony.Models.DB
         public string Surname { get; set; } = null!;
         public int Nsn { get; set; }
         public string? BadDebtStatus { get; set; }
-
         //removing the time
         [DataType(DataType.Date)]
-
         public DateTime DateOfBirth { get; set; }
         public string? Ethnicity1 { get; set; }
         public string? Ethnicity2 { get; set; }
@@ -38,6 +36,7 @@ namespace GraduationCeremony.Models.DB
         public string? Mobile { get; set; }
         public string? Campus { get; set; }
         public string? School { get; set; }
+        public string? Pronunciation { get; set; }
 
         public virtual ICollection<GraduandAward> GraduandAwards { get; set; }
     }

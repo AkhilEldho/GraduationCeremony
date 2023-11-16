@@ -26,9 +26,10 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<CheckIn> CheckIns { get; set; } = null!;
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
-        
-        // CUSTOM VIEW
+
+        //CUSTOM VIEW
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -216,10 +217,6 @@ namespace GraduationCeremony.Models.DB
 
                 entity.Property(e => e.PersonCode).HasColumnName("PERSON_CODE");
 
-                entity.Property(e => e.Pronunciation)
-                    .HasMaxLength(150)
-                    .HasColumnName("PRONUNCIATION");
-
                 entity.Property(e => e.QualificationCode)
                     .HasMaxLength(150)
                     .HasColumnName("QUALIFICATION_CODE");
@@ -333,6 +330,8 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Postcode)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Pronunciation).HasMaxLength(150);
 
                 entity.Property(e => e.School)
                     .HasMaxLength(50)
