@@ -57,9 +57,20 @@
         }
         @if (string.IsNullOrEmpty(ViewBag.Message))
         {
-            <input type="text" id="pronunciation" placeholder="Enter name phonetics.. Jo-hn Sm-ith" />
-            <a asp-controller="CheckIn" asp-action="CheckIn" asp-route-PersonCode="@Model.PersonCode" asp-route-pronunciation="" class="btn btn-success">Check In</a>
-            <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            <form id="searchForm" action="/CheckIn/CheckIn" method="get" autocomplete="off" class="search-form">
+                <div class="form-group">
+                    <input type="text" id="pronunciation" name="pronunciation" class="form-control search-input"
+                           autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name phonetics.. Jo-hn Sm-ith" />
+                </div>
+
+                <!-- Hidden input for PersonCode -->
+                <input type="hidden" id="personCode" name="personCode" value="@Model.PersonCode" />
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger search-button">Check In</button>
+                </div>
+                <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
+            </form>
         }
     </div>
 </div>

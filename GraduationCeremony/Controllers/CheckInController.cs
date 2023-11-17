@@ -247,6 +247,7 @@ namespace GraduationCeremony.Controllers
                         Mobile = grad.Mobile,
                         CollegeEmail = grad.CollegeEmail,
                         School = grad.School,
+                        Pronunciatoin = grad.Pronunciation,
                     };
 
 
@@ -257,9 +258,13 @@ namespace GraduationCeremony.Controllers
                     }
                     else
                     {
+                        if (!string.IsNullOrEmpty(pronunciation))
+                            grad.Pronunciation = pronunciation;
+
                         // Add the new check-in record, order the list, and save changes
                         _context.CheckIns.Add(student);
                         _context.CheckIns.OrderBy(item => item.GraduandAwardId);
+
                         await _context.SaveChangesAsync();
                     }
                 }
@@ -293,17 +298,6 @@ namespace GraduationCeremony.Controllers
         public async Task<IActionResult> Presenter()
         {
             var checkInFull = from g in _context.CheckIns select g;
-
-            var checkAndAward = from checkIn in _context.CheckIns
-                              join award in _context.Awards
-                              on checkIn.AwardCode equals award.AwardCode
-                              select new
-                              {
-                                  CheckIn = checkIn,
-                                  Award = award
-                              };
-
-
             checkInFull = checkInFull.OrderBy(x => x.Level).ThenBy(item => item.AwardDescription).ThenBy(item => item.Forenames);
 
             List<CheckIn> checkInList = new List<CheckIn>();

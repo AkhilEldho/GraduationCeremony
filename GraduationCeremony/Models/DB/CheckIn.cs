@@ -24,6 +24,7 @@ namespace GraduationCeremony.Models.DB
         public string? Major2 { get; set; }
         public int GraduandAwardId { get; set; }
         public string? School { get; set; }
+        public string? Pronunciatoin { get; set; }
 
         public virtual GraduandAward GraduandAward { get; set; } = null!;
     }

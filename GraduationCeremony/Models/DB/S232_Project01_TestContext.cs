@@ -27,7 +27,7 @@ namespace GraduationCeremony.Models.DB
         public virtual DbSet<Graduand> Graduands { get; set; } = null!;
         public virtual DbSet<GraduandAward> GraduandAwards { get; set; } = null!;
 
-        //CUSTOM VIEW
+        //Custom View
         public virtual DbSet<GraduandDetails> GraduandDetails { get; set; } = null!;
 
 
@@ -216,6 +216,11 @@ namespace GraduationCeremony.Models.DB
                 entity.Property(e => e.Nsn).HasColumnName("NSN");
 
                 entity.Property(e => e.PersonCode).HasColumnName("PERSON_CODE");
+
+                entity.Property(e => e.Pronunciatoin)
+                    .HasMaxLength(150)
+                    .IsUnicode(false)
+                    .HasColumnName("PRONUNCIATOIN");
 
                 entity.Property(e => e.QualificationCode)
                     .HasMaxLength(150)
