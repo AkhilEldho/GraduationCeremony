@@ -17,19 +17,21 @@
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item text-black"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+
                         <!-- Giving unique id to keep track -->
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
-                        <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
+
+                        @if(string.IsNullOrEmpty(Model.ElementAt(i).Pronunciatoin))
+                        {
+                            <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
+                        }
+                        else
+                        {
+                            <li class="list-group-item text-black"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciatoin</li>
+                        }
+
                         <li class="list-group-item text-black"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
-                        @if (!string.IsNullOrEmpty(@Model.ElementAt(i).Major1))
-                        {
-                            <li class="list-group-item text-black"><strong>Major:</strong> @Model.ElementAt(i).Major1</li>
-                        }
-                        @if (!string.IsNullOrEmpty(@Model.ElementAt(i).Major2))
-                        {
-                            <li class="list-group-item text-black"><strong>Major 2:</strong> @Model.ElementAt(i).Major2</li>
-                        }
                         <li class="list-group-item text-black"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
                         <li class="list-group-item text-black"><strong>School:</strong> @Model.ElementAt(i).School</li>
                     </ul>

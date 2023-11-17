@@ -6,16 +6,9 @@
 
 <div class="container">
     <h1>CheckIn</h1>
-    <h4>Remeber your order number</h4>
+
+    <h4 class="alert alert-success primary-message">Remeber your order number : @Model.GraduandAwardId</h4>
     <hr />
-    <div class="row">
-        <div class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GraduandAwardId)
-        </div>
-        <div class="col-sm-10">
-            @Html.DisplayFor(model => model.GraduandAwardId)
-        </div>
-    </div>
     <div class="row">
         <div class="col-sm-2">
             @Html.DisplayNameFor(model => model.Forenames)
@@ -30,6 +23,14 @@
         </div>
         <div class="col-sm-10">
             @Html.DisplayFor(model => model.Surname)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Pronunciatoin)
+        </div>
+        <div class="col-sm-10">
+            @Html.DisplayFor(model => model.Pronunciatoin)
         </div>
     </div>
     <div class="row">

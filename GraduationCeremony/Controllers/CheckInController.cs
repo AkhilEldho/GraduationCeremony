@@ -185,7 +185,8 @@ namespace GraduationCeremony.Controllers
                             Level = award.Level,
                             DateOfBirth = grad.DateOfBirth,
                             Mobile = grad.Mobile,
-                            CollegeEmail = grad.CollegeEmail
+                            CollegeEmail = grad.CollegeEmail,
+                            Pronunciatoin = grad.Pronunciation,
                         };
 
                         var checkedIn = await _context.CheckIns
@@ -227,6 +228,13 @@ namespace GraduationCeremony.Controllers
                 // Check if the student has an existing check-in record
                 var student = await _context.CheckIns.FirstOrDefaultAsync(x => x.PersonCode == PersonCode);
 
+                string namePronunciation = pronunciation;
+
+                if(string.IsNullOrEmpty(namePronunciation))
+                {
+                    namePronunciation = grad.Pronunciation;
+                }
+
                 if (student == null)
                 {
                     // Create a new check-in record if it doesn't exist
@@ -247,7 +255,7 @@ namespace GraduationCeremony.Controllers
                         Mobile = grad.Mobile,
                         CollegeEmail = grad.CollegeEmail,
                         School = grad.School,
-                        Pronunciatoin = grad.Pronunciation,
+                        Pronunciatoin = namePronunciation,
                     };
 
 
@@ -405,7 +413,7 @@ namespace GraduationCeremony.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(CheckedInList));
         }
     }
 }
