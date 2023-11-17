@@ -55,10 +55,22 @@
         <button type="submit" class="btn btn-primary submit-button">Import Excel</button>
     </form>
 
-    <a asp-controller="Home" asp-action="DeleteCheckInList" class="btn btn-secondary ml-1 submit-button">Delete All Checked In Graduands</a>
+    <a href="#" onclick="confirmDelete('Graduands')" class="btn btn-secondary ml-1 submit-button">Delete All Checked In Graduands</a>
     <br />
-    <a asp-controller="Home" asp-action="DeleteAll" class="btn btn-secondary ml-2">Delete All Graduands</a>
-    <br />
+    <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary ml-2">Delete All Graduands</a>
+
+    <script>
+        function confirmDelete(text) {
+            var confirmation = confirm("Are you sure you want to delete " + text + "?");
+
+            if (confirmation) {
+                // User clicked OK, proceed with the deletion
+                window.location.href = "/Home/Delete?text=" + text;
+            } else {
+                // User clicked Cancel, do nothing or provide feedback
+            }
+        }
+    </script>
 
 
     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))

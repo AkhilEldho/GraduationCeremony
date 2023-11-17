@@ -123,7 +123,6 @@ namespace GraduationCeremony.Controllers
                                                 graduands.Add(graduand);
                                             }
                                         }
-
                                     }
 
                                     //validating graduand award
@@ -316,6 +315,38 @@ namespace GraduationCeremony.Controllers
             }
 
             return graduandAward;
+        }
+
+        public async Task<ViewResult> DeleteAsync(string text)
+        {
+            if (text == "Graduands")
+            {
+                var checkIn = from g in _context.CheckIns select g;
+
+                _context.CheckIns.RemoveRange(checkIn);
+                _context.SaveChanges();
+
+                ViewBag.ErrorMessage = "Graduands Deleted";
+                return View("ImportExcel");
+            }
+            else
+            {
+                //getting existing data from db
+                var awardsFull = from g in _context.Awards select g;
+                var graduandsFull = from g in _context.Graduands select g;
+                var gradAwardsFull = from g in _context.GraduandAwards select g;
+                var checkIn = from g in _context.CheckIns select g;
+
+                _context.RemoveRange(awardsFull);
+                _context.RemoveRange(graduandsFull);
+                _context.RemoveRange(gradAwardsFull);
+                _context.RemoveRange(checkIn);
+
+                _context.SaveChanges();
+
+                ViewBag.ErrorMessage = "Database is empty";
+                return View("ImportExcel");
+            }
         }
 
 
