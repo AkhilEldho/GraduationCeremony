@@ -22,50 +22,57 @@
 </form>
 <div class="container mt-4">
     <h1>Checked-In List</h1>
-
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-            <thead class="thead-white">
-                <tr>
-                    <th>#</th>
-                    <th>Forenames</th>
-                    <th>Surname</th>
-                    <th>Award Code</th>
-                    <th>Qualification Code</th>
-                    <th>Award Description</th>
-                    <th>Level</th>
-                    <th>Date of Birth</th>
-                    <th>College Email</th>
-                    <th>Mobile</th>
-                    <th>Major 1</th>
-                    <th>Major 2</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+    @if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <div class="alert alert-danger error-message">@ViewBag.Message</div>
+    } else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-white">
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.GraduandAwardId)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Forenames)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Surname)</td>
-                        <td>@Html.DisplayFor(modelItem => item.AwardCode)</td>
-                        <td>@Html.DisplayFor(modelItem => item.QualificationCode)</td>
-                        <td>@Html.DisplayFor(modelItem => item.AwardDescription)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Level)</td>
-                        <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CollegeEmail)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Major1)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Major2)</td>
-                        <td>
-                            <a asp-action="Delete" asp-route-id="@item.PersonCode" class="btn btn-danger btn-sm">Delete</a>
-                        </td>
+                        <th>#</th>
+                        <th>Forenames</th>
+                        <th>Surname</th>
+                        <th>Award Code</th>
+                        <th>Qualification Code</th>
+                        <th>Award Description</th>
+                        <th>Level</th>
+                        <th>Date of Birth</th>
+                        <th>College Email</th>
+                        <th>Mobile</th>
+                        <th>Major 1</th>
+                        <th>Major 2</th>
+                        <th>Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.GraduandAwardId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Forenames)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Surname)</td>
+                            <td>@Html.DisplayFor(modelItem => item.AwardCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.QualificationCode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.AwardDescription)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Level)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CollegeEmail)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Major1)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Major2)</td>
+                            <td>
+                                <a asp-action="Delete" asp-route-id="@item.PersonCode" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+  
 </div>
 
 @Html.PagedListPager(Model, page => Url.Action("Index",

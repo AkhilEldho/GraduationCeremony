@@ -34,7 +34,10 @@ namespace GraduationCeremony.Controllers
                          .OrderBy(item => item.awards.Level)
                         .ThenBy(item => item.awards.AwardDescription)
                         .ThenBy(item => item.graduands.Forenames).ToList();
-
+            if (result.Count() == 0)
+            {
+                ViewBag.Message = "No graduand found";
+            }
             return View(result.ToPagedList(pageNumber, 10));
         }
 

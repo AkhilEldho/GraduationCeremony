@@ -56,15 +56,16 @@ namespace GraduationCeremony.Controllers
 
                             if (worksheet != null && worksheet.Dimension != null)
                             {
+                                DeleteEmptyRows(worksheet);
                                 //getting existing data from db
                                 var awardsFull = from g in _context.Awards select g;
                                 var graduandsFull = from g in _context.Graduands select g;
                                 var gradAwardsFull = from g in _context.GraduandAwards select g;
 
                                 //converting db to list
-                                List<Award>awardsFullList = await awardsFull.ToListAsync();
-                                List<Graduand>graduandsFullList = await graduandsFull.ToListAsync();
-                                List<GraduandAward>graduandAwardsFullList = await gradAwardsFull.ToListAsync();
+                                List<Award> awardsFullList = await awardsFull.ToListAsync();
+                                List<Graduand> graduandsFullList = await graduandsFull.ToListAsync();
+                                List<GraduandAward> graduandAwardsFullList = await gradAwardsFull.ToListAsync();
 
                                 //new list to save the excel data
                                 List<Award> awards = new List<Award>();
@@ -73,12 +74,13 @@ namespace GraduationCeremony.Controllers
 
                                 var errors = new HashSet<string>();
 
-                                int noOfRow = worksheet.Dimension.End.Row - 1;
+                                int noOfRow = worksheet.Dimension.End.Row;
 
                                 var processedAwardCodes = new HashSet<string>();
                                 var processedGraduandCodes = new HashSet<string>();
                                 var processedGraduandAwardCodes = new HashSet<string>();
 
+                                //starts at 2 because row 1 is headings
                                 for (int r = 2; r <= noOfRow; r++)
                                 {
                                     Award award = ExtractAward(worksheet, r);
@@ -95,7 +97,7 @@ namespace GraduationCeremony.Controllers
                                             if (awardErrors.Count == 0)
                                             {
                                                 //checking if data exists already
-                                                if(awardsFullList.Find(x => x.AwardCode == award.AwardCode) == null)
+                                                if (awardsFullList.Find(x => x.AwardCode == award.AwardCode) == null)
                                                 {
                                                     awards.Add(award);
                                                 }
@@ -108,12 +110,12 @@ namespace GraduationCeremony.Controllers
                                         }
                                     }
                                     else
-                                    { 
+                                    {
                                         errors.Add("Award not found for row " + r);
                                     }
 
                                     //validating graduand
-                                    if(graduand != null)
+                                    if (graduand != null)
                                     {
                                         //checking if data exists already
                                         if (processedGraduandCodes.Add(graduand.PersonCode.ToString()))
@@ -140,8 +142,8 @@ namespace GraduationCeremony.Controllers
                                     }
                                 }
 
-                                //only saving those with changes
-                                if (awards.Count != 0)
+                               //only saving those with changes
+                                if (awards.Count != 0 && awards.Count != awardsFullList.Count())
                                 {
                                     //for add range: https://stackoverflow.com/questions/38887434/cannot-convert-from-string-to-system-collections-generic-list-string
                                     //adding to DB
@@ -153,7 +155,7 @@ namespace GraduationCeremony.Controllers
 
 
                                 //only saving those with changes
-                                if (graduands.Count != 0)
+                                if (graduands.Count != 0 && graduands.Count != graduandsFullList.Count())
                                 {
                                     _context.Graduands.AddRange(graduands);
                                     _context.SaveChanges();
@@ -162,23 +164,26 @@ namespace GraduationCeremony.Controllers
                                     ViewBag.ErrorMessage = "No New Data Added \n";
 
                                 //only saving those with changes
-                                if (graduandAwards.Count != 0)
+
+                                if (graduandAwards.Count != 0 && graduandAwards.Count != graduandAwardsFullList.Count())
                                 {
                                     //ordering the items
                                     graduandAwards = graduandAwards
-                                        .OrderBy(item => item.AwardCodeNavigation.Level)
-                                        .ThenBy(item => item.AwardCodeNavigation.AwardDescription)
-                                        .ThenBy(item => item.PersonCodeNavigation.Forenames)
-                                        .ToList();
+                                     .OrderBy(item => item.AwardCodeNavigation?.Level)
+                                     .ThenBy(item => item.AwardCodeNavigation?.AwardDescription)
+                                     .ThenBy(item => item.PersonCodeNavigation?.Forenames)
+                                     .ToList();
 
                                     _context.GraduandAwards.AddRange(graduandAwards);
                                     _context.SaveChanges();
+                                    ViewBag.SuccessMessage = "Excel successfully uploaded";
                                 }
                                 else
                                     ViewBag.ErrorMessage = "No New Data Added \n";
 
                                 ViewBag.Errors = errors;
                             }
+        
                             else
                             {
                                 ViewBag.ErrorMessage = "This Excel is empty.";
@@ -191,14 +196,42 @@ namespace GraduationCeremony.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = ex.Message;
+                Console.WriteLine(ex);
+                ViewBag.ErrorMessage = "Incorrect file. Please try again";
             }
 
             return View("ImportExcel");
         }
 
-        //retrieving the actual values by row
-        private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)
+        //https://stackoverflow.com/questions/73690637/how-to-find-empty-rows-from-excel-sheet-given-by-user-and-delete-them-in-asp-net
+        private void DeleteEmptyRows(ExcelWorksheet worksheet)
+        {
+            var rowCount = worksheet.Dimension.Rows;
+            var maxColumns = worksheet.Dimension.Columns;
+
+            for (int row = rowCount; row > 0; row--)
+            {
+                bool isRowEmpty = true;
+                for (int column = 1; column <= maxColumns; column++)
+                {
+                    var cellEntry = Convert.ToString(worksheet.Cells[row, column].Value);
+                    if (!string.IsNullOrEmpty(cellEntry))
+                    {
+                        isRowEmpty = false;
+                        break;
+                    }
+                }
+
+                if (!isRowEmpty)
+                    continue;
+                else
+                    worksheet.DeleteRow(row);
+            }
+        }
+    
+
+    //retrieving the actual values by row
+    private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)
         {
             return worksheet.Cells[row, columnIndex].Text;
         }
@@ -344,11 +377,30 @@ namespace GraduationCeremony.Controllers
 
                 _context.SaveChanges();
 
+                // reset identity numbering for GraduandAwards
+                ResetIdForGraduandAwards();
+
+
                 ViewBag.ErrorMessage = "Database is empty";
                 return View("ImportExcel");
             }
         }
 
+        // based off: https://stackoverflow.com/questions/52937700/reset-id-column-of-database-records
+        public void ResetIdForGraduandAwards()
+        {
+            try
+            {
+                using (S232_Project01_TestContext context = new S232_Project01_TestContext())
+                {
+                    context.Database.ExecuteSqlRaw("DBCC CHECKIDENT ('Graduand_Award', RESEED, 0)");
+                }
+            }
+            catch (Exception exp)
+            {
+                throw new Exception("Error: Records could not be reset - " + exp.Message.ToString(), exp);
+            }
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

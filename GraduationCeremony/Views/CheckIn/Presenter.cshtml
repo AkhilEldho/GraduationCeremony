@@ -22,13 +22,13 @@
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
 
-                        @if(string.IsNullOrEmpty(Model.ElementAt(i).Pronunciatoin))
+                        @if (string.IsNullOrEmpty(Model.ElementAt(i).Pronunciation))
                         {
                             <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
                         }
                         else
                         {
-                            <li class="list-group-item text-black"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciatoin</li>
+                            <li class="list-group-item text-black"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciation</li>
                         }
 
                         <li class="list-group-item text-black"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>

@@ -186,7 +186,7 @@ namespace GraduationCeremony.Controllers
                             DateOfBirth = grad.DateOfBirth,
                             Mobile = grad.Mobile,
                             CollegeEmail = grad.CollegeEmail,
-                            Pronunciatoin = grad.Pronunciation,
+                            Pronunciation = grad.Pronunciation,
                         };
 
                         var checkedIn = await _context.CheckIns
@@ -255,7 +255,7 @@ namespace GraduationCeremony.Controllers
                         Mobile = grad.Mobile,
                         CollegeEmail = grad.CollegeEmail,
                         School = grad.School,
-                        Pronunciatoin = namePronunciation,
+                        Pronunciation = namePronunciation,
                     };
 
 
@@ -295,7 +295,10 @@ namespace GraduationCeremony.Controllers
 
             //retrieve checkin table
             var checkInFull = from g in _context.CheckIns select g;
-
+            if (checkInFull.Count() == 0)
+            {
+                ViewBag.Message = "No checkedin found";
+            }
             List<CheckIn> checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.GraduandAwardId).ToList();
 
