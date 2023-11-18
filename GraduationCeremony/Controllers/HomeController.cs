@@ -353,12 +353,30 @@ namespace GraduationCeremony.Controllers
 
         public async Task<ViewResult> DeleteAsync(string text)
         {
-            if (text == "Graduands")
+            if (text == "Check")
             {
                 var checkIn = from g in _context.CheckIns select g;
 
                 _context.CheckIns.RemoveRange(checkIn);
                 _context.SaveChanges();
+
+                ViewBag.ErrorMessage = "Checked in List Deleted";
+                return View("ImportExcel");
+            }
+            else if(text == "Graduand")
+            {
+                var awardsFull = from g in _context.Awards select g;
+                var graduandsFull = from g in _context.Graduands select g;
+                var gradAwardsFull = from g in _context.GraduandAwards select g;
+
+                _context.RemoveRange(awardsFull);
+                _context.RemoveRange(graduandsFull);
+                _context.RemoveRange(gradAwardsFull);
+
+                _context.SaveChanges();
+
+                // reset identity numbering for GraduandAwards
+                ResetIdForGraduandAwards();
 
                 ViewBag.ErrorMessage = "Graduands Deleted";
                 return View("ImportExcel");
@@ -380,7 +398,6 @@ namespace GraduationCeremony.Controllers
 
                 // reset identity numbering for GraduandAwards
                 ResetIdForGraduandAwards();
-
 
                 ViewBag.ErrorMessage = "Database is empty";
                 return View("ImportExcel");

@@ -36,7 +36,7 @@ namespace GraduationCeremony.Controllers
                         .ThenBy(item => item.graduands.Forenames).ToList();
             if (result.Count() == 0)
             {
-                ViewBag.Message = "No graduand found";
+                ViewBag.Message = "No excel file imported yet";
             }
             return View(result.ToPagedList(pageNumber, 10));
         }

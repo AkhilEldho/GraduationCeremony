@@ -297,7 +297,7 @@ namespace GraduationCeremony.Controllers
             var checkInFull = from g in _context.CheckIns select g;
             if (checkInFull.Count() == 0)
             {
-                ViewBag.Message = "No checkedin found";
+                ViewBag.Message = "No students have checked in yet";
             }
             List<CheckIn> checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.GraduandAwardId).ToList();
