@@ -133,7 +133,8 @@ namespace GraduationCeremony.Controllers
                                         //checking if data exists already
                                         if (processedGraduandAwardCodes.Add(graduandAward.PersonCode.ToString()))
                                         {
-                                            if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode) == null)
+                                            //ensuring that the data gets added if it doesn't exist in bridging table
+                                            if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode && x.PersonCode == graduandAward.PersonCode) == null)
                                             {
                                                 graduandAwards.Add(graduandAward);
                                             }
@@ -151,7 +152,7 @@ namespace GraduationCeremony.Controllers
                                     _context.SaveChanges();
                                 }
                                 else
-                                    ViewBag.ErrorMessage = "No New Data Added \n";
+                                    ViewBag.ErrorMessage += "No New Awards Added \n";
 
 
                                 //only saving those with changes
@@ -161,7 +162,7 @@ namespace GraduationCeremony.Controllers
                                     _context.SaveChanges();
                                 }
                                 else
-                                    ViewBag.ErrorMessage = "No New Data Added \n";
+                                    ViewBag.ErrorMessage += "No New Graduands Added \n";
 
                                 //only saving those with changes
 
@@ -179,7 +180,7 @@ namespace GraduationCeremony.Controllers
                                     ViewBag.SuccessMessage = "Excel successfully uploaded";
                                 }
                                 else
-                                    ViewBag.ErrorMessage = "No New Data Added \n";
+                                    ViewBag.ErrorMessage += "No New Grad Awards Added \n";
 
                                 ViewBag.Errors = errors;
                             }

@@ -16,7 +16,7 @@
             <div class="card">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item text-black"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname</li>
+                        <li class="list-group-item text-black"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
 
                         <!-- Giving unique id to keep track -->
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
@@ -53,6 +53,15 @@
     <script type="text/javascript">
         var currentPersonIndex = 0;
         var personProfiles = document.querySelectorAll(".person-profile");
+
+        window.onload = function () {
+            GetPronunciation(
+                document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
+                document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
+                document.getElementById('pronunciation_' + currentPersonIndex)
+            );
+            updateDisplay();
+        };
 
         function updateDisplay() {
             for (var i = 0; i < personProfiles.length; i++) {

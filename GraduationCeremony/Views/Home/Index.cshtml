@@ -1,57 +1,46 @@
-﻿
-@{
-    ViewData["Title"] = "Home Page";
+﻿@{
+    ViewData["Title"] = "Home";
 }
 
-<style>
-    .container {
-        text-align: center;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+@section Scripts {
+    <script>
+        // You can include custom scripts for the homepage here if needed.
+    </script>
+}
 
-    .display-4 {
-        font-size: 2.5rem;
-    }
+<div class="row">
+    <div class="col-md-8">
+        <h2>Welcome to the Graduation Ceremony</h2>
 
-    .intro-text {
-        font-size: 1.2rem;
-    }
+        <p>
+            We are thrilled to celebrate the accomplishments of our graduands at this year's Graduation Ceremony.
+            Use the navigation bar above to explore different sections and make the event unforgettable!
+        </p>
 
-    .search-form {
-        text-align: center;
-        margin-top: 20px;
-    }
+        <p>
+            To get started, you can check in graduands by clicking <a asp-area="" asp-controller="CheckIn" asp-action="Index">here</a>.
+        </p>
+    </div>
+</div>
 
-    .search-input {
-        width: 100%;
-        max-width: 300px;
-        padding: 10px;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-    }
-
-    .search-button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .auto-suggest-container {
-        position: absolute;
-        display: none;
-        z-index: 100;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        width: 100%;
-        max-width: 300px;
-    }
-</style>
-
-<div class="container">
-    <h1 class="display-4">OUR PROJECT</h1>
+<div id="imageCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="https://pixabay.com/photos/graduation-teen-high-school-student-995042/" class="d-block w-100" alt="Graduation Photo 1">
+        </div>
+        <div class="carousel-item">
+            <img src="https://pixabay.com/photos/ceremony-graduates-graduation-1866532/" class="d-block w-100" alt="Graduation Photo 2">
+        </div>
+        <div class="carousel-item">
+            <img src="https://pixabay.com/photos/graduation-people-ceremony-diploma-3058263/" class="d-block w-100" alt="Graduation Photo 3">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#imageCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#imageCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
