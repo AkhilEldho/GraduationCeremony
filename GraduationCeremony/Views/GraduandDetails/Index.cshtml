@@ -8,6 +8,43 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .autoSuggest {
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        max-height: 200px;
+        max-width: 400px;
+        overflow-y: auto;
+        overflow-x: auto;
+        width: auto;
+        margin: 10px;
+        z-index: 1;
+        margin-top: 5px;
+        display: none;
+    }
+
+        .autoSuggest input[type="button"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            color: #333;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            transition: background-color 0.3s;
+        }
+
+            .autoSuggest input[type="button"]:hover,
+            .autoSuggest input[type="button"]:focus {
+                background-color: #ffb0ad !important;
+            }
+
+</style>
+
 
 <div class="container">
     <h1 class="display-4">Search Graduand</h1>
