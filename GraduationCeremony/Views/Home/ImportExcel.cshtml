@@ -1,47 +1,73 @@
-﻿<style>
+﻿@{
+    ViewData["Title"] = "Import";
+}
+
+<style>
+    label {
+        font-size: 1.5rem;
+        color: #d9534f;
+        display: block;
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
     .form-container {
-        max-width: 400px;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         padding: 20px;
-        border: 1px solid #dcdcdc;
-        background-color: #f9f9f9;
-        border-radius: 5px;
         text-align: center;
+        margin: 0 auto;
+        max-width: 800px;
+    }
+
+    .form-group {
+        width: 100%;
+        max-width: 600px;
+        margin-bottom: 20px;
     }
 
     .file-input {
-        margin-bottom: 10px;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
     }
 
     .submit-button {
-        margin-top: 10px;
+        background-color: #5bc0de;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+    }
+
+        .submit-button:hover {
+            background-color: #31b0d5;
+        }
+
+    .btn-secondary {
+        display: inline-block;
+        margin: 10px 0;
+        width: 100%;
+        max-width: 300px;
     }
 
     .alert {
-        margin-top: 10px;
-        text-align: center;
-        padding: 10px;
+        font-size: 16px;
+        margin-top: 20px;
+        border-radius: 5px;
     }
 
-    .success-message {
-        background-color: #dff0d8;
-        border-color: #3c763d;
-        color: #3c763d;
-    }
-
-    .error-message {
-        background-color: #f2dede;
-        border-color: #a94442;
-        color: #a94442;
-    }
-
-    .error-heading {
-        font-size: 1.2rem;
-    }
-
-    .error-list {
-        list-style-type: disc;
-        margin-left: 20px;
+    .error-list li {
+        font-size: 14px;
     }
 </style>
 
@@ -51,29 +77,22 @@
             <label for="file">Select Excel File:</label>
             <input type="file" name="file" id="file" class="form-control file-input" />
         </div>
-        <br />
         <button type="submit" class="btn btn-primary submit-button">Import Excel</button>
     </form>
 
-    <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary ml-1 submit-button">Delete All Checked In Graduands</a>
-    <br />
-    <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary ml-2">Delete All Graduands</a>
-    <br />
-    <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary ml-2">Delete Everything</a>
+    <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary">Delete All Checked In Graduands</a>
+    <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
+    <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a>
 
     <script>
         function confirmDelete(text) {
             var confirmation = confirm("Are you sure you want to delete " + text + "?");
 
             if (confirmation) {
-                // User clicked OK, proceed with the deletion
                 window.location.href = "/Home/Delete?text=" + text;
-            } else {
-                // User clicked Cancel, do nothing or provide feedback
             }
         }
     </script>
-
 
     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
     {

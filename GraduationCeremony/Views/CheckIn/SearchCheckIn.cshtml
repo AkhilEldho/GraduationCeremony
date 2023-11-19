@@ -3,80 +3,151 @@
 @{
     ViewData["Title"] = "CheckIn Details";
 }
+<style>
+    .custom-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
 
-<div class="container mt-4">
-    <h1>Check-In Details</h1>
+    .custom-card {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        overflow: hidden;
+    }
 
-    <div class="card">
-        <div class="card-header bg-danger text-white">
-            Personal Information
-        </div>
-        <div class="card-body">
-            <ul>
-                <li><strong>Person Code:</strong> @Html.DisplayFor(model => model.PersonCode)</li>
-                <li><strong>Name:</strong> @Html.DisplayFor(model => model.Forenames) @Html.DisplayFor(model => model.Surname)</li>
-                @if (!string.IsNullOrEmpty(Model.Pronunciation))
-                {
-                    <li><strong>Pronunciatoin:</strong> @Html.DisplayFor(model => model.Pronunciation)</li>
-                }
-                <li><strong>NSN:</strong> @Html.DisplayFor(model => model.Nsn)</li>
-                <li><strong>Date of Birth:</strong> @Html.DisplayFor(model => model.DateOfBirth)</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-header bg-danger text-white">
-            Award Information
-        </div>
-        <div class="card-body">
-            <ul>
-                <li><strong>Award Code:</strong> @Html.DisplayFor(model => model.AwardCode)</li>
-                <li><strong>Qualification Code:</strong> @Html.DisplayFor(model => model.QualificationCode)</li>
-                <li><strong>Award Description:</strong> @Html.DisplayFor(model => model.AwardDescription)</li>
-                <li><strong>Level:</strong> @Html.DisplayFor(model => model.Level)</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-header bg-danger text-white">
-            Contact Information
-        </div>
-        <div class="card-body">
-            <ul>
-                <li><strong>College Email:</strong> @Html.DisplayFor(model => model.CollegeEmail)</li>
-                <li><strong>Mobile:</strong> @Html.DisplayFor(model => model.Mobile)</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="mt-4">
-        @if (!string.IsNullOrEmpty(ViewBag.Message))
-        {
-            <div class="alert alert-danger error-message">@ViewBag.Message</div>
-            <div class="alert alert-success primary-message">Order In Queue @Model.GraduandAwardId </div>
-            <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+        .custom-card .card-header {
+            background-color: #d9534f;
+            color: #fff; /* Adjust text color as needed */
+            font-weight: bold;
+            font-size: 24px;
         }
-        @if (string.IsNullOrEmpty(ViewBag.Message))
-        {
-            <form id="searchForm" action="/CheckIn/CheckIn" method="get" autocomplete="off" class="search-form">
-                @if (string.IsNullOrEmpty(Model.Pronunciation))
-                {
+
+
+    .button:hover {
+        background-color: #c9302c;
+    }
+
+
+    .card-body ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .card-body li {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .search-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .error-message,
+    .primary-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .error-message {
+        color: #d9534f;
+        background-color: #f2dede;
+    }
+
+    .primary-message {
+        color: #3c763d;
+        background-color: #dff0d8;
+    }
+
+    .btn-secondary {
+        margin-top: 10px;
+    }
+
+</style>
+
+<style>
+
+</style>
+<div class="container custom-container mt-4">
+    <div class="text-center custom-card">
+        <h1 class="display-4">Search Graduand</h1>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                Personal Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>Person Code:</strong> @Html.DisplayFor(model => model.PersonCode)</li>
+                    <li><strong>Name:</strong> @Html.DisplayFor(model => model.Forenames) @Html.DisplayFor(model => model.Surname)</li>
+                    @if (!string.IsNullOrEmpty(Model.Pronunciation))
+                    {
+                        <li><strong>Pronunciation:</strong> @Html.DisplayFor(model => model.Pronunciation)</li>
+                    }
+                    <li><strong>NSN:</strong> @Html.DisplayFor(model => model.Nsn)</li>
+                    <li><strong>Date of Birth:</strong> @Html.DisplayFor(model => model.DateOfBirth)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                Award Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>Award Code:</strong> @Html.DisplayFor(model => model.AwardCode)</li>
+                    <li><strong>Qualification Code:</strong> @Html.DisplayFor(model => model.QualificationCode)</li>
+                    <li><strong>Award Description:</strong> @Html.DisplayFor(model => model.AwardDescription)</li>
+                    <li><strong>Level:</strong> @Html.DisplayFor(model => model.Level)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                Contact Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>College Email:</strong> @Html.DisplayFor(model => model.CollegeEmail)</li>
+                    <li><strong>Mobile:</strong> @Html.DisplayFor(model => model.Mobile)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            @if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="alert alert-danger error-message">@ViewBag.Message</div>
+                <div class="alert alert-success primary-message">Order In Queue @Model.GraduandAwardId </div>
+                <a asp-action="Index" class="btn btn-secondary ml-2">Back to List</a>
+            }
+            @if (string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <form id="searchForm" action="/CheckIn/CheckIn" method="get" autocomplete="off" class="search-form">
+                    @if (string.IsNullOrEmpty(Model.Pronunciation))
+                    {
+                        <div class="form-group">
+                            <input type="text" id="pronunciation" name="pronunciation" class="form-control search-input"
+                                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name phonetics.. Jo-hn Sm-ith" />
+                        </div>
+                    }
+
+                    <!-- Hidden input for PersonCode -->
+                    <input type="hidden" id="personCode" name="personCode" value="@Model.PersonCode" />
+
                     <div class="form-group">
-                        <input type="text" id="pronunciation" name="pronunciation" class="form-control search-input"
-                               autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name phonetics.. Jo-hn Sm-ith" />
+                        <button type="submit" class="btn btn-danger button">Check In</button>
                     </div>
-                }
-
-                <!-- Hidden input for PersonCode -->
-                <input type="hidden" id="personCode" name="personCode" value="@Model.PersonCode" />
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-danger search-button">Check In</button>
-                </div>
-                <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
-            </form>
-        }
+                    <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
+                </form>
+            }
+        </div>
     </div>
 </div>

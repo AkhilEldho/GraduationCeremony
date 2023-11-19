@@ -4,62 +4,23 @@
 @using X.PagedList.Web.Common;
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Search Graduand";
 }
-
-<style>
-    .autoSuggest {
-        position: absolute;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        max-height: 200px;
-        max-width: 400px;
-        overflow-y: auto;
-        overflow-x: auto;
-        width: auto;
-        margin: 10px;
-        z-index: 1;
-        margin-top: 5px;
-        display: none;
-    }
-
-        .autoSuggest input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            color: #333;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            font-size: 15px;
-            transition: background-color 0.3s;
-        }
-
-            .autoSuggest input[type="button"]:hover,
-            .autoSuggest input[type="button"]:focus {
-                background-color: #ffb0ad !important;
-            }
-
-</style>
-
 
 <div class="container">
     <h1 class="display-4">Search Graduand</h1>
-</div>
 
-<form id="searchForm" action="/GraduandDetails/Search" method="get" autocomplete="off" class="search-form">
-    <div class="form-group">
-        <input type="text" id="searchString" name="searchString" class="search-input"
-               autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name:" required />
-    </div>
-    <div class="form-group">
-        <button type="submit" class="search-button">Search</button>
-    </div>
-    <div id="autoSuggestContainer" class="auto-suggest-container">
-    </div>
-</form>
+    <form id="searchForm" action="/GraduandDetails/Search" method="get" autocomplete="off" class="search-form">
+        <div class="form-group">
+            <input type="text" id="searchString" name="searchString" class="search-input"
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " required />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+        <div id="autoSuggestContainer" class="autoSuggest"></div>
+    </form>
+</div>
 
 <div class="container">
     @if (!string.IsNullOrEmpty(ViewBag.Message))
@@ -106,16 +67,47 @@
             </table>
         </div>
 
-        @Html.PagedListPager(Model, page => Url.Action("Index",
-        new { Page = page }),
-        new PagedListRenderOptions
+        @if(Model.Count > 10)
         {
-            LiElementClasses = new string[] { "page-item" },
-            PageClasses = new string[] { "page-link" }
-            })
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { Page = page }),
+    new PagedListRenderOptions
+    {
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+    })
         }
+    }
+    <a asp-action="Index" class="btn btn-warning">Back to list</a>
 </div>
 
+<script type="text/javascript">
+    function XAjaxRequest(searchString) {
+        if (searchString.length < 1) {
+            autoSuggestContainer.innerHTML = "";
+            return;
+        }
 
-<a asp-action="Index" class="btn btn-warning">Back to list</a>
+        var xmlhttp;
+        xmlhttp = new XMLHttpRequest();
+        var url = "/GraduandDetails/SearchGraduandDetailsByName?searchString=" + searchString;
+        xmlhttp.open("GET", url, false);
+        xmlhttp.send();
+        document.getElementById("autoSuggestContainer").style.display = "block";
+        document.getElementById("autoSuggestContainer").innerHTML = "";
 
+        var messageObject = JSON.parse(xmlhttp.responseText);
+
+        var autoSuggestions = "";
+
+        for (var i = 0; i < messageObject.length; i++) {
+            autoSuggestions +=
+                "<input type=\"button\" value=\"" + messageObject[i].graduands.Forenames + " " + messageObject[i].graduands.Surname + "\" "
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
+                + "class=\"auto-suggest-button\" />";
+            autoSuggestions += "<br />";
+        }
+
+        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+    }
+</script>

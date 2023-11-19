@@ -4,49 +4,136 @@
     ViewData["Title"] = "Presenter";
 }
 
-<link rel="stylesheet" href="~/css/Presenter.css" asp-append-version="true">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
 
-<h1>Presenter</h1>
+    /* Presenter styling */
+    .presenter-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+    }
 
-<div class="person-profile-container">
-    @for (int i = 0; i < Model.Count(); i++)
-    {
-        <!-- Inside the loop -->
-        <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
-            <div class="card">
-                <div class="card-body">
+    .card {
+        background-color: #fff;
+        color: #333;
+        border: 1px solid #d9534f;
+        border-radius: 10px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 1000px;
+        padding: 20px;
+    }
+
+        .card h1 {
+            text-align: center;
+        }
+
+    .display-4 {
+        font-size: 3rem;
+        color: #d9534f;
+    }
+
+    .person-profile-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .person-profile {
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 600px;
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-group-item {
+        margin-bottom: 10px;
+    }
+
+    .d-flex {
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-bottom: 20px;
+    }
+
+    .list-item {
+        font-size: 20px;
+    }
+
+    /* Fancier Button Styles */
+    .btn {
+        font-weight: 600;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    }
+
+    #prevButton {
+        background-color: #d9534f;
+        color: #fff;
+        border: 1px solid #d9534f;
+    }
+
+        #prevButton:hover {
+            background-color: #713232;
+            border: 1px solid #713232;
+        }
+
+    #nextButton {
+        background-color: #3374ff;
+        color: #fff;
+        border: 1px solid #3374ff;
+    }
+
+        #nextButton:hover {
+            background-color: #1a52cc;
+            border: 1px solid #1a52cc;
+        }
+</style>
+
+<div class="presenter-container">
+    <div class="card">
+        <h1 class="display-4">Presenter</h1>
+
+        <div class="person-profile-container">
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item text-black"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
-
-                        <!-- Giving unique id to keep track -->
+                        <li class="list-group-item text-black list-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
 
                         @if (string.IsNullOrEmpty(Model.ElementAt(i).Pronunciation))
                         {
-                            <li class="list-group-item text-black" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
+                            <li class="list-group-item text-black list-item" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
                         }
                         else
                         {
-                            <li class="list-group-item text-black"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciation</li>
+                            <li class="list-group-item text-black list-item"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciation</li>
                         }
 
-                        <li class="list-group-item text-black"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
-                        <li class="list-group-item text-black"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
-                        <li class="list-group-item text-black"><strong>School:</strong> @Model.ElementAt(i).School</li>
+                        <li class="list-group-item text-black list-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
+                        <li class="list-group-item text-black list-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
+                        <li class="list-group-item text-black list-item"><strong>School:</strong> @Model.ElementAt(i).School</li>
                     </ul>
                 </div>
-            </div>
+            }
         </div>
-    }
+
+        <div class="d-flex justify-content-between">
+            <button id="prevButton" class="btn">Previous Person</button>
+            <button id="nextButton" class="btn">Next Person</button>
+        </div>
+    </div>
 </div>
-
-<div class="d-flex justify-content-between">
-    <button id="prevButton" class="btn">Previous Person</button>
-    <button id="nextButton" class="btn">Next Person</button>
-</div>
-
-
 
 @section scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -72,65 +159,28 @@
                 }
             }
         }
-        /** NEED TO MODIFY
-         *         function fetchDataAndUpdate() {
-            // Use AJAX to fetch the updated data
-            $.ajax({
-                url: "/CheckIn/GetUpdatedPersons",
-                type: "GET",
-                success: function (data) {
-                    // Ensure the current index is within bounds
-                    currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
-
-                    // Update the table with new data
-                    if (data.length > personProfiles.length) {
-                        // If new data is available, update the profiles and display the new person
-                        personProfiles = document.querySelectorAll(".person-profile");
-                        updateDisplay();
-
-                        // Call GetPronunciation for the new person
-                        GetPronunciation(
-                            document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
-                            document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
-                            document.getElementById('pronunciation_' + currentPersonIndex)
-                        );
-                    }
-                }
-            });
-        }
-         */
-
 
         function fetchDataAndUpdate() {
-            // Use AJAX to fetch the updated data
             $.ajax({
                 url: "/CheckIn/GetUpdatedPersons",
                 type: "GET",
                 success: function (data) {
-                    // Update the table with new data
-
-                    // Ensure the current index is within bounds
                     currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
-
                     updateDisplay();
                 }
             });
         }
 
-        // Check for updates (every 5 seconds)
         setInterval(fetchDataAndUpdate, 5000);
 
-        // Event listeners for Next and Previous Buttons
         document.getElementById("nextButton").addEventListener("click", function () {
             if (currentPersonIndex < personProfiles.length - 1) {
                 currentPersonIndex++;
-                // Call GetPronunciation when switching to the next person
                 GetPronunciation(
                     document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
                     document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
-                
             }
             fetchDataAndUpdate();
         });
@@ -138,32 +188,25 @@
         document.getElementById("prevButton").addEventListener("click", function () {
             if (currentPersonIndex > 0) {
                 currentPersonIndex--;
-
-                // Call GetPronunciation when switching to the previous person
                 GetPronunciation(
                     document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
                     document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
-
                 fetchDataAndUpdate();
             }
         });
 
-        // Function to get the pronunciation of a word
         function GetPronunciation(forenames, surname, pronunciationElement) {
             var vowels = ['a', 'e', 'i', 'o', 'u'];
             var syllables = [];
             var currentSyllable = "";
 
-            // Trim leading and trailing whitespaces
             var trimmedForenames = forenames.trim();
             var trimmedSurname = surname.trim();
 
-            // Combine forenames and surname
             var fullName = trimmedForenames + " " + trimmedSurname;
 
-            // Handle case where either forenames or surname is empty
             if (fullName.length === 0) {
                 pronunciationElement.innerText = "Pronunciation: [Empty Name]";
                 return;
@@ -185,12 +228,9 @@
             }
 
             var pronunciation = syllables.join("-");
-            // Update the content of the pronunciation element
             pronunciationElement.innerText = pronunciation;
         }
 
-        // Initial data fetch and update
         fetchDataAndUpdate();
     </script>
 }
-</script>

@@ -3,62 +3,43 @@
 @using X.PagedList;
 @using X.PagedList.Web.Common;
 
-<style>
-    .autoSuggest {
-        position: absolute;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        max-height: 200px;
-        max-width: 400px;
-        overflow-y: auto;
-        overflow-x: auto;
-        width: auto;
-        margin: 10px;
-        z-index: 1;
-        margin-top: 5px;
-        display: none;
-    }
-
-        .autoSuggest input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            color: #333;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            text-align: left;
-            font-size: 15px;
-            transition: background-color 0.3s;
-        }
-
-            .autoSuggest input[type="button"]:hover,
-            .autoSuggest input[type="button"]:focus {
-                background-color: #ffb0ad !important;
-            }
-
-</style>
-
 @{
     ViewData["Title"] = "Checked-In List";
 }
-<form id="searchForm" action="/CheckIn/SearchCheckedIn" method="get" autocomplete="off" class="search-form">
-    <div class="form-group">
-        <input type="text" id="searchString" name="searchString" class="search-input"
-               autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " required />
-    </div>
-    <div class="form-group">
-        <button type="submit" class="search-button">Search</button>
-    </div>
-    <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
-</form>
-<div class="container mt-4">
-    <h1>Checked-In List</h1>
+
+<style>
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .search-form {
+        position: relative;
+    }
+</style>
+
+<div class="container">
+    <h1 class="display-4">Checked-In List</h1>
+
+    <form id="searchForm" action="/CheckIn/SearchCheckedIn" method="get" autocomplete="off" class="search-form">
+        <div class="form-group">
+            <input type="text" id="searchString" name="searchString" class="search-input"
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " required />
+            <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="search-button">Search</button>
+        </div>
+    </form>
+
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
         <div class="alert alert-danger error-message">@ViewBag.Message</div>
-    } else
+    }
+    else
     {
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
@@ -103,20 +84,21 @@
                 </tbody>
             </table>
         </div>
-    }
 
-  
+        @if (Model.Count > 10)
+        {
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { Page = page }),
+    new PagedListRenderOptions
+    {
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+    })
+        }
+    }
 </div>
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-        new { Page = page }),
-        new PagedListRenderOptions
-        {
-            LiElementClasses = new string[] { "page-item" },
-            PageClasses = new string[] { "page-link" }
-    })
-
-@*auto suggestion*@
+<!-- auto suggestion script -->
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
         if (searchString.length < 1) {
@@ -127,27 +109,19 @@
             autoSuggestContainer.classList.add("show-border");
         }
 
-
-        //alert("testing searchString=" + searchString);
         var xmlhttp;
         xmlhttp = new XMLHttpRequest();
         var url = "/CheckIn/SearchCheckedInGraduands?searchString=" + searchString;
-        // open connection, GET is quick and simple, false: sync page will freeze
         xmlhttp.open("GET", url, false);
-        // send the request to IndexAJAX
         xmlhttp.send();
         document.getElementById("autoSuggestContainer").style.display = "block";
-        //need to clear out the container for a fresh auto-suggest list
-        //else the auto-suggest list can keep growing and growing with additional user keyups
         document.getElementById("autoSuggestContainer").innerHTML = "";
 
-        var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
+        var messageObject = JSON.parse(xmlhttp.responseText);
 
         var autoSuggestions = "";
 
         for (var i = 0; i < messageObject.length; i++) {
-            //HTML code generation demo
-            //Works together with the ".innerHTML" statement after the end of this "for" block
             autoSuggestions +=
                 "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " + messageObject[i].Surname + "\" "
                 + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
@@ -155,7 +129,7 @@
 
             autoSuggestions += "<br />";
         }
-        //place the generated buttons HTML code inside the display div
+
         document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
     }
 </script>

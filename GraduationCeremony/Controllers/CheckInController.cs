@@ -390,12 +390,6 @@ namespace GraduationCeremony.Controllers
             {
                 return NotFound();
             }
-            else
-            {
-                _context.CheckIns.Remove(checkInFull);
-            }
-
-            await _context.SaveChangesAsync();
 
             return View(checkInFull);
         }

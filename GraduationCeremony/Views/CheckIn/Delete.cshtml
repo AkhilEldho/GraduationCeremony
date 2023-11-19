@@ -4,78 +4,126 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<style>
+    body {
+        background-color: #f8f9fa; /* Set the background color for the entire page */
+        color: #343a40; /* Set the text color */
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>CheckIn</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Forenames)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Forenames)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Surname)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Surname)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nsn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nsn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AwardCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AwardCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QualificationCode)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.QualificationCode)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AwardDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AwardDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Level)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Level)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CollegeEmail)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CollegeEmail)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Mobile)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mobile)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="PersonCode" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    h1, h3 {
+        color: #d9534f; /* Set the color for heading elements */
+    }
+
+    .custom-container {
+        background-color: #fff; /* Set the background color for the container */
+        padding: 20px; /* Add padding for better visual appeal */
+        border-radius: 10px; /* Add border-radius for rounded corners */
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Add box-shadow for a subtle shadow effect */
+    }
+
+    .btn-danger {
+        background-color: #d9534f; /* Set the background color for the delete button */
+        color: #fff; /* Set the text color for the delete button */
+        border: none; /* Remove border for a cleaner look */
+        border-radius: 5px; /* Add border-radius for rounded corners */
+        padding: 10px 20px; /* Add padding for better button size */
+        font-size: 16px; /* Set the font size for the delete button */
+        text-decoration: none; /* Remove underline from the text */
+        transition: background-color 0.3s; /* Add a smooth transition for the background color */
+    }
+
+        .btn-danger:hover {
+            background-color: #c9302c; /* Change the background color on hover */
+        }
+
+    .back-to-list {
+        color: #d9534f; /* Set the text color for the "Back to List" link */
+        text-decoration: none; /* Remove underline from the text */
+        margin-left: 10px; /* Add a margin to separate it from the delete button */
+    }
+
+        .back-to-list:hover {
+            text-decoration: underline; /* Underline the text on hover */
+        }
+</style>
+
+
+<div class="container custom-container mt-4">
+    <h1 class="display-4 text-center mb-4">Delete</h1>
+
+    <h3 class="text-center">Are you sure you want to remove from list?</h3>
+
+    <div>
+        <h4>Check-In Information</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Forenames)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Forenames)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Surname)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Surname)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Nsn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nsn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AwardCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AwardCode)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.QualificationCode)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.QualificationCode)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.AwardDescription)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.AwardDescription)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Level)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Level)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateOfBirth)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CollegeEmail)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CollegeEmail)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Mobile)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Mobile)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" class="text-center mt-3">
+            <input type="hidden" asp-for="PersonCode" />
+            <input type="submit" value="Delete" class="btn btn-danger" /> 
+        </form>
+
+        <a asp-action="CheckedInList" asp-controller="CheckIn" class="btn btn-primary">Back to List</a>
+    </div>
 </div>
