@@ -275,6 +275,26 @@ namespace GraduationCeremony.Controllers
 
                         await _context.SaveChangesAsync();
                     }
+                } else
+                {
+                    student.PersonCode = PersonCode;
+                    student.Forenames = grad.Forenames;
+                    student.Surname = grad.Surname;
+                    student.Nsn = grad.Nsn;
+
+                    student.AwardCode = award.AwardCode;
+                    student.QualificationCode = award.QualificationCode;
+                    student.AwardDescription = award.AwardDescription;
+                    student.Level = award.Level;
+
+                    student.GraduandAwardId = gradAward.GraduandAwardId;
+                    student.Major1 = gradAward.Major1;
+                    student.Major2 = gradAward.Major2;
+
+                    student.DateOfBirth = grad.DateOfBirth;
+                    student.Mobile = grad.Mobile;
+                    student.CollegeEmail = grad.CollegeEmail;
+                    student.Pronunciation = grad.Pronunciation;
                 }
 
                 return View(student);

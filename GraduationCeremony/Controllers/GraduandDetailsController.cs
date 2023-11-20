@@ -199,6 +199,7 @@ namespace GraduationCeremony.Controllers
                         grad.Forenames = graduandDetailsVM.graduands.Forenames;
                         grad.Surname = graduandDetailsVM.graduands.Surname;
                         grad.DateOfBirth = graduandDetailsVM.graduands.DateOfBirth;
+                        grad.Pronunciation = graduandDetailsVM.graduands.Pronunciation;
 
                         // Update award properties
                         award.AwardDescription = graduandDetailsVM.awards.AwardDescription;

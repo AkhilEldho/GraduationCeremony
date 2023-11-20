@@ -9,6 +9,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection.PortableExecutable;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using System.Globalization;
 
 namespace GraduationCeremony.Controllers
 {
@@ -101,11 +102,12 @@ namespace GraduationCeremony.Controllers
                                                 {
                                                     awards.Add(award);
                                                 }
-                                                else
-                                                {
-                                                    //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
-                                                    errors.UnionWith(awardErrors);
-                                                }
+                                               
+                                            }
+                                            else
+                                            {
+                                                //https://stackoverflow.com/questions/47752/remove-duplicates-from-a-listt-in-c-sharp
+                                                errors.UnionWith(awardErrors);
                                             }
                                         }
                                     }
@@ -133,17 +135,27 @@ namespace GraduationCeremony.Controllers
                                         //checking if data exists already
                                         if (processedGraduandAwardCodes.Add(graduandAward.PersonCode.ToString()))
                                         {
-                                            //ensuring that the data gets added if it doesn't exist in bridging table
-                                            if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode && x.PersonCode == graduandAward.PersonCode) == null)
+                                            var gradAwardErrors = ValidateGraduandAward(graduandAward);
+                                            if (gradAwardErrors.Count == 0)
                                             {
-                                                graduandAwards.Add(graduandAward);
+                                                //ensuring that the data gets added if it doesn't exist in bridging table
+                                                if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode && x.PersonCode == graduandAward.PersonCode) == null)
+                                                {
+                                                    graduandAwards.Add(graduandAward);
+                                                } 
+                                            }
+                                            else
+                                            {
+                                                errors.UnionWith(gradAwardErrors);
                                             }
                                         }
 
                                     }
+                                    ViewBag.Errors = errors;
                                 }
 
-                               //only saving those with changes
+
+                                //only saving those with changes
                                 if (awards.Count != 0 && awards.Count != awardsFullList.Count())
                                 {
                                     //for add range: https://stackoverflow.com/questions/38887434/cannot-convert-from-string-to-system-collections-generic-list-string
@@ -181,8 +193,6 @@ namespace GraduationCeremony.Controllers
                                 }
                                 else
                                     ViewBag.ErrorMessage += "No New Grad Awards Added \n";
-
-                                ViewBag.Errors = errors;
                             }
         
                             else
@@ -229,10 +239,29 @@ namespace GraduationCeremony.Controllers
                     worksheet.DeleteRow(row);
             }
         }
-    
 
-    //retrieving the actual values by row
-    private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)
+        //for awarded column
+        private DateTime? ParseCustomDateFormat(object value)
+        { 
+            //convert value to string
+            var convertedvalue = value.ToString();
+            //check if it is not empty
+            if (!string.IsNullOrWhiteSpace(convertedvalue))
+            {
+                 //https://stackoverflow.com/questions/4718960/datetime-tryparse-issue-with-dates-of-yyyy-dd-mm-format
+                 //convert string date to datetime
+                if (DateTime.TryParse(convertedvalue, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
+                {
+                    return result;
+                }
+
+                Console.WriteLine($"Failed to convert to datetime: {convertedvalue}");
+            }
+            return null;
+        }
+
+        //retrieving the actual values by row
+        private string GetValue(ExcelWorksheet worksheet, int row, int columnIndex)
         {
             return worksheet.Cells[row, columnIndex].Text;
         }
@@ -338,7 +367,7 @@ namespace GraduationCeremony.Controllers
                 Major1 = GetValue(worksheet, row, 9),
                 Major2 = GetValue(worksheet, row, 10),
                 Completion = DateTime.Parse(GetValue(worksheet, row, 12)),
-                Awarded = DateTime.Parse(GetValue(worksheet, row, 13)),
+                Awarded = ParseCustomDateFormat(GetValue(worksheet, row, 13)),
                 YearAchieved = DateTime.Parse(GetValue(worksheet, row, 14)),
             };
 
@@ -350,6 +379,24 @@ namespace GraduationCeremony.Controllers
 
             return graduandAward;
         }
+
+        // Validation method for Award 
+        private List<string> ValidateGraduandAward(GraduandAward graduandAward)
+        {
+            List<string> errors = new List<string>();
+
+            if (string.IsNullOrEmpty(graduandAward.Completion.ToString()))
+            {
+                errors.Add("Completion date is missing a value.");
+            }
+
+            if (string.IsNullOrEmpty(graduandAward.YearAchieved.ToString()))
+            {
+                errors.Add("Year achieved date is missing a value.");
+            }
+            return errors;
+        }
+
 
         public async Task<ViewResult> DeleteAsync(string text)
         {
