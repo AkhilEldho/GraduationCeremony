@@ -42,7 +42,7 @@ namespace GraduationCeremony.Controllers
         // AUTO SUGGEST FOR CHECKIN 
         public string SearchGraduandByName(string searchString)
         {
-            string sql = "SELECT * FROM Graduand WHERE Forenames LIKE @p0 OR Surname LIKE @p1";
+            string sql = "SELECT Graduand.* FROM Graduand INNER JOIN Graduand_Award ON Graduand.Person_code = Graduand_Award.Person_code WHERE(Graduand.Forenames LIKE @p0 OR Graduand.Surname LIKE @p1) AND(Graduand_Award.awarded IS NULL OR Graduand_Award.awarded = '')";
 
             //allow to search similar to startswith for both forenames or surname
             string wrapSearchString = searchString + "%";
@@ -348,6 +348,29 @@ namespace GraduationCeremony.Controllers
             return Json(updatedPersons);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdatePerson(string? PersonCode)
+        {
+            if (!string.IsNullOrEmpty(PersonCode))
+            {
+                int code = int.Parse(PersonCode);
+                //saving awarded date to the day it's given
+                List<GraduandAward> graduandAward = await _context.GraduandAwards.ToListAsync();
+                GraduandAward awarded = graduandAward.Find(x => x.PersonCode == code);
+
+                if (awarded.Awarded == null || string.IsNullOrEmpty(awarded.Awarded.ToString()))
+                {
+                    awarded.Awarded = DateTime.Now;
+                    _context.SaveChanges();
+                }
+            }
+
+            var updatedPersons = await _context.CheckIns.ToListAsync();
+
+            return Json(updatedPersons);
+        }
+
+
         // GET: CheckInController/Details/5
         public ActionResult Details(int id)
         {
@@ -404,14 +427,14 @@ namespace GraduationCeremony.Controllers
                 return NotFound();
             }
 
-            var checkInFull = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
+            var student = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
 
-            if (checkInFull == null)
+            if (student == null)
             {
                 return NotFound();
             }
 
-            return View(checkInFull);
+            return View(student);
         }
 
         // POST: Graduation/Delete/5
@@ -423,11 +446,9 @@ namespace GraduationCeremony.Controllers
             {
                 return Problem("Entity set 'S232_Project01_TestContext.CheckIn'  is null.");
             }
-            var student = await _context.CheckIns.FindAsync(id);
-            if (student != null)
-            {
-                _context.CheckIns.Remove(student);
-            }
+
+            var student = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
+            _context.CheckIns.Remove(student);
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(CheckedInList));

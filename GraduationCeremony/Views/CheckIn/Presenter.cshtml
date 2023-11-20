@@ -110,14 +110,15 @@
                         <li class="list-group-item text-black list-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
                         <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                         <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
+                        <input type="hidden" id="personCode_@i" value="@Model.ElementAt(i).PersonCode" />
 
                         @if (string.IsNullOrEmpty(Model.ElementAt(i).Pronunciation))
                         {
-                            <li class="list-group-item text-black list-item" id="pronunciation_@i"><strong>Pronunciation:</strong></li>
+                            <li class="list-group-item text-black list-item" id="pronunciation_@i"></li>
                         }
                         else
                         {
-                            <li class="list-group-item text-black list-item"><strong>Pronunciation:</strong> @Model.ElementAt(i).Pronunciation</li>
+                            <li class="list-group-item text-black list-item">@Model.ElementAt(i).Pronunciation</li>
                         }
 
                         <li class="list-group-item text-black list-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
@@ -147,6 +148,7 @@
                 document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
                 document.getElementById('pronunciation_' + currentPersonIndex)
             );
+            sendPersonCodeToController(currentPersonIndex);
             updateDisplay();
         };
 
@@ -171,6 +173,22 @@
             });
         }
 
+        // Function to send the personCode to the controller
+        function sendPersonCodeToController(index) {
+
+            var personCode = document.getElementById('personCode_' + index).value;
+
+            $.ajax({
+                url: "/CheckIn/UpdatePerson",
+                type: "POST",
+                data: { PersonCode: personCode },
+                success: function (data) {
+                    currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
+                    updateDisplay();
+                }
+            });
+        }
+
         setInterval(fetchDataAndUpdate, 5000);
 
         document.getElementById("nextButton").addEventListener("click", function () {
@@ -182,6 +200,7 @@
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
             }
+            sendPersonCodeToController(currentPersonIndex);
             fetchDataAndUpdate();
         });
 
@@ -193,8 +212,8 @@
                     document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
                     document.getElementById('pronunciation_' + currentPersonIndex)
                 );
-                fetchDataAndUpdate();
             }
+            fetchDataAndUpdate();
         });
 
         function GetPronunciation(forenames, surname, pronunciationElement) {
