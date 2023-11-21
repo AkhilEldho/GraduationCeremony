@@ -1,5 +1,6 @@
 ﻿using GraduationCeremony.Models.DB;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net;
@@ -18,6 +19,7 @@ namespace GraduationCeremony.Controllers
             _context = context;
             _logger = logger;
         }
+
         public IActionResult Index(int? page)
         {
             var pageNumber = page ?? 1;
@@ -34,10 +36,20 @@ namespace GraduationCeremony.Controllers
                          .OrderBy(item => item.awards.Level)
                         .ThenBy(item => item.awards.AwardDescription)
                         .ThenBy(item => item.graduands.Forenames).ToList();
+
             if (result.Count() == 0)
             {
                 ViewBag.Message = "No excel file imported yet";
             }
+
+            var yearList = result
+                .Where(grad => grad.graduandAwards.Awarded != null)
+                .Select(grad => grad.graduandAwards.Awarded.Value.Year)
+                .Distinct() // To get unique years
+                .ToList();
+
+            ViewBag.YearList = new SelectList(yearList);
+
             return View(result.ToPagedList(pageNumber, 10));
         }
 
@@ -62,7 +74,7 @@ namespace GraduationCeremony.Controllers
             return json;
         }
 
-        public async Task<IActionResult> Search(string searchString, int? page)
+        public async Task<IActionResult> Search(string searchString, int? page, string? selectedYear)
         {
             try
             {
@@ -96,6 +108,7 @@ namespace GraduationCeremony.Controllers
                     ViewBag.Message = "Error: Please enter a valid search string.";
                     return View("Index");
                 }
+
                 //searching by first name / last name
                 var result = await (from g in _context.Graduands
                                    join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
@@ -118,6 +131,15 @@ namespace GraduationCeremony.Controllers
                     // No results found
                     ViewBag.Message = "Student " + searchString + " not found. Please enter name correctly";
                 }
+
+                //getting the years of graduaded students
+                var yearList = result
+                    .Where(grad => grad.graduandAwards.Awarded != null)
+                    .Select(grad => grad.graduandAwards.Awarded.Value.Year)
+                    .Distinct() // To get unique years
+                    .ToList();
+
+                ViewBag.YearList = new SelectList(yearList);
 
                 return View(result.ToPagedList(pageNumber, 10));
             }
