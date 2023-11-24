@@ -14,7 +14,7 @@
         <div class="form-group">
             <!-- Search Input -->
             <input type="text" id="searchString" name="searchString" class="search-input"
-                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " required />
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " />
         </div>
         <!-- Auto Suggest Container -->
         <div id="autoSuggestContainer" class="autoSuggest"></div>
@@ -22,22 +22,6 @@
         <div class="form-group">
             <!-- Search Button -->
             <button type="submit" class="search-button">Search</button>
-        </div>
-
-        <!-- Dropdown for selecting years -->
-        <div class="form-group">
-            <label for="selectYear">Select Year:</label>
-            @Html.DropDownList("selectYear", ViewBag.YearList as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
-
-            <!-- Hidden field to store selected year -->
-            <input type="hidden" id="selectedYear" name="selectedYear" />
-        </div>
-
-        <div class="text-center">
-            <!-- Filter Button -->
-            <div class="form-check form-check-inline form-horizontal">
-                <button class="btn btn-lg btn-success" type="submit" value="Filter">Filter</button>
-            </div>
         </div>
     </form>
 </div>
@@ -59,6 +43,7 @@
                         <th>Date of Birth</th>
                         <th>Award Code</th>
                         <th>Award Description</th>
+                        <th>Award Awarded</th>
                         <th>Qualification Code</th>
                         <th>Level</th>
                         <th>Email</th>
@@ -75,6 +60,14 @@
                             <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
                             <td>@item.awards.AwardCode</td>
                             <td>@item.awards.AwardDescription</td>
+                            @if (item.graduandAwards.Awarded != null)
+                            {
+                                <td>@item.graduandAwards.Awarded.Value.Year</td>
+                            }
+                            else
+                            {
+                                <td>Not Awarded</td>
+                            }
                             <td>@item.awards.QualificationCode</td>
                             <td>@item.awards.Level</td>
                             <td>@item.graduands.CollegeEmail</td>
@@ -90,12 +83,12 @@
         @if (Model.Count >= 10)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
-            new { Page = page }),
-            new PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
+    new { Page = page }),
+    new PagedListRenderOptions
+    {
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" }
+    })
         }
     }
     <a asp-action="Index" class="btn btn-warning">Back to list</a>
@@ -129,10 +122,5 @@
         }
 
         document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
-    }
-
-    function updateHiddenField() {
-        var selectedYear = document.getElementById("selectYear").value;
-        document.getElementById("selectedYear").value = selectedYear;
     }
 </script>
