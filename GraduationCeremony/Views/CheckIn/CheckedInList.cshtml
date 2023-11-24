@@ -88,14 +88,14 @@
         @if (Model.Count > 10)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { Page = page }),
-    new PagedListRenderOptions
-    {
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
-    })
+            new { Page = page }),
+            new PagedListRenderOptions
+            {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+            })
+                }
         }
-    }
 </div>
 
 <!-- auto suggestion script -->
