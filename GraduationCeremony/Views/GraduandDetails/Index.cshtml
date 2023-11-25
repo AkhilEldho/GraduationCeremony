@@ -36,7 +36,7 @@
         </div>
     </form>
         <!-- Auto Suggest Container -->
-        <div id="autoSuggestContainer" class="autoSuggest"></div>
+    <div id="autoSuggestContainerSearch" class="autoSuggest"></div>
 </div>
 
 <div class="container">
@@ -104,7 +104,8 @@
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
         if (searchString.length < 1) {
-            autoSuggestContainer.innerHTML = "";
+            // Correct the ID here
+            document.getElementById("autoSuggestContainerSearch").innerHTML = "";
             return;
         }
 
@@ -113,8 +114,10 @@
         var url = "/GraduandDetails/SearchGraduandDetailsByName?searchString=" + searchString;
         xmlhttp.open("GET", url, false);
         xmlhttp.send();
-        document.getElementById("autoSuggestContainer").style.display = "block";
-        document.getElementById("autoSuggestContainer").innerHTML = "";
+
+        // Correct the ID here
+        document.getElementById("autoSuggestContainerSearch").style.display = "block";
+        document.getElementById("autoSuggestContainerSearch").innerHTML = "";
 
         var messageObject = JSON.parse(xmlhttp.responseText);
 
@@ -128,7 +131,7 @@
             autoSuggestions += "<br />";
         }
 
-        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+        document.getElementById("autoSuggestContainerSearch").innerHTML = autoSuggestions;
     }
 
     function updateHiddenField() {

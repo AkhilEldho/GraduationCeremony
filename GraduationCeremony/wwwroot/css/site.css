@@ -262,27 +262,65 @@ body {
 
 @media (min-width: 1620px) and (max-width: 2200px) {
     .autoSuggest {
-        width: 16%; /* Adjust as needed */
-        left: 43%; /* Adjust as needed */
+        width: 24%; /* Adjust as needed */
+        left: 47%; /* Adjust as needed */
     }
 }
 
 @media (min-width: 1320px) and (max-width: 1620px) {
     .autoSuggest {
-        width: 16%; /* Adjust as needed */
-        left: 40%; /* Adjust as needed */
+        width: 27%; /* Adjust as needed */
+        left: 46%; /* Adjust as needed */
     }
 }
 
 @media (min-width: 768px) and (max-width: 1320px) {
+    .autoSuggest {
+        width: 32%; /* Adjust as needed */
+        left: 45%; /* Adjust as needed */
+    }
+}
+
+@media (min-width: 430px) and (max-width: 768px) {
     .autoSuggest {
         width: 22%; /* Adjust as needed */
         left: 39%; /* Adjust as needed */
     }
 }
 
+/* Default styles for smaller screens */
+#autoSuggestContainerSearch {
+    width: 80%; /* Adjust as needed */
+    left: 10%; /* Adjust as needed */
+}
+
+/* Styles for screens between 1620px and 2200px */
+@media (min-width: 1620px) and (max-width: 2200px) {
+    #autoSuggestContainerSearch {
+        width: 16%; /* Adjust as needed */
+        left: 43%; /* Adjust as needed */
+    }
+}
+
+/* Styles for screens between 1320px and 1620px */
+@media (min-width: 1320px) and (max-width: 1620px) {
+    #autoSuggestContainerSearch {
+        width: 16%; /* Adjust as needed */
+        left: 40%; /* Adjust as needed */
+    }
+}
+
+/* Styles for screens between 768px and 1320px */
+@media (min-width: 768px) and (max-width: 1320px) {
+    #autoSuggestContainerSearch {
+        width: 22%; /* Adjust as needed */
+        left: 39%; /* Adjust as needed */
+    }
+}
+
+/* Styles for screens between 430px and 768px */
 @media (min-width: 430px) and (max-width: 768px) {
-    .autoSuggest {
+    #autoSuggestContainerSearch {
         width: 22%; /* Adjust as needed */
         left: 39%; /* Adjust as needed */
     }
