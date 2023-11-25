@@ -4,24 +4,24 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
+<div class="container mb-4">
     <!-- Page Title -->
-    <h1 class="display-4 mb-4">CHECK IN</h1>
+    <div class="title mb-4">Check In</div>
 
     <!-- Search Form -->
     <form id="searchForm" action="/CheckIn/SearchCheckIn" method="get" autocomplete="off" class="search-form">
-        <div class="form-group">
+        <div class="form-group search-box">
             <!-- Search Input -->
             <input type="text" id="searchString" name="searchString" class="form-control search-input"
-                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter your email" required />
-        </div>
-        <div class="form-group">
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" required />
+
             <!-- Search Button -->
-            <button type="submit" class="btn btn-danger search-button">Search</button>
+            <button type="submit" class="btn btn-outline-danger search-button btn-lg">Search</button>
         </div>
-        <!-- Auto Suggest Container -->
-        <div id="autoSuggestContainer" class="autoSuggest"></div>
+
     </form>
+    <!-- Auto Suggest Container -->
+    <div id="autoSuggestContainer" class="autoSuggest"></div>
 
     <!-- Display Error Message -->
     @if (!string.IsNullOrEmpty(ViewBag.Message))
@@ -31,11 +31,12 @@
 </div>
 
 
-@*auto suggestion*@
+@* auto suggestion *@
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
         if (searchString.length < 1) {
             autoSuggestContainer.innerHTML = "";
+            autoSuggestContainer.style.display = "none";
             autoSuggestContainer.classList.remove("show-border");
             return;
         } else {
@@ -58,6 +59,11 @@
 
         var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
 
+        if (messageObject.length === 0) {
+            // If there are no matching search results, hide the autoSuggestContainer
+            autoSuggestContainer.style.display = "none";
+            return;
+        }
         var autoSuggestions = "";
 
         for (var i = 0; i < messageObject.length; i++) {
@@ -65,12 +71,14 @@
             //Works together with the ".innerHTML" statement after the end of this "for" block
             autoSuggestions +=
                 "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " + messageObject[i].Surname + "\" "
-                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" "
-                + "style=\"background-color:transparent;\" />";
+                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" ";
 
             autoSuggestions += "<br />";
         }
         //place the generated buttons HTML code inside the display div
         document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
     }
-</script>
+</script> 
+
+
+

@@ -1,10 +1,8 @@
 /* site.css */
 html {
-    font-size: 16px;
-   
+    font-size: 14px;
     position: relative;
     min-height: 100%;
-
 }
 
 body {
@@ -12,6 +10,9 @@ body {
     background-color: #333; /* Darker background color */
     color: #fff; /* White text */
 /*    background: linear-gradient(to right, #d9534f, #713232);*/ /* Match the navbar gradient */
+}
+.footer {
+    background: linear-gradient(to left, #A94441 15%, #8f4140 30%, #141313 100%);
 }
 
 .person-profile-container {
@@ -37,27 +38,143 @@ body {
     text-align: center;
 }
 
-.display-4 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+/*MAIN TITLE FOR PAGES*/
+.title {
+    font-size: 40px;
+    margin: 20px 0px 0px 20px;
     color: #d9534f;
+    text-align: center;
+    font-weight: 600;
+}
+/*----------HOME PAGE VIEW--------------*/
+.carousel-inner > div {
+    max-height: 400px;
 }
 
+    .carousel-inner > div img {
+        max-height: 400px;
+        object-fit: cover;
+    }
+
+.about-us {
+    background-color: #f8f8f8;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.siteName, .featuresTitle {
+    color: #ed5d53;
+    font-size: 45px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+
+.siteDesc {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 auto;
+    max-width: 600px;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.card-link {
+    text-decoration: none;
+    color: #666;
+}
+
+    .card-link:hover {
+        text-decoration: none;
+        color: inherit;
+    }
+
+/*hover effect from here: https://www.youtube.com/watch?v=KAHjf1Xj0SU*/
+.card-format {
+    transition: all 0.3s;
+}
+
+    .card-format:hover {
+        transform: scale(1.05);
+    }
+
+/*----------CHECK IN VIEW---------------*/
+/*Index*/
 .search-form {
+    width: 50%;
+    margin: 0 auto;
     display: flow;
     flex-direction: column;
     align-items: center;
 }
 
-.search-input {
+.search-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+    .search-box .search-input {
+        width: 100%;
+        margin-right: 10px;
+        height: 40px;
+    }
+
+.autoSuggest {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    width: 43%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+    margin: 10px;
+    display: none;
+}
+
+    .autoSuggest input[type="button"] {
+        width: 100%;
+        padding: 4px 20px;
+        font-size: 14px;
+        color: #5c5a5a;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        text-align: left;
+        font-size: 15px;
+    }
+
+        .autoSuggest input[type="button"]:hover,
+        .autoSuggest input[type="button"]:focus {
+            background-color: #ffe8e8 !important;
+        }
+
+.btn-outline-danger:active,
+.btn-outline-danger:hover,
+.btn-outline-danger:focus,
+.btn-outline-danger:active {
+    background-color: #DC3545 !important;
+    border-color: #DC3545 !important;
+}
+
+/*.search-input {
     padding: 15px;
     font-size: 16px;
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
+}*/
 
-.search-button {
+/*.search-button {
     padding: 15px;
     font-size: 16px;
     background-color: #d9534f;
@@ -67,11 +184,9 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
     width: 100%;
-}
+}*/
 
-    .search-button:hover {
-        background-color: #c9302c;
-    }
+
 
 /*.container {
     background-color: #fff;*/ /* Set the background color to white */
@@ -81,19 +196,19 @@ body {
     /*position: relative;*/ /* Set position to relative for positioning children */
 /*}*/
 
-.autoSuggest {
+/*.autoSuggest {
     position: absolute;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 4px;
-    max-height: 150px; /* Adjust the max-height as needed */
-    width: calc(100% - 30px); /* Use the same width as the search input, subtracting padding and border */
-    overflow-y: auto; /* Enable vertical scrolling */
-    overflow-x: auto;
-    top: 100%; /* Position below the search input */
-    left: 0; /* Align with the left edge of the container */
-    right: 0; /* Align with the right edge of the container */
-    margin: 10px;
+    max-height: 150px;*/ /* Adjust the max-height as needed */
+    /*width: calc(100% - 30px);*/ /* Use the same width as the search input, subtracting padding and border */
+    /*overflow-y: auto;*/ /* Enable vertical scrolling */
+    /*overflow-x: auto;
+    top: 100%;*/ /* Position below the search input */
+    /*left: 0;*/ /* Align with the left edge of the container */
+    /*right: 0;*/ /* Align with the right edge of the container */
+    /*margin: 10px;
     z-index: 1;
     margin-top: 0;
     display: none;
@@ -115,7 +230,7 @@ body {
         .autoSuggest input[type="button"]:hover,
         .autoSuggest input[type="button"]:focus {
             background-color: #ffb0ad !important;
-        }
+        }*/
 
 .error-message {
     margin-top: 20px;
@@ -256,62 +371,3 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-.carousel-inner > div {
-    max-height: 400px;
-}
-
-    .carousel-inner > div img {
-        max-height: 400px;
-        object-fit: cover;
-    }
-
-.about-us {
-    background-color: #f8f8f8;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.siteName, .featuresTitle {
-    color: #ed5d53;
-    font-size: 45px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-
-.siteDesc {
-    color: #666;
-    font-size: 16px;
-    line-height: 1.6;
-    margin: 0 auto;
-    max-width: 600px;
-    text-align: justify;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-
-.card-link {
-    text-decoration: none;
-    color: #666;
-}
-
-    .card-link:hover {
-        text-decoration: none;
-        color: inherit;
-    }
-
-/*hover effect from here: https://www.youtube.com/watch?v=KAHjf1Xj0SU*/
-.card-format {
-    transition: all 0.3s;
-}
-
-    .card-format:hover {
-        transform: scale(1.05);
-    }
-
-.footer {
-    background: linear-gradient(to right, #d9534f, #713232);
-}
