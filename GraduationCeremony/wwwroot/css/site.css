@@ -140,7 +140,7 @@ body {
     max-height: 200px;
     overflow-y: auto;
     width: 26%;
-    left: 44%;
+    left: 50%;
     transform: translateX(-50%);
     margin-top: 5px;
     margin: 10px;
@@ -258,18 +258,36 @@ body {
         width: auto; /* Adjust as needed */
     }
 
+}
+
+@media (min-width: 1620px) and (max-width: 2200px) {
     .autoSuggest {
-        width: 24%;
-        left: 47%;
+        width: 16%; /* Adjust as needed */
+        left: 43%; /* Adjust as needed */
     }
 }
 
-@media (max-width: 500px) {
+@media (min-width: 1320px) and (max-width: 1620px) {
     .autoSuggest {
-        width: 24%;
-        left: 37%;
+        width: 16%; /* Adjust as needed */
+        left: 40%; /* Adjust as needed */
     }
 }
+
+@media (min-width: 768px) and (max-width: 1320px) {
+    .autoSuggest {
+        width: 22%; /* Adjust as needed */
+        left: 39%; /* Adjust as needed */
+    }
+}
+
+@media (min-width: 430px) and (max-width: 768px) {
+    .autoSuggest {
+        width: 22%; /* Adjust as needed */
+        left: 39%; /* Adjust as needed */
+    }
+}
+
 
 /* Hover effect for table rows */
 .table-hover tbody tr:hover {
