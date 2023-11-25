@@ -64,8 +64,8 @@ namespace GraduationCeremony.Controllers
             .FromSqlRaw(sql, wrapSearchString, wrapSearchString)
             .Select(g => new GraduandDetails
             {
-              PersonCode = g.PersonCode,
-              graduands = g
+                PersonCode = g.PersonCode,
+                graduands = g
             })
             .ToList();
 
@@ -109,22 +109,34 @@ namespace GraduationCeremony.Controllers
                     return View("Index");
                 }
 
+                List<GraduandDetails> result = new List<GraduandDetails>();
+
                 //searching by first name / last name
-                var result = await (from g in _context.Graduands
-                                   join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                                   join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                                   where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
-                                         (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
-                                   select new GraduandDetails
-                                   {
-                                       graduands = g,
-                                       awards = a,
-                                       graduandAwards = ga
-                                   })
+                result = await (from g in _context.Graduands
+                                join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                                join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                                where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
+                                      (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
+                                select new GraduandDetails
+                                {
+                                    graduands = g,
+                                    awards = a,
+                                    graduandAwards = ga
+                                })
                       .OrderBy(item => item.awards.Level)
                       .ThenBy(item => item.awards.AwardDescription)
                       .ThenBy(item => item.graduands.Forenames)
                       .ToListAsync();
+
+                if (!string.IsNullOrEmpty(selectedYear))
+                {
+                    int year = int.Parse(selectedYear);
+
+                    // Filter results based on the awarded date
+                    result = result
+                        .Where(item => item.graduandAwards.Awarded.HasValue && item.graduandAwards.Awarded.Value.Year == year)
+                        .ToList();
+                }
 
                 if (result.Count == 0)
                 {

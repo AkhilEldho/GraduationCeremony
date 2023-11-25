@@ -25,23 +25,21 @@
         </div>
 
         <!-- Dropdown for selecting years -->
-        @if (ViewBag.YearList != null && ((SelectList)ViewBag.YearList).Any())
-        {
-            <div class="form-group">
-                <label for="selectYear">Select Year:</label>
-                @Html.DropDownList("selectYear", ViewBag.YearList as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
+        <div class="form-group">
+            @Html.DropDownList("selectYear", ViewBag.YearList as SelectList,
+            "-- Select Year --",  // Add this empty option
+            new { @class = "form-control", onchange = "updateHiddenField()" })
 
-                <!-- Hidden field to store selected year -->
-                <input type="hidden" id="selectedYear" name="selectedYear" />
-            </div>
+            <!-- Hidden field to store selected year -->
+            <input type="hidden" id="selectedYear" name="selectedYear" />
+        </div>
 
-            <div class="text-center">
-                <!-- Filter Button -->
-                <div class="form-check form-check-inline form-horizontal">
-                    <button class="btn btn-lg btn-success" type="submit" value="Filter">Filter</button>
-                </div>
+        <div class="text-center">
+            <!-- Filter Button -->
+            <div class="form-check form-check-inline form-horizontal">
+                <button class="btn btn-lg btn-success" type="submit" value="Filter">Filter</button>
             </div>
-        }
+        </div>
     </form>
 </div>
 
@@ -62,6 +60,7 @@
                         <th>Date of Birth</th>
                         <th>Award Code</th>
                         <th>Award Description</th>
+                        <th>Award Awarded</th>
                         <th>Qualification Code</th>
                         <th>Level</th>
                         <th>Email</th>
@@ -78,6 +77,14 @@
                             <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
                             <td>@item.awards.AwardCode</td>
                             <td>@item.awards.AwardDescription</td>
+                            @if (item.graduandAwards.Awarded != null)
+                            {
+                                <td>@item.graduandAwards.Awarded.Value.Year</td>
+                            }
+                            else
+                            {
+                                <td>Not Awarded</td>
+                            }
                             <td>@item.awards.QualificationCode</td>
                             <td>@item.awards.Level</td>
                             <td>@item.graduands.CollegeEmail</td>
@@ -103,6 +110,9 @@
     }
     <a asp-action="Index" class="btn btn-warning">Back to list</a>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
@@ -134,9 +144,29 @@
         document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
     }
 
-    function updateHiddenField() {
-        var selectedYear = document.getElementById("selectYear").value;
-        document.getElementById("selectedYear").value = selectedYear;
-        alert(selectedYear);
+    // Function to initialize the script
+    function initializeScript() {
+        // Get the selected value of the dropdown
+        var selectedYear = $("#selectYear").val();
+
+        // Set the value of the hidden field
+        $("#selectedYear").val(selectedYear);
+
+        // Trigger the updateHiddenField function
+        updateHiddenField();
     }
+
+    // Function to update the hidden field when the dropdown changes
+    function updateHiddenField() {
+        // Get the selected value of the dropdown
+        var selectedYear = $("#selectYear").val();
+
+        // Set the value of the hidden field
+        $("#selectedYear").val(selectedYear);
+    }
+
+    // Call the initializeScript function when the document is ready
+    $(document).ready(initializeScript);
+
 </script>
+
