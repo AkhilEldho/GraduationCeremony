@@ -3,97 +3,100 @@
 }
 
 <style>
-    label {
-        font-size: 1.5rem;
-        color: #d9534f;
-        display: block;
-        margin-bottom: 10px;
-        text-align: left;
+    body {
+        background-color: #f8f9fa;
     }
 
-    .form-container {
+    .container {
+        max-width: 800px; /* Adjusted maximum width to match the second container */
+        margin: 20px auto;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-        padding: 20px;
+    }
+
+    /* Label styling */
+    label {
+        font-size: 40px;
+        margin: 20px 0px 0px 20px;
+        color: #d9534f;
         text-align: center;
-        margin: 0 auto;
-        max-width: 800px;
+        font-weight: 600;
     }
 
-    .form-group {
-        width: 100%;
-        max-width: 600px;
-        margin-bottom: 20px;
-    }
-
+    /* File input styling */
     .file-input {
         padding: 15px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+        max-width: 600px;
+    }
+
+    /* Submit button styling */
+    .submit-button,
+    .btn-secondary {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        text-align: center;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        box-sizing: border-box;
+        max-width: 600px; /* Adjusted maximum width to match the second container */
     }
 
     .submit-button {
         background-color: #5bc0de;
         color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 15px;
         font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        width: 100%;
     }
 
-        .submit-button:hover {
-            background-color: #31b0d5;
-        }
-
-    .btn-secondary {
-        display: inline-block;
-        margin: 10px 0;
-        width: 100%;
-        max-width: 300px;
+    .btn-secondary:hover {
+        background-color: #f0f0f0;
     }
 
+    /* Alert styling */
     .alert {
         font-size: 16px;
         margin-top: 20px;
         border-radius: 5px;
     }
 
-    .error-list li {
-        font-size: 14px;
+    /* Error list styling */
+    .error-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
+
+        .error-list li {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
 </style>
 
-<div class="container form-container">
+<div class="container">
+    <!-- Form for uploading Excel file -->
     <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="file">Select Excel File:</label>
-            <input type="file" name="file" id="file" class="form-control file-input" />
-        </div>
+        <label for="file">Select Excel File:</label>
+        <input type="file" name="file" id="file" class="form-control file-input" />
         <button type="submit" class="btn btn-success submit-button">Import Excel</button>
     </form>
 
+    <!-- Button group for additional actions -->
     <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary">Delete All Checked In Graduands</a>
     <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
     <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a>
 
-    <script>
-        function confirmDelete(text) {
-            var confirmation = confirm("Are you sure you want to delete " + text + "?");
-
-            if (confirmation) {
-                window.location.href = "/Home/Delete?text=" + text;
-            }
-        }
-    </script>
-
+    <!-- Display success and error messages -->
     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
     {
         <div class="alert alert-success success-message">@ViewBag.SuccessMessage</div>
@@ -122,3 +125,14 @@
         <div class="alert alert-danger error-message">@ViewBag.AwardError</div>
     }
 </div>
+
+<script>
+    // JavaScript function to confirm deletion
+    function confirmDelete(text) {
+        var confirmation = confirm("Are you sure you want to delete " + text + "?");
+
+        if (confirmation) {
+            window.location.href = "/Home/Delete?text=" + text;
+        }
+    }
+</script>

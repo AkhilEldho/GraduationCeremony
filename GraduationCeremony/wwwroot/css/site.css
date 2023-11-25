@@ -12,7 +12,8 @@ body {
 /*    background: linear-gradient(to right, #d9534f, #713232);*/ /* Match the navbar gradient */
 }
 .footer {
-    background: linear-gradient(to left, #A94441 15%, #8f4140 30%, #141313 100%);
+    background: #401b1b;
+    background: linear-gradient(to left, #8f4140 15%, #401b1b 100%, #141313 15%);
 }
 
 .person-profile-container {
@@ -121,7 +122,7 @@ body {
 }
 
     .search-box .search-input {
-        width: 100%;
+        width: 100%; 
         margin-right: 10px;
         height: 40px;
     }
@@ -133,8 +134,8 @@ body {
     border-radius: 4px;
     max-height: 200px;
     overflow-y: auto;
-    width: 43%;
-    left: 50%;
+    width: 26%;
+    left: 44%;
     transform: translateX(-50%);
     margin-top: 5px;
     margin: 10px;
@@ -165,72 +166,6 @@ body {
     background-color: #DC3545 !important;
     border-color: #DC3545 !important;
 }
-
-/*.search-input {
-    padding: 15px;
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}*/
-
-/*.search-button {
-    padding: 15px;
-    font-size: 16px;
-    background-color: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
-}*/
-
-
-
-/*.container {
-    background-color: #fff;*/ /* Set the background color to white */
-    /*padding: 20px;*/ /* Add padding for better visual appeal */
-    /*border-radius: 10px;*/ /* Add border-radius for rounded corners */
-    /*box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);*/ /* Add box-shadow for a subtle shadow effect */
-    /*position: relative;*/ /* Set position to relative for positioning children */
-/*}*/
-
-/*.autoSuggest {
-    position: absolute;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    max-height: 150px;*/ /* Adjust the max-height as needed */
-    /*width: calc(100% - 30px);*/ /* Use the same width as the search input, subtracting padding and border */
-    /*overflow-y: auto;*/ /* Enable vertical scrolling */
-    /*overflow-x: auto;
-    top: 100%;*/ /* Position below the search input */
-    /*left: 0;*/ /* Align with the left edge of the container */
-    /*right: 0;*/ /* Align with the right edge of the container */
-    /*margin: 10px;
-    z-index: 1;
-    margin-top: 0;
-    display: none;
-}
-
-    .autoSuggest input[type="button"] {
-        width: 100%;
-        padding: 15px;
-        font-size: 14px;
-        color: #333;
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        text-align: left;
-        font-size: 15px;
-        transition: background-color 0.3s;
-    }
-
-        .autoSuggest input[type="button"]:hover,
-        .autoSuggest input[type="button"]:focus {
-            background-color: #ffb0ad !important;
-        }*/
 
 .error-message {
     margin-top: 20px;
@@ -304,6 +239,33 @@ body {
     }
 }
 
+/* Add media query for adjusting navbar styles on larger screens */
+@media (min-width: 768px) {
+    .navbar {
+        font-size: 15px;
+    }
+
+    .custom-card .search-input {
+        width: auto; /* Adjust as needed */
+    }
+
+    .custom-card .button {
+        width: auto; /* Adjust as needed */
+    }
+
+    .autoSuggest {
+        width: 24%;
+        left: 47%;
+    }
+}
+
+@media (max-width: 500px) {
+    .autoSuggest {
+        width: 24%;
+        left: 37%;
+    }
+}
+
 /* Hover effect for table rows */
 .table-hover tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Slight background color on hover */
@@ -338,24 +300,6 @@ body {
     max-width: 550px;
     box-sizing: border-box; /* Add box-sizing to include padding and border in the width */
 }
-
-
-/* Add media query for adjusting navbar styles on larger screens */
-@media (min-width: 768px) {
-    .navbar {
-        font-size: 16px;
-    }
-
-    .custom-card .search-input {
-        width: auto; /* Adjust as needed */
-    }
-
-    .custom-card .button {
-        width: auto; /* Adjust as needed */
-    }
-
-}
-
 
 /*person code arrow remove*/
 /*for chrome, safari, edge,opera*/
