@@ -322,7 +322,7 @@ namespace GraduationCeremony.Controllers
             List<CheckIn> checkIn = await checkInFull.ToListAsync();
             checkIn = checkIn.OrderBy(x => x.GraduandAwardId).ToList();
 
-            return View(checkIn.ToPagedList(1, 10));
+            return View(checkIn.ToPagedList(pageNumber, 10));
         }
 
         // PRESENTERS VIEW

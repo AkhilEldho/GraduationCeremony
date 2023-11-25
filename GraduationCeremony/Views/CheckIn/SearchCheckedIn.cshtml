@@ -7,41 +7,31 @@
     ViewData["Title"] = "Checked-In List";
 }
 
-<style>
-    .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-
-    .search-form {
-        position: relative;
-    }
-</style>
 
 <div class="container">
-    <h1 class="display-4">Checked-In List</h1>
+    <div class="title mb-4">Checked-In List</div>
 
     <form id="searchForm" action="/CheckIn/SearchCheckedIn" method="get" autocomplete="off" class="search-form">
-        <div class="form-group">
-            <input type="text" id="searchString" name="searchString" class="search-input"
-                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name: " required />
-            <div id="autoSuggestContainer" class="autoSuggest" style="border: none;"></div>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="search-button">Search</button>
+        <div class="form-group search-box">
+            <input type="text" id="searchString" name="searchString" class="form-control search-input"
+                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" required />
+
+            <button type="submit" class="btn btn-outline-danger search-button btn-lg">Search</button>
         </div>
     </form>
 
+    <div id="autoSuggestContainer" class="autoSuggest"></div>
+</div>
+
+<div class="container mt-5">
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
         <div class="alert alert-danger error-message">@ViewBag.Message</div>
     }
     else
     {
-        <div class="table-responsive">
+        <!--margin bottom to show the scrolllbar-->
+        <div class="table-responsive mb-5">
             <table class="table table-striped table-bordered">
                 <thead class="thead-white">
                     <tr>
@@ -85,7 +75,7 @@
             </table>
         </div>
 
-        @if (Model.Count > 10)
+        @if (Model.Count > 2)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
     new { Page = page }),
@@ -98,11 +88,13 @@
     }
 </div>
 
+
 <!-- auto suggestion script -->
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
         if (searchString.length < 1) {
             autoSuggestContainer.innerHTML = "";
+            autoSuggestContainer.style.display = "none";
             autoSuggestContainer.classList.remove("show-border");
             return;
         } else {
@@ -118,6 +110,12 @@
         document.getElementById("autoSuggestContainer").innerHTML = "";
 
         var messageObject = JSON.parse(xmlhttp.responseText);
+
+        if (messageObject.length === 0) {
+            // If there are no matching search results, hide the autoSuggestContainer
+            autoSuggestContainer.style.display = "none";
+            return;
+        }
 
         var autoSuggestions = "";
 

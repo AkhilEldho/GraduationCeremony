@@ -13,6 +13,7 @@ namespace GraduationCeremony.Controllers
     {
         private readonly S232_Project01_TestContext _context;
         private readonly ILogger<GraduandDetailsController> _logger;
+        private string search = "";
 
         public GraduandDetailsController(S232_Project01_TestContext context, ILogger<GraduandDetailsController> logger)
         {
@@ -50,7 +51,7 @@ namespace GraduationCeremony.Controllers
 
             ViewBag.YearList = new SelectList(yearList);
 
-            return View(result.ToPagedList(pageNumber, 10));
+            return View(result.ToPagedList(pageNumber, 15));
         }
 
         // AUTO SUGGEST FOR GRADUANDDETAILS 
@@ -79,6 +80,17 @@ namespace GraduationCeremony.Controllers
             try
             {
                 var pageNumber = page ?? 1;
+                ViewData["SearchString"] = searchString;
+                ViewData["SelectedYear"] = selectedYear;
+
+                if (!string.IsNullOrEmpty(searchString))
+                {
+                    search = searchString;
+                }
+                else
+                {
+                    searchString = search;
+                }
 
                 // Removing extra space  
                 searchString = searchString?.Trim();
@@ -153,7 +165,7 @@ namespace GraduationCeremony.Controllers
 
                 ViewBag.YearList = new SelectList(yearList);
 
-                return View(result.ToPagedList(pageNumber, 10));
+                return View(result.ToPagedList(pageNumber, 15));
             }
             catch (Exception ex)
             {

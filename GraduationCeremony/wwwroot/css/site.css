@@ -6,14 +6,19 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
+    margin-bottom: 100px;
+    position: initial;
     background-color: #333; /* Darker background color */
     color: #fff; /* White text */
-/*    background: linear-gradient(to right, #d9534f, #713232);*/ /* Match the navbar gradient */
+    padding-bottom: 50px;
 }
 .footer {
-    background: #401b1b;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     background: linear-gradient(to left, #8f4140 15%, #401b1b 100%, #141313 15%);
+    color: #fff;
+    text-align: center;
 }
 
 .person-profile-container {
@@ -314,4 +319,35 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+/* Pagination styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination .page-item {
+        margin: 0 4px;
+        font-size: 16px;
+    }
+
+    .pagination .page-link {
+        color: #d9534f;
+        background-color: #fff; /* Customize the background color */
+        border-color: #d9534f; /* Customize the border color */
+    }
+
+        .pagination .page-link:hover,
+        .pagination .page-link:focus {
+            background-color: #d9534f; /* Customize the background color on hover/focus */
+            border-color: #5bc0de; /* Customize the border color on hover/focus */
+            color: #fff;
+        }
+
+    .pagination .page-item.active .page-link {
+        background-color: #d9534f; /* Customize the background color for the active page */
+        border-color: #5bc0de; /* Customize the border color for the active page */
+        color: #fff;
+    }
 

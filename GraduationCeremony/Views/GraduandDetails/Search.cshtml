@@ -19,11 +19,13 @@
                 </div>
             </div>
 
-
             <div class="col-md-3">
                 <div class="form-group ">
-                    @Html.DropDownList("selectYear", ViewBag.YearList as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
-                    <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
+                    @if (ViewData["YearList"] != null)
+                    {
+                        @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
+                        <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
+                    }
                 </div>
 
             </div>
@@ -57,7 +59,6 @@
                         <th>Date of Birth</th>
                         <th>Award Code</th>
                         <th>Award Description</th>
-                        <th>Award Awarded</th>
                         <th>Qualification Code</th>
                         <th>Level</th>
                         <th>Email</th>
@@ -74,14 +75,6 @@
                             <td>@item.graduands.DateOfBirth.ToShortDateString()</td>
                             <td>@item.awards.AwardCode</td>
                             <td>@item.awards.AwardDescription</td>
-                            @if (item.graduandAwards.Awarded != null)
-                            {
-                                <td>@item.graduandAwards.Awarded.Value.Year</td>
-                            }
-                            else
-                            {
-                                <td>Not Awarded</td>
-                            }
                             <td>@item.awards.QualificationCode</td>
                             <td>@item.awards.Level</td>
                             <td>@item.graduands.CollegeEmail</td>
@@ -93,23 +86,17 @@
                 </tbody>
             </table>
         </div>
-
-        @if (Model.Count >= 10)
-        {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { Page = page }),
-    new PagedListRenderOptions
-    {
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
-    })
-        }
     }
-    <a asp-action="Index" class="btn btn-warning">Back to list</a>
+
+    <div class="pagination-wrapper" style="text-align:center">
+        <div class="pagination">
+            @Html.PagedListPager(Model, page => Url.Action("Search", new { Page = page, searchString = ViewData["SearchString"], selectedYear = ViewData["SelectedYear"] }), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
+        </div>
+
+        <a asp-action="Index" class="btn btn-warning btn-back-to-list" style="width: 50%;">Back to list</a>
+    </div>
+
 </div>
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <script type="text/javascript">
     function XAjaxRequest(searchString) {
@@ -141,29 +128,8 @@
         document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
     }
 
-    // Function to initialize the script
-    function initializeScript() {
-        // Get the selected value of the dropdown
-        var selectedYear = $("#selectYear").val();
-
-        // Set the value of the hidden field
-        $("#selectedYear").val(selectedYear);
-
-        // Trigger the updateHiddenField function
-        updateHiddenField();
-    }
-
-    // Function to update the hidden field when the dropdown changes
     function updateHiddenField() {
-        // Get the selected value of the dropdown
-        var selectedYear = $("#selectYear").val();
-
-        // Set the value of the hidden field
-        $("#selectedYear").val(selectedYear);
+        var selectedYear = document.getElementById("selectYear").value;
+        document.getElementById("selectedYear").value = selectedYear;
     }
-
-    // Call the initializeScript function when the document is ready
-    $(document).ready(initializeScript);
-
 </script>
-
