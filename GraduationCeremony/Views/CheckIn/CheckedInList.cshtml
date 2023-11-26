@@ -9,7 +9,7 @@
 
 
 <div class="container">
-    <div class="title mb-4">Checked-In List</div>
+    <div class="title">Checked-In List</div>
 
     <form id="searchForm" action="/CheckIn/SearchCheckedIn" method="get" autocomplete="off" class="search-form">
         <div class="form-group search-box">
@@ -67,7 +67,7 @@
                             <td>@Html.DisplayFor(modelItem => item.Major1)</td>
                             <td>@Html.DisplayFor(modelItem => item.Major2)</td>
                             <td>
-                                <a asp-action="Delete" asp-route-id="@item.PersonCode" class="btn btn-danger btn-sm">Delete</a>
+                                <a asp-action="Delete" asp-route-id="@item.PersonCode" class="btn btn-danger btn-sm">Remove</a>
                             </td>
                         </tr>
                     }

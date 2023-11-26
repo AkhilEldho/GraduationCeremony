@@ -1,123 +1,142 @@
 ﻿@model GraduationCeremony.Models.DB.CheckIn
 
 @{
-    ViewData["Title"] = "CheckIn";
+    ViewData["Title"] = "Check-In";
 }
 
 <style>
-    h1 {
-        color: #d9534f;
+    .custom-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
     }
 
-    .custom-container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    .custom-card {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+        overflow: hidden;
+    }
+
+        .custom-card .card-header {
+            background-color: #d9534f;
+            color: #fff; /* Adjust text color as needed */
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+
+    .button{
+        color: #3c763d;
+        background-color: #dff0d8;
+    }
+
+    .button:hover {
+            background-color: #dff0d8;
+        }
+
+
+    .card-body ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .card-body li {
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .search-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .error-message,
+    .primary-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .error-message {
+        color: #d9534f;
+        background-color: #f2dede;
     }
 
     .primary-message {
-        background-color: #dff0d8;
         color: #3c763d;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
+        background-color: #dff0d8;
     }
 
-    hr {
-        border-top: 1px solid #ccc;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    }
-
-    .font-weight-bold {
-        font-weight: bold;
-    }
-
-    .btn-secondary {
-        background-color: #d9534f;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 15px 30px;
-        font-size: 16px;
-        text-decoration: none;
-        transition: background-color 0.3s;
-    }
-
-        .btn-secondary:hover {
-            background-color: #c9302c;
-        }
 </style>
 
 <div class="container custom-container mt-4">
-    <h1 class="display-4 text-center mb-4">Check-In Information</h1>
+    <div class="text-center custom-card">
+        <!-- Page title -->
+        <h1 class="text-center title">Check-In Information</h1>
 
-    <div class="alert alert-success primary-message">
-        <h4w><strong>Order Number:</strong> @Model.GraduandAwardId</h4w>
-    </div>
+        <!-- Success message with order number -->
+        <div class="alert alert-success primary-message">
+            <h4><strong>Order Number:</strong> @Model.GraduandAwardId</h4>
+        </div>
 
-    <hr />
+        <div class="card mt-4">
+            <div class="card-header" style="background-color: #3c763d;">
+                Personal Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>Person Code:</strong> @Html.DisplayFor(model => model.PersonCode)</li>
+                    <li><strong>Name:</strong> @Html.DisplayFor(model => model.Forenames) @Html.DisplayFor(model => model.Surname)</li>
+                    @if (!string.IsNullOrEmpty(Model.Pronunciation))
+                    {
+                        <li><strong>Pronunciation:</strong> @Html.DisplayFor(model => model.Pronunciation)</li>
+                    }
+                    else
+                    {
+                        <li><strong>Pronunciation:</strong> Auto Generated</li>
+                    }
+                    <li><strong>Person Code:</strong> @Html.DisplayFor(model => model.PersonCode)</li>
+                    <li><strong>Date of Birth:</strong> @Html.DisplayFor(model => model.DateOfBirth)</li>
+                </ul>
+            </div>
+        </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Forenames:
+        <div class="card mt-4">
+            <div class="card-header" style="background-color: #3c763d;">
+                Award Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>Award Code:</strong> @Html.DisplayFor(model => model.AwardCode)</li>
+                    <li><strong>Qualification Code:</strong> @Html.DisplayFor(model => model.QualificationCode)</li>
+                    <li><strong>Award Description:</strong> @Html.DisplayFor(model => model.AwardDescription)</li>
+                    <li><strong>Level:</strong> @Html.DisplayFor(model => model.Level)</li>
+                </ul>
+            </div>
         </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.Forenames)
-        </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Surname:
+        <div class="card mt-4">
+            <div class="card-header" style="background-color: #3c763d;">
+                Contact Information
+            </div>
+            <div class="card-body text-center">
+                <ul>
+                    <li><strong>College Email:</strong> @Html.DisplayFor(model => model.CollegeEmail)</li>
+                    <li><strong>Mobile:</strong> @Html.DisplayFor(model => model.Mobile)</li>
+                </ul>
+            </div>
         </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.Surname)
-        </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Pronunciation:
+        <!-- Navigation back to Home -->
+        <div class="row mt-3">
+            <div class="col-sm-12 text-center">
+                <a asp-action="Index" class="btn btn-success button">Back Home</a>
+            </div>
         </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.Pronunciation)
-        </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Person Code:
-        </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.GraduandAward.PersonCode)
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Level:
-        </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.Level)
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">
-            Award Description:
-        </div>
-        <div class="col-sm-9">
-            @Html.DisplayFor(model => model.AwardDescription)
-        </div>
-    </div>
-
-    <!-- Add styling for additional models here -->
-
-    <div class="row mt-3">
-        <div class="col-sm-12 text-center">
-            <a asp-action="Index" class="btn btn-secondary">Home</a>
-        </div>
     </div>
 </div>
+
