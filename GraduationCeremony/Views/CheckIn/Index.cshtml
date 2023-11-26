@@ -5,8 +5,20 @@
 }
 
 <div class="container mb-4">
-    <!-- Page Title -->
-    <div class="title mb-4">Check In</div>
+    <!--Welcome text-->
+    <br />
+    <div class="about-us mt-2">
+        <div class="container">
+            <!-- Site Name -->
+            <p class="siteName" style="text-align:center;">Let's get you checked in</p>
+            <!-- Site Description -->
+            <p class="siteDesc">
+                Welcome to our Graduation Check-In platform! We are excited to assist you in the check-in process for the upcoming Graduation Ceremony. Enter your name below and let's ensure you're all set for this special event.
+            </p>
+        </div>
+    </div>
+    <br />
+    <br />
 
     <!-- Search Form -->
     <form id="searchForm" action="/CheckIn/SearchCheckIn" method="get" autocomplete="off" class="search-form">
@@ -27,6 +39,17 @@
     {
         <div class="alert alert-danger error-message mt-4">@ViewBag.Message</div>
     }
+
+    <br />
+    <br />
+    <div class="about-us mt-2">
+        <div class="container">
+            <p class="siteDesc">
+                If you can't find yourself in the search results, don't worry! Our dedicated staff is here to assist you. Please approach any staff member available, and they will be happy to guide you through the check-in process. Your comfort and convenience are our top priorities, and we are here to ensure that you have a smooth and enjoyable experience during this special event.
+            </p>
+        </div>
+    </div>
+
 </div>
 
 
