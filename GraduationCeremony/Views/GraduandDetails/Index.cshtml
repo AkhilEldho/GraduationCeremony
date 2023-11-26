@@ -15,13 +15,13 @@
             <div class="col-md-7">
                 <div class="form-group search-box">
                     <input type="text" id="searchString" name="searchString" class="form-control search-input"
-                           autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" required />
+                           autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" />
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group ">
-                    @Html.DropDownList("selectYear", ViewBag.YearList as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
+                    @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, "Select Year", new { @class = "form-control", onchange = "updateHiddenField()" })
                     <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
                 </div>
                 
@@ -135,7 +135,17 @@
     }
 
     function updateHiddenField() {
-        var selectedYear = document.getElementById("selectYear").value;
+        var selectYear = document.getElementById("selectYear");
+        var selectedYear = selectYear.options[selectYear.selectedIndex].value;
+
+        if (selectedYear !== "") {
+            // Remove the "Select Year" option
+            var selectOption = selectYear.options[0];
+            selectYear.remove(selectOption.index);
+        }
+
         document.getElementById("selectedYear").value = selectedYear;
     }
+
 </script>
+

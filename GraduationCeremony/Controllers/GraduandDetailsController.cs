@@ -114,40 +114,52 @@ namespace GraduationCeremony.Controllers
                     }
                 }
 
-                if (string.IsNullOrEmpty(searchString))
-                {
-                    // Handle empty or null search string
-                    ViewBag.Message = "Error: Please enter a valid search string.";
-                    return View("Index");
-                }
-
-                List<GraduandDetails> result = new List<GraduandDetails>();
-
-                //searching by first name / last name
-                result = await (from g in _context.Graduands
-                                join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                                join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                                where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
-                                      (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
-                                select new GraduandDetails
-                                {
-                                    graduands = g,
-                                    awards = a,
-                                    graduandAwards = ga
-                                })
+                List<GraduandDetails> result = result = await (from g in _context.Graduands
+                                                               join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                                                               join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                                                               select new GraduandDetails
+                                                               {
+                                                                   graduands = g,
+                                                                   awards = a,
+                                                                   graduandAwards = ga
+                                                               })
                       .OrderBy(item => item.awards.Level)
                       .ThenBy(item => item.awards.AwardDescription)
                       .ThenBy(item => item.graduands.Forenames)
                       .ToListAsync();
 
-                if (!string.IsNullOrEmpty(selectedYear))
-                {
-                    int year = int.Parse(selectedYear);
+                List<GraduandDetails> searchList = result;
 
-                    // Filter results based on the awarded date
-                    result = result
-                        .Where(item => item.graduandAwards.Awarded.HasValue && item.graduandAwards.Awarded.Value.Year == year)
+                if (string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(selectedYear))
+                {
+                    searchList = result
+                        .Where(item => item.graduandAwards.Awarded != null && item.graduandAwards.Awarded.Value.Year == int.Parse(selectedYear))
                         .ToList();
+                }
+                else if(!string.IsNullOrEmpty(searchString)) 
+                {
+                    //searching by first name / last name
+                    searchList = await (from g in _context.Graduands
+                                    join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                                    join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                                    where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
+                                          (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
+                                    select new GraduandDetails
+                                    {
+                                        graduands = g,
+                                        awards = a,
+                                        graduandAwards = ga
+                                    })
+                          .OrderBy(item => item.awards.Level)
+                          .ThenBy(item => item.awards.AwardDescription)
+                          .ThenBy(item => item.graduands.Forenames)
+                          .ToListAsync();
+                }
+                else if (string.IsNullOrEmpty(searchString))
+                {
+                    // Handle empty or null search string
+                    ViewBag.Message = "Error: Please enter a valid search string.";
+                    return View("Index");
                 }
 
                 if (result.Count == 0)
@@ -165,7 +177,7 @@ namespace GraduationCeremony.Controllers
 
                 ViewBag.YearList = new SelectList(yearList);
 
-                return View(result.ToPagedList(pageNumber, 15));
+                return View(searchList.ToPagedList(pageNumber, 15));
             }
             catch (Exception ex)
             {
