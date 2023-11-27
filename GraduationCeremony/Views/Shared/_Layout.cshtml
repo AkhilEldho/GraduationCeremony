@@ -28,17 +28,20 @@
                             <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="Index">Check In</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="CheckedInList">Check In List</a>
-                        </li>
                         @if (User.IsInRole("Presenter"))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="CheckedInList">Check In List</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="Presenter">Present</a>
                             </li>
                         }
                         @if (User.IsInRole("Staff"))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="CheckedInList">Check In List</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="GraduandDetails" asp-action="Index">View</a>
                             </li>
