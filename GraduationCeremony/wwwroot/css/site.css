@@ -352,6 +352,55 @@ th, td {
     color: #fff;
 }
 
+/*----------EDIT GRADUAND---------------*/
+#editGraduand {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+    #editGraduand h1.title {
+        text-align: center;
+    }
+
+/*----------DELETE PAGES---------------*/
+.deletePage h1, .deletePage h3 {
+    color: #d9534f;
+}
+
+.deletePage .custom-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.deletePage .btn-danger {
+    background-color: #d9534f;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+    .deletePage .btn-danger:hover {
+        background-color: #c9302c;
+    }
+
+.deletePage .back-to-list {
+    color: #d9534f;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+    .deletePage .back-to-list:hover {
+        text-decoration: underline;
+    }
+
 /* Navbar styling */
 .navbar {
     background: linear-gradient(to right, #d9534f, #713232);
