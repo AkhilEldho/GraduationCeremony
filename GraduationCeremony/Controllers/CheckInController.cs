@@ -11,7 +11,9 @@ using OfficeOpenXml.Style;
 using System.Collections;
 using System.Drawing.Printing;
 using System.Linq;
+using System.Numerics;
 using System.Security.Principal;
+using System.Xml.Linq;
 using X.PagedList;
 
 namespace GraduationCeremony.Controllers
@@ -204,7 +206,7 @@ namespace GraduationCeremony.Controllers
                 }
 
                 // Handle the case when grad, gradAward, or award is null
-                ViewBag.Message = "Error: Graduand record not found.";
+                ViewBag.Message = "Student " + searchString + " not found. Please enter name correctly";
                 return View("Index");
             }
             catch (Exception ex)

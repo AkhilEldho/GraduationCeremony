@@ -24,7 +24,6 @@
                     @if (ViewData["YearList"] != null)
                     {
                         @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
-                        <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
                     }
                 </div>
 

@@ -22,6 +22,7 @@
             <div class="col-md-3">
                 <div class="form-group ">
                     @Html.DropDownList("selectYear", ViewBag.YearList as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
+                    
                     <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
 
                 </div>

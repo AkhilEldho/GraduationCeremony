@@ -53,6 +53,22 @@ body {
     text-align: center;
     font-weight: 600;
 }
+
+
+/*----------LOGIN-----------------------*/
+.loginTitle {
+    font-size: 40px;
+    margin: 20px 0px 0px 20px;
+    color: #44694c;
+    text-align: center;
+    font-weight: 600;
+}
+/* Custom checkbox style */
+.custom-checkbox:checked {
+    background-color: #359c47;
+    border-color: #359c47;
+    color: #fff;
+}
 /*----------HOME PAGE VIEW--------------*/
 .carousel-inner > div {
     max-height: 400px;
@@ -150,6 +166,7 @@ body {
     margin-top: 5px;
     margin: 10px;
     display: none;
+    z-index: 1;
 }
 
     .autoSuggest input[type="button"] {
@@ -179,22 +196,34 @@ body {
 
 .error-message {
     margin-top: 20px;
+    width: 50%;
+    margin: 0 auto;
     color: #d9534f;
+    z-index: 0; /*behind the autosuggest*/
+}
+
+/*----------SEARCH CHECKEDIN-----------*/
+.card .card-header {
+    background-color: #3c763d;
+    color: #fff; 
+    font-weight: bold;
+    font-size: 24px;
 }
 
 /*----------TABLE HEADER---------------*/
-th,td {
+th, td {
     white-space: nowrap;
 }
 
-/*----------LOGIN----------------------*/
-/* Custom checkbox style */
-.custom-checkbox:checked {
-    background-color: #359c47; /* Change to your desired color */
-    border-color: #359c47; /* Change to your desired color */
-    color: #fff; /* Change to your desired color */
+/*---------BTN DANGER HOVER----------*/
+.btn-danger:active,
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    background-color: #3c763d !important;
+    border-color: #3c763d !important;
+    color: #fff;
 }
-
 
 
 /* Navbar styling */
@@ -237,8 +266,7 @@ th,td {
     background-color: #fff; /* White background for tables */
 }
 
-    .table th,
-    .table td {
+    .table th {
         padding: 0.75rem;
         text-align: center;
         vertical-align: middle;
@@ -271,11 +299,11 @@ th,td {
     }
 
     .custom-card .search-input {
-        width: auto; /* Adjust as needed */
+        width: auto;
     }
 
     .custom-card .button {
-        width: auto; /* Adjust as needed */
+        width: auto; 
     }
 
 }
@@ -361,7 +389,7 @@ th,td {
     background-color: rgba(255, 255, 255, 0.05); /* Alternating background color for odd rows */
 }
 
-.custom-card .search-input {
+/*.custom-card .search-input {
     padding: 15px;
     font-size: 16px;
     width: 100%;
@@ -369,10 +397,10 @@ th,td {
     border-radius: 5px;
     margin-bottom: 15px;
     max-width: 800px;
-    box-sizing: border-box; /* Add box-sizing to include padding and border in the width */
-}
+    box-sizing: border-box;*/ /* Add box-sizing to include padding and border in the width */
+/*}*/
 
-.custom-card .button {
+/*.custom-card .button {
     padding: 15px;
     font-size: 16px;
     background-color: #d9534f;
@@ -381,10 +409,10 @@ th,td {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%; /* Set width to 100% */
-    max-width: 550px;
-    box-sizing: border-box; /* Add box-sizing to include padding and border in the width */
-}
+    width: 100%;*/ /* Set width to 100% */
+    /*max-width: 550px;
+    box-sizing: border-box;*/ /* Add box-sizing to include padding and border in the width */
+/*}*/
 
 /*person code arrow remove*/
 /*for chrome, safari, edge,opera*/
@@ -414,20 +442,20 @@ input[type=number] {
 
     .pagination .page-link {
         color: #d9534f;
-        background-color: #fff; /* Customize the background color */
-        border-color: #d9534f; /* Customize the border color */
+        background-color: #fff; 
+        border-color: #d9534f;
     }
 
         .pagination .page-link:hover,
         .pagination .page-link:focus {
-            background-color: #d9534f; /* Customize the background color on hover/focus */
-            border-color: #5bc0de; /* Customize the border color on hover/focus */
+            background-color: #d9534f;
+            border-color: #5bc0de; 
             color: #fff;
         }
 
     .pagination .page-item.active .page-link {
-        background-color: #d9534f; /* Customize the background color for the active page */
-        border-color: #5bc0de; /* Customize the border color for the active page */
+        background-color: #d9534f; 
+        border-color: #5bc0de;
         color: #fff;
     }
 
