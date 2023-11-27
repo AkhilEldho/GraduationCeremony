@@ -3,46 +3,40 @@
 
 <h1>@ViewData["Title"]</h1>
 
-
-<div class="loginTitle">Login to your Account</div>
-
 <div class="container mb-4">
     <div class="row justify-content-center">
         <form id="account" method="post" class="col-lg-6 mt-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="card">
-                <div class="card-body px-4 py-5 px-md-5">
-                    <!-- Email input -->
-                    <div style="text-align:left;"> <label asp-for="Input.Email" class="form-label"></label> </div>
-                    <div class="form-outline mb-4">
-                        <div class="input-group">
 
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="fa-solid fa-envelope icons"></i>
-                                </span>
-                            </div>
-                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="sample@mit.co.nz" />
+
+                <div class="card-body px-4 py-5 px-md-5 ">
+                    <!-- Email input -->
+                    <div class="form-title">Login to your account</div>
+                    <hr />
+                    <div class="form-outline mb-4">
+                        <div class="input-group form-floating">
+                            <span class="input-group-text form-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
+                            <input asp-for="Input.Email" class="form-control border-left-0" autocomplete="username" aria-required="true" />
+
                         </div>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
 
 
                     <!-- Password input -->
-                    <div style="text-align:left;"> <label asp-for="Input.Password" class="form-label" style="text-align:left;"></label></div>
-                        <div class="form-outline mb-4">
-           
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="fa-solid fa-lock icons"></i>
-                                </span>
-                            </div>
-                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="gradapp2023" />
+                    <div class="form-outline mb-4">
+                        <div class="input-group form-floating">
+                            <span class="input-group-text form-icon">
+                                <i class="fa-solid fa-lock icons"></i>
+                            </span>
+                            <input asp-for="Input.Password" class="form-control border-left-0" autocomplete="current-password" aria-required="true" />
+
                         </div>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-
                     <!-- Checkbox and Forgot Password link -->
                     <div class="form-group d-flex justify-content-between align-items-center mb-4 mt-3">
                         <div class="form-check">
@@ -56,9 +50,11 @@
 
                     <!-- Submit button -->
                     <div>
-                        <button id="login-submit" type="submit" class="btn btn-lg btn-success" style="border-radius: 20px; width: 50%;">Log in</button>
+                        <button id="login-submit" type="submit" class="btn btn-lg btn-success loginButtons">Log in</button>
                     </div>
                 </div>
+
+             
             </div>
         </form>
     </div>

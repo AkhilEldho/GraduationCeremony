@@ -9,20 +9,22 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="card">
                 <div class="card-body px-4 py-5 px-md-5">
-                    <h2>Create a new account.</h2>
+                    <div class="form-title">Create a new account</div>
                     <hr />
-
-                    <div class="form-floating mb-4">
-                        <input asp-for="Input.FirstName" class="form-control" autocomplete="firstName" aria-required="true" />
-                        <label asp-for="Input.FirstName">First Name</label>
-                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    <!--2 columns-->
+                    <div class="row">
+                        <div class="form-floating col-md-6 mb-4">
+                            <input asp-for="Input.FirstName" class="form-control" autocomplete="firstName" aria-required="true" />
+                            <label asp-for="Input.FirstName" for="Input.FirstName" class="ml-3">First Name</label>
+                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-floating col-md-6 mb-4">
+                            <input asp-for="Input.LastName" class="form-control" autocomplete="lastName" aria-required="true" />
+                            <label asp-for="Input.LastName" for="Input.LastName" class="ml-3">Last Name</label>
+                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                        </div>
                     </div>
 
-                    <div class="form-floating mb-4">
-                        <input asp-for="Input.LastName" class="form-control" autocomplete="lastName" aria-required="true" />
-                        <label asp-for="Input.LastName">Last Name</label>
-                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                    </div>
 
                     <div class="form-floating mb-4">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
@@ -42,7 +44,7 @@
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
 
-                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                    <button id="registerSubmit" type="submit" class="btn btn-lg btn-success loginButtons">Register</button>
                 </div>
             </div>
         </form>

@@ -32,8 +32,8 @@
         <!--margin bottom to show the scrolllbar-->
         <div class="table-responsive mb-5">
             <table class="table table-striped table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
+                <thead>
+                    <tr class="table-style">
                         <th>#</th>
                         <th>Forenames</th>
                         <th>Surname</th>
@@ -74,19 +74,23 @@
             </table>
         </div>
 
-        @if (Model.Count > 10)
+        @if (Model.Count >= 10)
         {
-            @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { Page = page }),
-    new PagedListRenderOptions
-    {
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
-    })
+            <div class="pagination-wrapper" style="text-align:center">
+                <div class="pagination">
+                    @Html.PagedListPager(Model, page => Url.Action("CheckedInList",
+            new { Page = page }),
+            new PagedListRenderOptions
+            {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+            })
+                </div>
+            </div>
         }
     }
 </div>
-  
+
 
 <!-- auto suggestion script -->
 <script type="text/javascript">

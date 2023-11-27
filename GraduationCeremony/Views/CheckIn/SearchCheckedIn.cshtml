@@ -73,21 +73,20 @@
             </table>
         </div>
 
-        @if (Model.Count > 2)
+        @if (Model.Count >= 2)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
-    new { Page = page }),
-    new PagedListRenderOptions
-    {
-    LiElementClasses = new string[] { "page-item" },
-    PageClasses = new string[] { "page-link" }
-    }
-    )
+            new { Page = page }),
+            new PagedListRenderOptions
+            {
+            LiElementClasses = new string[] { "page-item" },
+            PageClasses = new string[] { "page-link" }
+            })
         }
     }
 
     <div class="pagination-wrapper" style="text-align:center">
-        <a asp-action="CheckedInList" class="btn btn-warning btn-back-to-list pagination-wrapper" style="width: 50%; text-align:center">Back to list</a>
+        <a asp-action="CheckedInList" class="btn btn-warning btn-back-to-list" style="width:15%; text-align:center">Back to list</a>
     </div>
 </div>
 

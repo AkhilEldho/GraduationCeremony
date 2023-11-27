@@ -18,9 +18,22 @@ body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: linear-gradient(to left, #8f4140 15%, #401b1b 100%, #141313 15%);
+    background-color: #2b2e30;
     color: #fff;
     text-align: center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+/*removing the arrow for input number in personcode*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .person-profile-container {
@@ -56,13 +69,18 @@ body {
 }
 
 /*----------LOGIN-----------------------*/
-.loginTitle {
-    font-size: 40px;
-    margin: 20px 0px 0px 20px;
-    color: #44694c;
+.form-title {
+    font-size: 30px;
+    color: #A84341;
     text-align: center;
-    font-weight: 600;
+    font-weight: 400;
 }
+
+.card .loginButtons {
+    border-radius: 20px;
+    width: 50%;
+}
+
 /* Custom checkbox style */
 .custom-checkbox:checked {
     background-color: #359c47;
@@ -117,6 +135,16 @@ body {
 
 .icons {
     color: #359c47;
+}
+
+.input-group .form-icon {
+    background-color: transparent !important;
+    border-right: 0 !important;
+    color: #359c47;
+}
+
+.input-group {
+    border-radius: 5px;
 }
 
 .card-format {
@@ -403,7 +431,8 @@ th, td {
 
 /* Navbar styling */
 .navbar {
-    background: linear-gradient(to right, #d9534f, #713232);
+    /*   background: linear-gradient(to right, #d9534f, #713232);*/
+    background-color: #ba3441;
     color: #fff;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -424,7 +453,8 @@ th, td {
 
 .navbar-nav .nav-link {
     color: #fff;
-    font-weight: 500;
+    font-weight: 600;
+    font-size:13px;
     padding: 5px 15px;
 }
 
@@ -451,11 +481,16 @@ th, td {
     .table thead th {
         vertical-align: bottom;
         border-bottom: 2px solid #dee2e6; /* Slightly thicker border for table header */
-        background-color: #f8f9fa; /* Light gray background for table header */
+        background-color: #a33943; /* Light gray background for table header */
     }
 
     .table tbody + tbody {
         border-top: 2px solid #dee2e6; /* Separate sections with a thicker border */
+    }
+
+    .table .table-style {
+        background-color: #DC3545;
+        color: white;
     }
 
 /* Responsive table styling */
@@ -563,3 +598,56 @@ th, td {
 }
 
 
+/*.pagination .page-link {
+    color: #343A40;
+    background-color: #fff;
+    border-color: #343A40;
+    background-color: #fff;
+}
+
+    .pagination .page-link:hover,
+    .pagination .page-link:focus {
+        background-color: #343A40;
+        border-color: #343A40;
+        color: #fff;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: #343A40;
+    border-color: #343A40;
+    color: #fff;
+}
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top:10px;
+}*/
+
+.pagination .page-link {
+    color: #ba3441;
+    background-color: #fff;
+    border-color: #ba3441;
+    background-color: #fff;
+}
+
+    .pagination .page-link:hover,
+    .pagination .page-link:focus {
+        background-color: #ba3441;
+        border-color: #ba3441;
+        color: #fff;
+    }
+
+.pagination .page-item.active .page-link {
+    background-color: #ba3441;
+    border-color: #ba3441;
+    color: #fff;
+}
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}

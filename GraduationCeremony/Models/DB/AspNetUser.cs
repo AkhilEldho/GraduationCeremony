@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace GraduationCeremony.Models.DB
 {
@@ -14,6 +15,7 @@ namespace GraduationCeremony.Models.DB
         }
 
         public string Id { get; set; } = null!;
+        [DisplayName("Username")]
         public string? UserName { get; set; }
         public string? NormalizedUserName { get; set; }
         public string Email { get; set; } = null!;
@@ -22,13 +24,16 @@ namespace GraduationCeremony.Models.DB
         public string? PasswordHash { get; set; }
         public string? SecurityStamp { get; set; }
         public string? ConcurrencyStamp { get; set; }
+        [DisplayName("Phone Number")]
         public string? PhoneNumber { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        [DisplayName("First Name")]
         public string FirstName { get; set; } = null!;
+        [DisplayName("Last Name")]
         public string LastName { get; set; } = null!;
         public string Password { get; set; } = null!;
 
