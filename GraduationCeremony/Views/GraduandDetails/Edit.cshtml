@@ -123,6 +123,12 @@
             <!-- Submit Button -->
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <br />
+                <br />
+                @if(Model.graduandAwards.Awarded.HasValue != null)
+                {
+                    <a asp-action="SearchCheckIn" asp-controller="CheckIn" asp-route-searchString="@Model.graduands.Forenames" class="btn btn-danger btn-sm">Check-In</a>
+                }
             </div>
         </form>
     </div>

@@ -14,8 +14,9 @@
         <div class="row">
             <div class="col-md-7">
                 <div class="form-group search-box">
+                    <!-- Search Input -->
                     <input type="text" id="searchString" name="searchString" class="form-control search-input"
-                           autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" />
+                           autocomplete="off" oninput="handleSearchInputChange();" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" />
                 </div>
             </div>
 
@@ -23,7 +24,8 @@
                 <div class="form-group ">
                     @if (ViewData["YearList"] != null)
                     {
-                        @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
+                        @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, "Select Year", new { @class = "form-control", onchange = "updateHiddenField()" })
+                        <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
                     }
                 </div>
 
@@ -44,13 +46,13 @@
 <div class="container">
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
-        <div class="alert alert-danger error-message">@ViewBag.Message</div>
+        <div class="alert alert-danger error-message" id="error-message">@ViewBag.Message</div>
     }
     else
     {
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead class="thead-white">
+            <table class="table table-striped table-hover">
+                <thead class="thead-dark">
                     <tr>
                         <th>Forename</th>
                         <th>Surname</th>
@@ -85,14 +87,16 @@
                 </tbody>
             </table>
         </div>
-    }
 
-    <div class="pagination-wrapper" style="text-align:center">
-        <div class="pagination">
-            @Html.PagedListPager(Model, page => Url.Action("Search", new { Page = page, searchString = ViewData["SearchString"], selectedYear = ViewData["SelectedYear"] }), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
+        <div class="pagination-wrapper" style="text-align:center">
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("Search", new { Page = page, searchString = ViewData["SearchString"], selectedYear = ViewData["SelectedYear"] }), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
+            </div>
+
         </div>
-
-        <a asp-action="Index" class="btn btn-success">Back to list</a>
+    }
+    <div class="pagination-wrapper" style="text-align:center">
+        <a asp-action="Index" class="btn btn-warning btn-back-to-list pagination-wrapper" style="width: 50%; text-align:center">Back to list</a>
     </div>
 
 </div>
@@ -111,7 +115,6 @@
         xmlhttp.open("GET", url, false);
         xmlhttp.send();
 
-        // Correct the ID here
         document.getElementById("autoSuggestContainerSearch").style.display = "block";
         document.getElementById("autoSuggestContainerSearch").innerHTML = "";
 
@@ -128,6 +131,8 @@
         }
 
         document.getElementById("autoSuggestContainerSearch").innerHTML = autoSuggestions;
+
+        autoSuggestContainerSearch.dataset.lastSearchString = searchString;
     }
 
     function updateHiddenField() {
@@ -143,5 +148,9 @@
         document.getElementById("selectedYear").value = selectedYear;
     }
 
+    // Script to handle input change and remove error message
+    function handleSearchInputChange() {
+        // Clear the error message when the user starts typing
+        document.getElementById("error-message").style.display = "none";
+    }
 </script>
-

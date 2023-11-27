@@ -25,7 +25,7 @@
         <div class="form-group search-box">
             <!-- Search Input -->
             <input type="text" id="searchString" name="searchString" class="form-control search-input"
-                   autocomplete="off" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" required />
+                   autocomplete="off" oninput="handleSearchInputChange();" onkeyup="XAjaxRequest(this.value);" placeholder="Enter name" required />
 
             <!-- Search Button -->
             <button type="submit" class="btn btn-outline-danger search-button btn-lg">Search</button>
@@ -37,7 +37,7 @@
     <!-- Display Error Message -->
     @if (!string.IsNullOrEmpty(ViewBag.Message))
     {
-        <div class="alert alert-danger error-message mt-4">@ViewBag.Message</div>
+        <div id="error-message" class="alert alert-danger error-message mt-4">@ViewBag.Message</div>
     }
 
     <br />
@@ -55,6 +55,8 @@
 
 @* auto suggestion *@
 <script type="text/javascript">
+
+    // Auto-suggest function
     function XAjaxRequest(searchString) {
         if (searchString.length < 1) {
             autoSuggestContainer.innerHTML = "";
@@ -65,39 +67,44 @@
             autoSuggestContainer.classList.add("show-border");
         }
 
+        // Send request only if there is a change in the search string
+        if (searchString !== autoSuggestContainer.dataset.lastSearchString) {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "/CheckIn/SearchGraduandByName?searchString=" + searchString;
 
-        //alert("testing searchString=" + searchString);
-        var xmlhttp;
-        xmlhttp = new XMLHttpRequest();
-        var url = "/CheckIn/SearchGraduandByName?searchString=" + searchString;
-        // open connection, GET is quick and simple, false: sync page will freeze
-        xmlhttp.open("GET", url, false);
-        // send the request to IndexAJAX
-        xmlhttp.send();
-        document.getElementById("autoSuggestContainer").style.display = "block";
-        //need to clear out the container for a fresh auto-suggest list
-        //else the auto-suggest list can keep growing and growing with additional user keyups
-        document.getElementById("autoSuggestContainer").innerHTML = "";
+            xmlhttp.open("GET", url, false);
+            xmlhttp.send();
 
-        var messageObject = JSON.parse(xmlhttp.responseText); // receive the respose text
+            document.getElementById("autoSuggestContainer").style.display = "block";
+            document.getElementById("autoSuggestContainer").innerHTML = "";
 
-        if (messageObject.length === 0) {
-            // If there are no matching search results, hide the autoSuggestContainer
-            autoSuggestContainer.style.display = "none";
-            return;
+            var messageObject = JSON.parse(xmlhttp.responseText);
+
+            if (messageObject.length === 0) {
+                autoSuggestContainer.style.display = "none";
+                return;
+            }
+
+            var autoSuggestions = "";
+
+            for (var i = 0; i < messageObject.length; i++) {
+                autoSuggestions +=
+                    "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " + messageObject[i].Surname + "\" "
+                    + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" ";
+
+                autoSuggestions += "<br />";
+            }
+
+            document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
+
+            // Store the last search string
+            autoSuggestContainer.dataset.lastSearchString = searchString;
         }
-        var autoSuggestions = "";
-
-        for (var i = 0; i < messageObject.length; i++) {
-            //HTML code generation demo
-            //Works together with the ".innerHTML" statement after the end of this "for" block
-            autoSuggestions +=
-                "<input type=\"button\" value=\"" + messageObject[i].Forenames + " " + messageObject[i].Surname + "\" "
-                + "onclick=\"document.getElementById('searchString').value = this.value; document.getElementById('searchForm').submit();\" ";
-
-            autoSuggestions += "<br />";
-        }
-        //place the generated buttons HTML code inside the display div
-        document.getElementById("autoSuggestContainer").innerHTML = autoSuggestions;
     }
-</script> 
+
+    // Script to handle input change and remove error message
+    function handleSearchInputChange() {
+        // Clear the error message when the user starts typing
+        document.getElementById("error-message").style.display = "none";
+    }
+</script>

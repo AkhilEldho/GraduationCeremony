@@ -130,26 +130,36 @@ namespace GraduationCeremony.Controllers
 
                 List<GraduandDetails> searchList = result;
 
+                //getting all the years
+                //getting the years of graduaded students
+                var yearList = result
+                    .Where(grad => grad.graduandAwards.Awarded != null)
+                    .Select(grad => grad.graduandAwards.Awarded.Value.Year)
+                    .Distinct() // To get unique years
+                    .ToList();
+
+                ViewBag.YearList = new SelectList(yearList);
+
                 if (string.IsNullOrEmpty(searchString) && !string.IsNullOrEmpty(selectedYear))
                 {
                     searchList = result
                         .Where(item => item.graduandAwards.Awarded != null && item.graduandAwards.Awarded.Value.Year == int.Parse(selectedYear))
                         .ToList();
                 }
-                else if(!string.IsNullOrEmpty(searchString)) 
+                else if (!string.IsNullOrEmpty(searchString))
                 {
                     //searching by first name / last name
                     searchList = await (from g in _context.Graduands
-                                    join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
-                                    join a in _context.Awards on ga.AwardCode equals a.AwardCode
-                                    where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
-                                          (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
-                                    select new GraduandDetails
-                                    {
-                                        graduands = g,
-                                        awards = a,
-                                        graduandAwards = ga
-                                    })
+                                        join ga in _context.GraduandAwards on g.PersonCode equals ga.PersonCode
+                                        join a in _context.Awards on ga.AwardCode equals a.AwardCode
+                                        where (string.IsNullOrEmpty(firstName) || g.Forenames.ToLower().StartsWith(firstName.ToLower()) || g.Surname.ToLower().StartsWith(firstName.ToLower())) &&
+                                              (string.IsNullOrEmpty(lastName) || g.Forenames.ToLower().StartsWith(lastName.ToLower()) || g.Surname.ToLower().StartsWith(lastName.ToLower()))
+                                        select new GraduandDetails
+                                        {
+                                            graduands = g,
+                                            awards = a,
+                                            graduandAwards = ga
+                                        })
                           .OrderBy(item => item.awards.Level)
                           .ThenBy(item => item.awards.AwardDescription)
                           .ThenBy(item => item.graduands.Forenames)
@@ -161,21 +171,11 @@ namespace GraduationCeremony.Controllers
                     ViewBag.Message = "Error: Please enter a valid search string.";
                     return View("Index");
                 }
-
-                if (result.Count == 0)
+                if (searchList.Count == 0)
                 {
                     // No results found
                     ViewBag.Message = "Student " + searchString + " not found. Please enter name correctly";
                 }
-
-                //getting the years of graduaded students
-                var yearList = result
-                    .Where(grad => grad.graduandAwards.Awarded != null)
-                    .Select(grad => grad.graduandAwards.Awarded.Value.Year)
-                    .Distinct() // To get unique years
-                    .ToList();
-
-                ViewBag.YearList = new SelectList(yearList);
 
                 return View(searchList.ToPagedList(pageNumber, 15));
             }
@@ -224,7 +224,6 @@ namespace GraduationCeremony.Controllers
             }
             catch (Exception ex)
             {
-                //COPY PASTED THIS FROM ONLINE
                 // Log the exception for further investigation
                 _logger.LogError($"Edit: An error occurred - {ex.Message}");
 

@@ -1,4 +1,5 @@
 /* site.css */
+
 html {
     font-size: 14px;
     position: relative;
@@ -54,7 +55,6 @@ body {
     font-weight: 600;
 }
 
-
 /*----------LOGIN-----------------------*/
 .loginTitle {
     font-size: 40px;
@@ -93,7 +93,6 @@ body {
     text-align: left;
 }
 
-
 .siteDesc {
     color: #666;
     font-size: 16px;
@@ -105,7 +104,6 @@ body {
     flex-direction: column;
     justify-content: center;
 }
-
 
 .card-link {
     text-decoration: none;
@@ -121,7 +119,6 @@ body {
     color: #359c47;
 }
 
-/*hover effect from here: https://www.youtube.com/watch?v=KAHjf1Xj0SU*/
 .card-format {
     transition: all 0.3s;
 }
@@ -148,7 +145,7 @@ body {
 }
 
     .search-box .search-input {
-        width: 100%; 
+        width: 100%;
         margin-right: 10px;
         height: 40px;
     }
@@ -202,13 +199,143 @@ body {
     z-index: 0; /*behind the autosuggest*/
 }
 
-/*----------SEARCH CHECKEDIN-----------*/
+/*----------SEARCH CHECK IN VIEW-----------*/
 .card .card-header {
     background-color: #3c763d;
-    color: #fff; 
+    color: #fff;
     font-weight: bold;
     font-size: 24px;
 }
+
+.searchCheckIn-custom-card {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+    background-color: #fff; /* Add your background color */
+    padding: 20px; /* Add your padding */
+}
+
+.searchCheckIn-card {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+}
+
+
+.searchCheckIn-card-body ul {
+    list-style: none;
+    padding: 5px;
+    margin-top: 10px;
+}
+
+.searchCheckIn-card-body li {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.btn-danger:active,
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    background-color: #3c763d;
+    color: #fff;
+}
+
+.searchCheckIn-search-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.searchCheckIn-form-group {
+    margin-bottom: 15px;
+}
+
+#searchCheckIn-pronunciation {
+    width: 100% !important;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    max-width: 450px;
+}
+
+#searchCheckIn-checkInButton {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #d9534f;
+    color: #fff;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.error-message,
+.primary-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.error-message {
+    color: #d9534f;
+    background-color: #f2dede;
+}
+
+.primary-message {
+    color: #3c763d;
+    background-color: #dff0d8;
+}
+#checkInTitle {
+    font-size: 24px;
+    color: #333;
+}
+
+#personalInfoCard,
+#awardInfoCard,
+#contactInfoCard {
+    background-color: #f8f9fa;
+    border: 1px solid #ccc;
+}
+
+#errorMessage {
+    color: #d9534f;
+    background-color: #f2dede;
+}
+
+#successMessage {
+    color: #3c763d;
+    background-color: #dff0d8;
+}
+
+#checkInButton {
+    background-color: #d9534f;
+    color: #fff;
+}
+/*----------CHECK IN---------------*/
+#check-in-custom-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#check-in-custom-card {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+}
+
+    #check-in-custom-card .card-header {
+        background-color: #d9534f;
+        color: #fff;
+        font-weight: bold;
+        font-size: 24px;
+    }
 
 /*----------TABLE HEADER---------------*/
 th, td {
@@ -224,7 +351,6 @@ th, td {
     border-color: #3c763d !important;
     color: #fff;
 }
-
 
 /* Navbar styling */
 .navbar {
@@ -303,22 +429,21 @@ th, td {
     }
 
     .custom-card .button {
-        width: auto; 
+        width: auto;
     }
-
 }
 
 @media (min-width: 1620px) and (max-width: 2200px) {
     .autoSuggest {
-        width: 24%; /* Adjust as needed */
-        left: 47%; /* Adjust as needed */
+        width: 24%; 
+        left: 47%; 
     }
 }
 
 @media (min-width: 1320px) and (max-width: 1620px) {
     .autoSuggest {
-        width: 27%; /* Adjust as needed */
-        left: 46%; /* Adjust as needed */
+        width: 27%; 
+        left: 46%; 
     }
 }
 
@@ -328,56 +453,55 @@ th, td {
     }
 
     .autoSuggest {
-        width: 32%; /* Adjust as needed */
-        left: 45%; /* Adjust as needed */
+        width: 32%;
+        left: 45%;
     }
 }
 
 @media (min-width: 430px) and (max-width: 768px) {
     .autoSuggest {
-        width: 22%; /* Adjust as needed */
-        left: 39%; /* Adjust as needed */
+        width: 22%; 
+        left: 39%; 
     }
 }
 
 /* Default styles for smaller screens */
 #autoSuggestContainerSearch {
-    width: 80%; /* Adjust as needed */
-    left: 10%; /* Adjust as needed */
+    width: 80%; 
+    left: 10%; 
 }
 
 /* Styles for screens between 1620px and 2200px */
 @media (min-width: 1620px) and (max-width: 2200px) {
     #autoSuggestContainerSearch {
-        width: 16%; /* Adjust as needed */
-        left: 43%; /* Adjust as needed */
+        width: 16%; 
+        left: 43%; 
     }
 }
 
 /* Styles for screens between 1320px and 1620px */
 @media (min-width: 1320px) and (max-width: 1620px) {
     #autoSuggestContainerSearch {
-        width: 16%; /* Adjust as needed */
-        left: 40%; /* Adjust as needed */
+        width: 16%; 
+        left: 40%; 
     }
 }
 
 /* Styles for screens between 768px and 1320px */
 @media (min-width: 768px) and (max-width: 1320px) {
     #autoSuggestContainerSearch {
-        width: 22%; /* Adjust as needed */
-        left: 39%; /* Adjust as needed */
+        width: 22%;
+        left: 39%; 
     }
 }
 
 /* Styles for screens between 430px and 768px */
 @media (min-width: 430px) and (max-width: 768px) {
     #autoSuggestContainerSearch {
-        width: 22%; /* Adjust as needed */
-        left: 39%; /* Adjust as needed */
+        width: 22%;
+        left: 39%; 
     }
 }
-
 
 /* Hover effect for table rows */
 .table-hover tbody tr:hover {
@@ -389,73 +513,4 @@ th, td {
     background-color: rgba(255, 255, 255, 0.05); /* Alternating background color for odd rows */
 }
 
-/*.custom-card .search-input {
-    padding: 15px;
-    font-size: 16px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    max-width: 800px;
-    box-sizing: border-box;*/ /* Add box-sizing to include padding and border in the width */
-/*}*/
-
-/*.custom-card .button {
-    padding: 15px;
-    font-size: 16px;
-    background-color: #d9534f;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;*/ /* Set width to 100% */
-    /*max-width: 550px;
-    box-sizing: border-box;*/ /* Add box-sizing to include padding and border in the width */
-/*}*/
-
-/*person code arrow remove*/
-/*for chrome, safari, edge,opera*/
-/*https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box*/
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/*for firefox*/
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-/* Pagination styling */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-    .pagination .page-item {
-        margin: 0 4px;
-        font-size: 16px;
-    }
-
-    .pagination .page-link {
-        color: #d9534f;
-        background-color: #fff; 
-        border-color: #d9534f;
-    }
-
-        .pagination .page-link:hover,
-        .pagination .page-link:focus {
-            background-color: #d9534f;
-            border-color: #5bc0de; 
-            color: #fff;
-        }
-
-    .pagination .page-item.active .page-link {
-        background-color: #d9534f; 
-        border-color: #5bc0de;
-        color: #fff;
-    }
 
