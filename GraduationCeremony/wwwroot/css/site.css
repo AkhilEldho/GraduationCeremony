@@ -12,6 +12,7 @@ body {
     color: #fff; /* White text */
     padding-bottom: 50px;
 }
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -25,7 +26,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50vh; /* Adjusted to full screen height */
+    height: 60vh; /* Adjusted to full screen height */
     margin: 0;
     width: 100%;
     color: #fff; /* Set text color */
@@ -48,7 +49,7 @@ body {
 .title {
     font-size: 40px;
     margin: 20px 0px 0px 20px;
-    color: #d9534f;
+    color: #A84341;
     text-align: center;
     font-weight: 600;
 }
@@ -69,7 +70,7 @@ body {
 }
 
 .siteName, .featuresTitle {
-    color: #ed5d53;
+    color: #A84341;
     font-size: 45px;
     font-weight: bold;
     margin-bottom: 20px;
@@ -99,6 +100,10 @@ body {
         text-decoration: none;
         color: inherit;
     }
+
+.icons {
+    color: #359c47;
+}
 
 /*hover effect from here: https://www.youtube.com/watch?v=KAHjf1Xj0SU*/
 .card-format {
@@ -176,6 +181,21 @@ body {
     margin-top: 20px;
     color: #d9534f;
 }
+
+/*----------TABLE HEADER---------------*/
+th,td {
+    white-space: nowrap;
+}
+
+/*----------LOGIN----------------------*/
+/* Custom checkbox style */
+.custom-checkbox:checked {
+    background-color: #359c47; /* Change to your desired color */
+    border-color: #359c47; /* Change to your desired color */
+    color: #fff; /* Change to your desired color */
+}
+
+
 
 /* Navbar styling */
 .navbar {

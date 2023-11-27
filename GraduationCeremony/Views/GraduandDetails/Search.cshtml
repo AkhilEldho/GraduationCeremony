@@ -23,7 +23,7 @@
                 <div class="form-group ">
                     @if (ViewData["YearList"] != null)
                     {
-                        @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, "Select Year", new { @class = "form-control", onchange = "updateHiddenField()" })
+                        @Html.DropDownList("selectYear", ViewData["YearList"] as SelectList, new { @class = "form-control", onchange = "updateHiddenField()" })
                         <input type="hidden" id="selectedYear" name="selectedYear" class="form-control search-input" />
                     }
                 </div>
@@ -93,7 +93,7 @@
             @Html.PagedListPager(Model, page => Url.Action("Search", new { Page = page, searchString = ViewData["SearchString"], selectedYear = ViewData["SelectedYear"] }), new PagedListRenderOptions { LiElementClasses = new string[] { "page-item" }, PageClasses = new string[] { "page-link" } })
         </div>
 
-        <a asp-action="Index" class="btn btn-warning btn-back-to-list" style="width: 50%;">Back to list</a>
+        <a asp-action="Index" class="btn btn-success">Back to list</a>
     </div>
 
 </div>

@@ -23,8 +23,6 @@
         border: 1px solid #d9534f;
         border-radius: 10px;
         box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-        width: 100%;
-        max-width: 1000px;
         padding: 20px;
     }
 
@@ -98,43 +96,42 @@
         }
 </style>
 
-<div class="presenter-container">
-    <div class="card">
-        <h1 class="title">Presenter</h1>
 
-        <div class="person-profile-container">
-            @for (int i = 0; i < Model.Count(); i++)
-            {
-                <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item text-black list-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
-                        <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
-                        <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
-                        <input type="hidden" id="personCode_@i" value="@Model.ElementAt(i).PersonCode" />
+<div class="card" style="margin: 0 auto;">
+    <div class="title">Presenter</div>
+    <div class="person-profile-container mt-5">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-black list-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
+                    <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
+                    <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
+                    <input type="hidden" id="personCode_@i" value="@Model.ElementAt(i).PersonCode" />
 
-                        @if (string.IsNullOrEmpty(Model.ElementAt(i).Pronunciation))
-                        {
-                            <li class="list-group-item text-black list-item" id="pronunciation_@i"></li>
-                        }
-                        else
-                        {
-                            <li class="list-group-item text-black list-item">@Model.ElementAt(i).Pronunciation</li>
-                        }
+                    @if (string.IsNullOrEmpty(Model.ElementAt(i).Pronunciation))
+                    {
+                        <li class="list-group-item text-black list-item" id="pronunciation_@i"></li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-black list-item">@Model.ElementAt(i).Pronunciation</li>
+                    }
 
-                        <li class="list-group-item text-black list-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
-                        <li class="list-group-item text-black list-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
-                        <li class="list-group-item text-black list-item"><strong>School:</strong> @Model.ElementAt(i).School</li>
-                    </ul>
-                </div>
-            }
-        </div>
+                    <li class="list-group-item text-black list-item"><strong>Qualification:</strong> @Model.ElementAt(i).AwardDescription</li>
+                    <li class="list-group-item text-black list-item"><strong>Level:</strong> @Model.ElementAt(i).Level</li>
+                    <li class="list-group-item text-black list-item"><strong>School:</strong> @Model.ElementAt(i).School</li>
+                </ul>
+            </div>
+        }
+    </div>
 
-        <div class="d-flex justify-content-between">
-            <button id="prevButton" class="btn">Previous Person</button>
-            <button id="nextButton" class="btn">Next Person</button>
-        </div>
+    <div class="d-flex">
+        <button id="prevButton" class="btn">Previous Person</button>
+        <button id="nextButton" class="btn">Next Person</button>
     </div>
 </div>
+
 
 @section scripts {
     <!-- Include jQuery library -->
