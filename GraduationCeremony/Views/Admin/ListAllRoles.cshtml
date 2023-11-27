@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "All roles";
+}
+
+@*Listing all roles*@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @*using fontawesome kit for icons styling*@
+    <script src="https://kit.fontawesome.com/1269185472.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+
+
+
+    <a class="btn btn-success btn-primary mb-2" asp-action="AddRole"><i class="fa-solid fa-users"></i> Add Role</a>
+
+    @if (Model.Any())
+    {
+        <table class="table col-3">
+            <thead>
+                <tr>
+                    <td><h5>Role</h5></td>
+                    <td></td>
+                </tr>
+            </thead>
+            @foreach (var role in Model)
+            {
+                <tbody>
+                    <tr>
+                        <td>@role.Name</td>
+                        <td class="text-xxl-center">
+                            <a asp-action="EditRole" asp-route-id="@role.Id" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i></a>
+                            <a asp-action="DeleteRole" asp-route-id="@role.Id" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash-can fa-shake"></i></a>
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    }
+    else
+    {
+        <h5>No roles yet, use the button above to add your first role.</h5>
+    }
+</body>
+</html>
+
+
