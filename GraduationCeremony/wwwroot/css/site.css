@@ -386,6 +386,12 @@ th, td {
         text-align: center;
     }
 
+/* Styling for labels */
+label {
+    font-weight: bold;
+    color: #333;
+}
+
 /*----------DELETE PAGES---------------*/
 .deletePage h1, .deletePage h3 {
     color: #d9534f;

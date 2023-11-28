@@ -3,10 +3,9 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<!-- Page Header -->
+<h1 class="text-center title">Edit User</h1>
 
-<h1>Edit</h1>
-
-<h4>AspNetUser</h4>
 <hr />
 <div class="row">
     <div class="col-lg-6 mx-auto">
@@ -49,12 +48,21 @@
                 <input asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <!-- Back Button -->
+                        <div class="d-flex justify-content-start">
+                            <a asp-action="Index" class="btn btn-secondary btn-block" style="width:50%;">Back to List</a>
+                        </div>
+                    </div>
 
-            <div class="text-left form-group">
-                <input type="submit" value="Save" class="btn btn-lg btn-primary" />
-            </div>
-            <div class="text-left form-group">
-                <a asp-action="Index" class="btn btn-warning btn-lg">Back to List</a>
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group d-flex justify-content-end">
+                            <input type="submit" value="Save" class="btn btn-success btn-block" style="width:50%;" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

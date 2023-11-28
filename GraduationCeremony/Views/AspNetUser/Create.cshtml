@@ -4,12 +4,12 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<!-- Page Header -->
+<h1 class="text-center title">Create User</h1>
 
-<h4>AspNetUser</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-lg-6 mx-auto">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -82,15 +82,24 @@
                 <input asp-for="AccessFailedCount" class="form-control" />
                 <span asp-validation-for="AccessFailedCount" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group ">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <!-- Back Button -->
+                        <div class="d-flex justify-content-start">
+                            <a asp-action="Index" class="btn btn-secondary btn-block" style="width:50%;">Back to List</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group d-flex justify-content-end">
+                        <input type="submit" value="Create" class="btn btn-success btn-block" style="width:50%;" />
+                    </div>
+                    </div>
+                </div>     
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
