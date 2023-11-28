@@ -54,7 +54,6 @@
 
 <!-- Form Section -->
 <div class="row">
-    <!-- Center the form within the column -->
     <div class="col-lg-6 mx-auto">
         <!-- Edit Form -->
         <form asp-action="Edit" method="post">
@@ -127,16 +126,15 @@
                 <br />
                 @if(Model.graduandAwards.Awarded.HasValue != null)
                 {
-                    <a asp-action="SearchCheckIn" asp-controller="CheckIn" asp-route-searchString="@Model.graduands.Forenames" class="btn btn-danger btn-sm">Check-In</a>
+                    <a asp-action="SearchCheckIn" asp-controller="CheckIn" asp-route-searchString="@Model.graduands.Forenames" class="btn btn-danger btn-lg">Check-In</a>
                 }
+                <!-- Back Button -->
+                <div class="text-left btn-back">
+                    <a asp-action="Index" class="btn btn-warning btn-lg">Back to List</a>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<!-- Back Button -->
-<div class="text-center btn-back">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>
 
 <!-- Scripts Section -->

@@ -51,9 +51,9 @@
     else
     {
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
-                <thead class="thead-dark">
-                    <tr>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr class="table-style">
                         <th>Forename</th>
                         <th>Surname</th>
                         <th>Person Code</th>
@@ -96,7 +96,7 @@
         </div>
     }
     <div class="pagination-wrapper" style="text-align:center">
-        <a asp-action="Index" class="btn btn-warning btn-back-to-list pagination-wrapper" style="width: 50%; text-align:center">Back to list</a>
+        <a asp-action="Index" class="btn btn-warning btn-back-to-list" style="width: 50%; text-align:center">Back to list</a>
     </div>
 
 </div>
