@@ -2,87 +2,89 @@
 @model RegisterModel
 
 <h1>@ViewData["Title"]</h1>
-
-<div class="container mb-4">
-    <div class="row justify-content-center">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="col-lg-6 mt-5">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="card">
-                <div class="card-body px-4 py-5 px-md-5">
-                    <div class="form-title">Create a new account</div>
-                    <hr />
-                    <!--2 columns for First and Last Name-->
-                   <div class="row">                      
-                        <div class="form-floating col-md-6 mb-4">
-                            <div class="input-group">
-                                <span class="input-group-text form-icon">
-                                    <i class="fa-solid fa-user"></i>
-                                </span>
-                                <input asp-for="Input.FirstName" class="form-control custom-input-box border-left-0" autocomplete="firstName" aria-required="true" placeholder="First Name" required/>
-                            </div>
-                            <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                   
-                        </div>
-                        <div class="form-floating col-md-6 mb-4">
-                            <div class="input-group">
-                                <span class="input-group-text form-icon">
-                                    <i class="fa-solid fa-user"></i>
-                                </span>
-                                <input asp-for="Input.LastName" class="form-control custom-input-box border-left-0" autocomplete="lastName" aria-required="true" placeholder="Last Name" required />
+@if (User.IsInRole("Admin"))
+{
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="col-lg-6 mt-5">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="card">
+                    <div class="card-body px-4 py-5 px-md-5">
+                        <div class="form-title">Create a new account</div>
+                        <hr />
+                        <!--2 columns for First and Last Name-->
+                        <div class="row">
+                            <div class="form-floating col-md-6 mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text form-icon">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+                                    <input asp-for="Input.FirstName" class="form-control custom-input-box border-left-0" autocomplete="firstName" aria-required="true" placeholder="First Name" required />
+                                </div>
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
 
                             </div>
-                            <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                            <div class="form-floating col-md-6 mb-4">
+                                <div class="input-group">
+                                    <span class="input-group-text form-icon">
+                                        <i class="fa-solid fa-user"></i>
+                                    </span>
+                                    <input asp-for="Input.LastName" class="form-control custom-input-box border-left-0" autocomplete="lastName" aria-required="true" placeholder="Last Name" required />
 
+                                </div>
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+
+                            </div>
                         </div>
-                    </div>
 
-                    <!--Email-->
-                    <div class="form-outline mb-4">
-                        <div class="input-group">
-                            <span class="input-group-text form-icon">
-                                <i class="fa-solid fa-envelope"></i>
-                            </span>
-                            <input asp-for="Input.Email" class="form-control custom-input-box border-left-0" autocomplete="username" aria-required="true"placeholder="Email"/>
+                        <!--Email-->
+                        <div class="form-outline mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text form-icon">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </span>
+                                <input asp-for="Input.Email" class="form-control custom-input-box border-left-0" autocomplete="username" aria-required="true" placeholder="Email" />
 
+                            </div>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
 
-                    <!--Password-->
-                    <div class="form-outline mb-4">
-                        <div class="input-group">
-                            <span class="input-group-text form-icon">
-                                <i class="fa-solid fa-lock-open"></i>
-                            </span>
-                            <input asp-for="Input.Password" class="form-control custom-input-box border-left-0" autocomplete="new-password" aria-required="true" placeholder="Password"/>
+                        <!--Password-->
+                        <div class="form-outline mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text form-icon">
+                                    <i class="fa-solid fa-lock-open"></i>
+                                </span>
+                                <input asp-for="Input.Password" class="form-control custom-input-box border-left-0" autocomplete="new-password" aria-required="true" placeholder="Password" />
 
+                            </div>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
 
-                    <!--Confirm Password-->
-                    <div class="form-outline mb-4">
-                        <div class="input-group">
-                            <span class="input-group-text form-icon">
-                                <i class="fa-solid fa-lock icons"></i>
-                            </span>
-                            <input asp-for="Input.ConfirmPassword" class="form-control custom-input-box border-left-0" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" required />
+                        <!--Confirm Password-->
+                        <div class="form-outline mb-4">
+                            <div class="input-group">
+                                <span class="input-group-text form-icon">
+                                    <i class="fa-solid fa-lock icons"></i>
+                                </span>
+                                <input asp-for="Input.ConfirmPassword" class="form-control custom-input-box border-left-0" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" required />
 
+                            </div>
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                         </div>
-                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                    </div>
 
-                    <button id="registerSubmit" type="submit" class="btn btn-lg btn-success loginButtons">Register</button>
+                        <button id="registerSubmit" type="submit" class="btn btn-lg btn-success loginButtons">Register</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
+}
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
 
 
 @* OG CODE
