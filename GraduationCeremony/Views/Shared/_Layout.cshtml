@@ -37,7 +37,7 @@
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="Presenter">Present</a>
                             </li>
                         }
-                        @if (User.IsInRole("Staff"))
+                        @if (User.IsInRole("Staff")) 
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white-50" asp-area="" asp-controller="CheckIn" asp-action="CheckedInList">Check In List</a>
