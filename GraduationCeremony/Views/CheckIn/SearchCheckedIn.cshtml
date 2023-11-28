@@ -73,7 +73,7 @@
             </table>
         </div>
 
-        @if (Model.Count >= 2)
+        @if (Model.Count >= 1)
         {
             @Html.PagedListPager(Model, page => Url.Action("Index",
             new { Page = page }),

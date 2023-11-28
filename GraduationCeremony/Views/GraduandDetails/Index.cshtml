@@ -85,18 +85,20 @@
         </div>
     }
 
-    <div class="pagination-wrapper" style="text-align:center">
-        <div class="pagination">
-            @Html.PagedListPager(Model, page => Url.Action("Index",
+    @if(Model.Count >= 1)
+    {
+        <div class="pagination-wrapper" style="text-align:center">
+            <div class="pagination">
+                @Html.PagedListPager(Model, page => Url.Action("Index",
             new { Page = page }),
             new PagedListRenderOptions
             {
             LiElementClasses = new string[] { "page-item" },
             PageClasses = new string[] { "page-link" }
             })
+            </div>
         </div>
-    </div>
-
+    }
 </div>
 
 <script type="text/javascript">

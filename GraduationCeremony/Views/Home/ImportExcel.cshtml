@@ -90,10 +90,13 @@
         <button type="submit" class="btn btn-success submit-button">Import Excel</button>
     </form>
 
-    <!-- Button group for additional actions -->
-    <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary">Delete All Checked In Graduands</a>
-    <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
-    <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a>
+    @if(User.IsInRole("Admin"))
+    {
+        <!-- Button group for additional actions -->
+        <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary">Delete All Checked In Graduands</a>
+        <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
+        <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a>
+    }
 
     <!-- Display success and error messages -->
     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))

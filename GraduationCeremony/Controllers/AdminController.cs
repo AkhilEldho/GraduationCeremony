@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace GraduationCeremony.Controllers
 {
-    [Authorize(Roles = "Staff")]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -196,22 +196,32 @@ namespace GraduationCeremony.Controllers
                 return View("Error");
             }
 
-            // Loop to find role with id
+            //loop to find role with id
             for (int i = 0; i < model.Count; i++)
             {
                 var user = await _userManager.FindByIdAsync(model[i].Id);
-
-                // Clear existing roles for the user
                 var userRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, userRoles);
 
-                if (model[i].IsSelected)
+                if (model[i].IsSelected && !(await _userManager.IsInRoleAsync(user, role.Name)))
                 {
-                    // Add the selected role
+                    if (userRoles.Count > 0)
+                    {
+                        //if user is in more than one role remove all the rest
+                        await _userManager.RemoveFromRolesAsync(user, userRoles);
+                    }
+
                     await _userManager.AddToRoleAsync(user, role.Name);
                 }
-            }
-
+                else if (!model[i].IsSelected && await _userManager.IsInRoleAsync(user, role.Name))
+                {
+                    await _userManager.RemoveFromRoleAsync(user, role.Name);
+                }
+                else
+                {
+                    continue;
+                }
+            }          
+            
             // Redirect to EditRole view
             return RedirectToAction("EditRole", new { Id = id });
         }

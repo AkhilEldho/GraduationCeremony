@@ -29,8 +29,6 @@ namespace GraduationCeremony.Controllers
             return View();
         }
 
-        //import excel view
-        [Authorize(Roles = "Staff")]
         public IActionResult ImportExcel()
         {
             return View();
@@ -102,7 +100,7 @@ namespace GraduationCeremony.Controllers
                                                 {
                                                     awards.Add(award);
                                                 }
-                                               
+
                                             }
                                             else
                                             {
@@ -142,7 +140,7 @@ namespace GraduationCeremony.Controllers
                                                 if (graduandAwardsFullList.Find(x => x.AwardCode == graduandAward.AwardCode && x.PersonCode == graduandAward.PersonCode) == null)
                                                 {
                                                     graduandAwards.Add(graduandAward);
-                                                } 
+                                                }
                                             }
                                             else
                                             {
@@ -194,7 +192,7 @@ namespace GraduationCeremony.Controllers
                                 else
                                     ViewBag.ErrorMessage += "No New Grad Awards Added \n";
                             }
-        
+
                             else
                             {
                                 ViewBag.ErrorMessage = "This Excel is empty.";
@@ -242,14 +240,14 @@ namespace GraduationCeremony.Controllers
 
         //for awarded column
         private DateTime? ParseCustomDateFormat(object value)
-        { 
+        {
             //convert value to string
             var convertedvalue = value.ToString();
             //check if it is not empty
             if (!string.IsNullOrWhiteSpace(convertedvalue))
             {
-                 //https://stackoverflow.com/questions/4718960/datetime-tryparse-issue-with-dates-of-yyyy-dd-mm-format
-                 //convert string date to datetime
+                //https://stackoverflow.com/questions/4718960/datetime-tryparse-issue-with-dates-of-yyyy-dd-mm-format
+                //convert string date to datetime
                 if (DateTime.TryParse(convertedvalue, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
                 {
                     return result;
@@ -307,7 +305,7 @@ namespace GraduationCeremony.Controllers
             // Create a new Award object
             Award award = new Award
             {
-                AwardCode = GetValue(worksheet, row, 5), 
+                AwardCode = GetValue(worksheet, row, 5),
                 QualificationCode = GetValue(worksheet, row, 6),
                 AwardDescription = GetValue(worksheet, row, 7),
                 Level = GetValue(worksheet, row, 8),
@@ -354,7 +352,7 @@ namespace GraduationCeremony.Controllers
 
         private GraduandAward ExtractGraduandAward(ExcelWorksheet worksheet, int row)
         {
-            string awardCode = GetValue(worksheet, row, 5); 
+            string awardCode = GetValue(worksheet, row, 5);
 
             // check if an Award with the same AwardCode exists in the database
             var award = _context.Awards.FirstOrDefault(a => a.AwardCode == awardCode);
@@ -410,7 +408,7 @@ namespace GraduationCeremony.Controllers
                 ViewBag.ErrorMessage = "Checked in List Deleted";
                 return View("ImportExcel");
             }
-            else if(text == "Graduand")
+            else if (text == "Graduand")
             {
                 var awardsFull = from g in _context.Awards select g;
                 var graduandsFull = from g in _context.Graduands select g;
