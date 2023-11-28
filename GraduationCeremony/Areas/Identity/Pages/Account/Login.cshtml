@@ -8,18 +8,16 @@
         <form id="account" method="post" class="col-lg-6 mt-5">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="card">
-
-
                 <div class="card-body px-4 py-5 px-md-5 ">
                     <!-- Email input -->
                     <div class="form-title">Login to your account</div>
                     <hr />
-                    <div class="form-outline mb-4">
-                        <div class="input-group form-floating">
+                    <div class="form-floating mb-4">
+                        <div class="input-group">
                             <span class="input-group-text form-icon">
                                 <i class="fa-solid fa-envelope"></i>
                             </span>
-                            <input asp-for="Input.Email" class="form-control border-left-0" autocomplete="username" aria-required="true" />
+                            <input asp-for="Input.Email" class="form-control custom-input-box border-left-0" autocomplete="username" aria-required="true" placeholder="Email"/>
 
                         </div>
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -27,12 +25,12 @@
 
 
                     <!-- Password input -->
-                    <div class="form-outline mb-4">
-                        <div class="input-group form-floating">
+                    <div class="form-floating mb-4">
+                        <div class="input-group">
                             <span class="input-group-text form-icon">
                                 <i class="fa-solid fa-lock icons"></i>
                             </span>
-                            <input asp-for="Input.Password" class="form-control border-left-0" autocomplete="current-password" aria-required="true" />
+                            <input asp-for="Input.Password" class="form-control custom-input-box border-left-0" autocomplete="current-password" aria-required="true" placeholder="Password" />
 
                         </div>
                         <span asp-validation-for="Input.Password" class="text-danger"></span>

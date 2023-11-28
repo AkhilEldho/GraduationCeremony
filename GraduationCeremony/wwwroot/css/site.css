@@ -75,6 +75,10 @@ input[type=number] {
     text-align: center;
     font-weight: 400;
 }
+.custom-input-box {
+    height: 45px !important;
+}
+
 
 .card .loginButtons {
     border-radius: 20px;
@@ -289,16 +293,6 @@ input[type=number] {
     border-radius: 5px;
     font-size: 16px;
     max-width: 450px;
-}
-
-#searchCheckIn-checkInButton {
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #d9534f;
-    color: #fff;
-    border: 1px solid #d9534f;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 .error-message,

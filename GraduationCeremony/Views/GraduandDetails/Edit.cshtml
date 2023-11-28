@@ -120,7 +120,7 @@
             </div>
 
             <!-- Submit Button -->
-            <div class="form-group">
+           @*  <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
                 <br />
                 <br />
@@ -132,7 +132,39 @@
                 <div class="text-left btn-back">
                     <a asp-action="Index" class="btn btn-warning btn-lg">Back to List</a>
                 </div>
-            </div>
+            </div> *@
+            <div class="form-group">
+                <div class="row text-center">
+                    <div class="col-md-6 mx-auto mb-3">
+                        <div class="form-group">
+                            <input type="submit" value="Save" class="btn btn-primary btn-md" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 col-sm-6">
+                        <!-- Back Button -->
+                        <div class="d-flex justify-content-start">
+                            <a asp-action="Index" class="btn btn-secondary btn-block" style="width:50%;">Back to List</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-6">
+                        @if (Model.graduandAwards.Awarded.HasValue != null)
+                        {
+                            <div class="form-group d-flex justify-content-end">
+                                <a asp-action="SearchCheckIn" asp-controller="CheckIn" asp-route-searchString="@Model.graduands.Forenames" class="btn btn-danger btn-block" style="width:50%;">Check-In</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+
+
+
+
+
         </form>
     </div>
 </div>
