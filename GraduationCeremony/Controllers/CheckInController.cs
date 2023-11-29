@@ -442,18 +442,51 @@ namespace GraduationCeremony.Controllers
         // POST: Graduation/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        /* public async Task<IActionResult> DeleteConfirmed(int id)
+         {
+             if (_context.CheckIns == null)
+             {
+                 return Problem("Entity set 'S232_Project01_TestContext.CheckIn'  is null.");
+             }
+
+             var student = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
+             _context.CheckIns.Remove(student);
+
+             await _context.SaveChangesAsync();
+             return RedirectToAction(nameof(CheckedInList));
+         }*/
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.CheckIns == null)
             {
-                return Problem("Entity set 'S232_Project01_TestContext.CheckIn'  is null.");
+                return Problem("Entity set 'S232_Project01_TestContext.CheckIn' is null.");
             }
 
+            // Retrieve the student from the checked-in list
             var student = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
-            _context.CheckIns.Remove(student);
 
-            await _context.SaveChangesAsync();
+            if (student != null)
+            {
+                // Retrieve the corresponding Graduand_Award entry
+                var graduandAward = await _context.GraduandAwards.FirstOrDefaultAsync(a => a.PersonCode == id);
+
+                if (graduandAward != null)
+                {
+
+                    // Set the awarded field to null
+                    graduandAward.Awarded = null;
+                    _context.GraduandAwards.Update(graduandAward);
+                }
+
+                // Remove the student from the checked-in list
+                _context.CheckIns.Remove(student);
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+            }
+
             return RedirectToAction(nameof(CheckedInList));
         }
+
     }
 }
