@@ -162,7 +162,7 @@ namespace GraduationCeremony.Controllers
                                     _context.SaveChanges();
                                 }
                                 else
-                                    ViewBag.ErrorMessage += "No New Awards Added \n";
+                                    ViewBag.ErrorMessage += "No New Awards Added" + "\n";
 
 
                                 //only saving those with changes
@@ -172,7 +172,7 @@ namespace GraduationCeremony.Controllers
                                     _context.SaveChanges();
                                 }
                                 else
-                                    ViewBag.ErrorMessage += "No New Graduands Added \n";
+                                    ViewBag.ErrorMessage += "No New Graduands Added" + "\n";
 
                                 //only saving those with changes
 
@@ -190,7 +190,7 @@ namespace GraduationCeremony.Controllers
                                     ViewBag.SuccessMessage = "Excel successfully uploaded";
                                 }
                                 else
-                                    ViewBag.ErrorMessage += "No New Grad Awards Added \n";
+                                    ViewBag.ErrorMessage += "No New Grad Awards Added" + "\n";
                             }
 
                             else

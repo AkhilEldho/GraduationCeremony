@@ -92,10 +92,15 @@
 
     @if(User.IsInRole("Admin"))
     {
-        <!-- Button group for additional actions -->
-        <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary">Delete All Checked In Graduands</a>
-        <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
-        <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a>
+        <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary btn-block">Delete All Checked In Graduands</a>
+       @*  <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
+        <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a> *@
+
+        <div id="additionalButtons" style="display: none;">
+            <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary btn-block">Delete All Graduands</a>
+            <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary btn-block">Delete Everything</a>
+        </div>
+
     }
 
     <!-- Display success and error messages -->
@@ -129,12 +134,31 @@
 </div>
 
 <script>
-    // JavaScript function to confirm deletion
+    @* // JavaScript function to confirm deletion
     function confirmDelete(text) {
         var confirmation = confirm("Are you sure you want to delete " + text + "?");
 
         if (confirmation) {
             window.location.href = "/Home/Delete?text=" + text;
         }
+    } *@
+
+        // JavaScript function to confirm deletion
+        function confirmDelete(text) {
+            var confirmation = confirm("Are you sure you want to delete " + text + "?");
+
+            if (confirmation) {
+                if (text === 'Check') {
+                    showAdditionalButtons();
+                    window.location.href = "/Home/Delete?text=" + text;
+                } 
+            }
+        }
+
+    // Function to show additional buttons
+    function showAdditionalButtons() {
+        var additionalButtons = document.getElementById('additionalButtons');
+        additionalButtons.style.display = 'block';
     }
+
 </script>

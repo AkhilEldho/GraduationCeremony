@@ -153,7 +153,7 @@
                     </div>
 
                     <div class="col-md-6 col-sm-6">
-                        @if (Model.graduandAwards.Awarded.HasValue == null)
+                        @if (Model.graduandAwards.Awarded.HasValue != null)
                         {
                             <div class="form-group d-flex justify-content-end">
                                 <a asp-action="SearchCheckIn" asp-controller="CheckIn" asp-route-searchString="@Model.graduands.Forenames" class="btn btn-primary btn-block" style="width:50%;">Check-In</a>
