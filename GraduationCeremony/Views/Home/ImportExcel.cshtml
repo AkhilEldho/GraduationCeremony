@@ -49,8 +49,8 @@
         cursor: pointer;
         transition: background-color 0.3s;
         box-sizing: border-box;
-        max-width: 600px; /* Adjusted maximum width to match the second container */
-    }
+        max-width: 600px; /* Adjusted maximum width to match the second container*/
+        } 
 
     .submit-button {
         background-color: #5bc0de;
@@ -87,31 +87,34 @@
     <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
         <div class="title mb-4">Select Excel File:</div>
         <input type="file" name="file" id="file" class="form-control file-input" />
-        <button type="submit" class="btn btn-success submit-button">Import Excel</button>
-    </form>
+       <div><button type="submit" class="btn btn-success submit-button btn-block">Import Excel</button></div>
 
+    </form>
     @if(User.IsInRole("Admin"))
     {
-        <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary btn-block">Delete All Checked In Graduands</a>
+        <a href="#" onclick="confirmDelete('Check')" class="btn btn-secondary btn-block mt-3">Delete All Checked In Graduands</a>
+      
        @*  <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary">Delete All Graduands</a>
         <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary">Delete Everything</a> *@
-
-        <div id="additionalButtons" style="display: none;">
+        <div id="additionalButtons" style="display:none;" class="mt-3 w-100">
             <a href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary btn-block">Delete All Graduands</a>
             <a href="#" onclick="confirmDelete('Everything')" class="btn btn-secondary btn-block">Delete Everything</a>
         </div>
+    } 
 
-    }
+</div>
 
+
+<div>
     <!-- Display success and error messages -->
     @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
     {
-        <div class="alert alert-success success-message">@ViewBag.SuccessMessage</div>
+        <div class="alert alert-success success-message" style="display:block">@ViewBag.SuccessMessage</div>
     }
 
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
-        <div class="alert alert-danger error-message">@ViewBag.ErrorMessage</div>
+        <div class="alert alert-danger error-message" style="display:block">@ViewBag.ErrorMessage</div>
     }
 
     @if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
@@ -133,32 +136,38 @@
     }
 </div>
 
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 <script>
-    @* // JavaScript function to confirm deletion
-    function confirmDelete(text) {
-        var confirmation = confirm("Are you sure you want to delete " + text + "?");
+    // function confirmDelete(text) {
+    //     var confirmation = confirm("Are you sure you want to delete " + text + "?");
 
-        if (confirmation) {
-            window.location.href = "/Home/Delete?text=" + text;
-        }
-    } *@
-
-        // JavaScript function to confirm deletion
+    //     if (confirmation) {
+    //         window.location.href = "/Home/Delete?text=" + text;
+    //     }
+    // }
         function confirmDelete(text) {
             var confirmation = confirm("Are you sure you want to delete " + text + "?");
 
             if (confirmation) {
-                if (text === 'Check') {
-                    showAdditionalButtons();
-                    window.location.href = "/Home/Delete?text=" + text;
-                } 
+                $.ajax({
+                    type: "DELETE",
+                    url: "/Home/Delete",
+                    data: { text: text },
+                    success: function (data) {
+                        // checking if the one clicked is the Delete CheckedIn
+                        if (text === 'Check') {
+                            showAdditionalButtons();
+                        }
+                    }
+                });
             }
         }
 
-    // Function to show additional buttons
     function showAdditionalButtons() {
-        var additionalButtons = document.getElementById('additionalButtons');
-        additionalButtons.style.display = 'block';
-    }
-
+            var additionalButtons = document.getElementById('additionalButtons');
+            additionalButtons.style.display = 'block';
+        }
 </script>
+
