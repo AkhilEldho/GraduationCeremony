@@ -73,6 +73,7 @@
             <div class="person-profile" style="display: @(i == 0 ? "block" : "none")">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item text-black list-item"><strong>Name:</strong> @Model.ElementAt(i).Forenames @Model.ElementAt(i).Surname.ToUpper()</li>
+
                     <input type="hidden" id="currentPersonForenames_@i" value="@Model.ElementAt(i).Forenames" />
                     <input type="hidden" id="currentPersonSurname_@i" value="@Model.ElementAt(i).Surname" />
                     <input type="hidden" id="personCode_@i" value="@Model.ElementAt(i).PersonCode" />
@@ -105,21 +106,57 @@
     <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        // Initialize variables
-        var currentPersonIndex = 0;
-        var personProfiles = document.querySelectorAll(".person-profile");
 
-        // Execute when the window is loaded
+        // Move the currentIndex and Model declarations outside the click event handlers
+        var currentIndex = 0;
+
         window.onload = function () {
-            // Initial setup
-            GetPronunciation(
-                document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
-                document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
-                document.getElementById('pronunciation_' + currentPersonIndex)
-            );
-            sendPersonCodeToController(currentPersonIndex);
-            updateDisplay();
+                updateDisplay();
+                sendPersonCodeToController(currentIndex);
         };
+
+        // Function to handle the "Next Person" button click
+        $('#nextButton').click(function () {
+            // Increment the current index if it's not already at the end
+            if (currentIndex < @Model.Count()) {
+                currentIndex++;
+                sendPersonCodeToController(currentIndex);
+                // Update the display
+                fetchDataAndUpdate();
+                location.reload();
+            }
+        });
+
+        // Function to handle the "Previous Person" button click
+        $('#prevButton').click(function () {
+            // Decrement the current index if it's not already at the beginning
+            if (currentIndex > 0) {
+                currentIndex--;
+                // Update the display
+                fetchDataAndUpdate();
+            }
+        });
+
+        // Function to fetch and update data from the server
+        function fetchDataAndUpdate() {
+            $.ajax({
+                url: "/CheckIn/GetUpdatedPersons",
+                type: "GET",
+                success: function (data) {
+                    try {
+                        console.log("Data received from server:", data);
+
+                        // Update the display
+                        updateDisplay();
+                    } catch (error) {
+                        console.error("Error parsing JSON data:", error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", status, error);
+                }
+            });
+        }
 
         // Function to send the personCode to the controller
         function sendPersonCodeToController(index) {
@@ -137,105 +174,30 @@
             });
         }
 
-        // Function to update the display based on currentPersonIndex
+
+        // Function to update the display based on the received data
         function updateDisplay() {
-            for (var i = 0; i < personProfiles.length; i++) {
-                if (i === currentPersonIndex) {
-                    personProfiles[i].style.display = "block";
-                } else {
-                    personProfiles[i].style.display = "none";
-                }
-            }
+            // Hide all person profiles
+            $('.person-profile').hide();
+
+            // Show the person profile at the current index
+            var currentProfile = $('.person-profile').eq(currentIndex);
+            currentProfile.show();
+
+            // Get the relevant elements for pronunciation
+            var forenames = $('#currentPersonForenames_' + currentIndex).val();
+            var surname = $('#currentPersonSurname_' + currentIndex).val();
+            var pronunciationElement = $('#pronunciation_' + currentIndex);
+
+            // Call GetPronunciation to update the pronunciation element
+            GetPronunciation(forenames, surname, pronunciationElement);
+
+            // Enable or disable the next and previous buttons based on the current index
+            $('#prevButton').prop('disabled', currentIndex === 0);
+            $('#nextButton').prop('disabled', currentIndex === @Model.Count() - 1);
+
         }
 
-        // Function to fetch and update data from the server
-        function fetchDataAndUpdate() {
-            $.ajax({
-                url: "/CheckIn/GetUpdatedPersons",
-                type: "GET",
-                success: function (data) {
-                    console.log("Data received from server:", data);
-
-                    // Ensure currentPersonIndex is within bounds
-                    currentPersonIndex = Math.min(currentPersonIndex, data.length - 1);
-
-                    // Update each profile with new data
-                    for (var i = 0; i < personProfiles.length; i++) {
-                        var profile = personProfiles[i];
-                        var personData = data[i];
-                        updateProfileContent(profile, personData);
-                    }
-
-                    // Update the personProfiles array
-                    personProfiles = document.querySelectorAll(".person-profile");
-
-                    // Update the display
-                    updateDisplay();
-                },
-            });
-        }
-
-        // Function to update the content of each profile
-        function updateProfileContent(profile, personData) {
-            // Log information about the update
-            console.log("Updating profile content for person:", personData, profile);
-
-            // Get elements inside each profile that need to be updated
-            var nameElement = profile.querySelector('.list-item-name');
-            var pronunciationElement = profile.querySelector('.list-item-pronunciation');
-            var awardDescriptionElement = profile.querySelector('.list-item-award');
-            var levelElement = profile.querySelector('.list-item-level');
-            var schoolElement = profile.querySelector('.list-item-school');
-
-            // Check if the elements are not null before updating
-            if (nameElement) {
-                var fullName = (personData.Forenames || '') + ' ' + (personData.Surname || '');
-                nameElement.innerText = "Name: " + fullName;
-            }
-
-            if (pronunciationElement) {
-                pronunciationElement.innerText = personData.Pronunciation || "Pronunciation: [Empty Pronunciation]";
-            }
-
-            if (awardDescriptionElement) {
-                awardDescriptionElement.innerText = "Qualification: " + (personData.AwardDescription || '');
-            }
-
-            if (levelElement) {
-                levelElement.innerText = "Level: " + (personData.Level || '');
-            }
-
-            if (schoolElement) {
-                schoolElement.innerText = "School: " + (personData.School || '');
-            }
-        }
-
-        // Event listener for the "Next Person" button
-        document.getElementById("nextButton").addEventListener("click", function () {
-            if (currentPersonIndex < personProfiles.length - 1) {
-                currentPersonIndex++;
-                GetPronunciation(
-                    document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
-                    document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
-                    document.getElementById('pronunciation_' + currentPersonIndex)
-                );
-            }
-            sendPersonCodeToController(currentPersonIndex);
-            fetchDataAndUpdate();
-        });
-
-        // Event listener for the "Previous Person" button
-        document.getElementById("prevButton").addEventListener("click", function () {
-            if (currentPersonIndex > 0) {
-                currentPersonIndex--;
-                GetPronunciation(
-                    document.getElementById('currentPersonForenames_' + currentPersonIndex).value,
-                    document.getElementById('currentPersonSurname_' + currentPersonIndex).value,
-                    document.getElementById('pronunciation_' + currentPersonIndex)
-                );
-            }
-            fetchDataAndUpdate();
-        });
 
         // Function to get the pronunciation of a name
         function GetPronunciation(forenames, surname, pronunciationElement) {
@@ -250,7 +212,7 @@
 
             // Handle case where the name is empty
             if (fullName.length === 0) {
-                pronunciationElement.innerText = "Pronunciation: [Empty Name]";
+                pronunciationElement.text("Pronunciation: [Empty Name]");
                 return;
             }
 
@@ -272,11 +234,8 @@
 
             // Join syllables with a hyphen and update the pronunciation element
             var pronunciation = syllables.join("-");
-            pronunciationElement.innerText = pronunciation;
+            pronunciationElement.text(pronunciation);
         }
-
-        // Fetch and update data at regular intervals
-        // setInterval(fetchDataAndUpdate, 5000);
 
         // Initial data fetch and update
         fetchDataAndUpdate();

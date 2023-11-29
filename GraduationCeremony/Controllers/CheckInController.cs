@@ -360,9 +360,18 @@ namespace GraduationCeremony.Controllers
                 List<GraduandAward> graduandAward = await _context.GraduandAwards.ToListAsync();
                 GraduandAward awarded = graduandAward.Find(x => x.PersonCode == code);
 
+                List<CheckIn> checkList = await _context.CheckIns.ToListAsync();
+                CheckIn grad = checkList.FirstOrDefault(x  => x.PersonCode == code);
+
                 if (awarded.Awarded == null || string.IsNullOrEmpty(awarded.Awarded.ToString()))
                 {
                     awarded.Awarded = DateTime.Now;
+                    _context.CheckIns.Remove(grad);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    _context.CheckIns.Remove(grad);
                     _context.SaveChanges();
                 }
             }
