@@ -13,6 +13,7 @@ using System.Globalization;
 
 namespace GraduationCeremony.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly S232_Project01_TestContext _context;
@@ -24,6 +25,9 @@ namespace GraduationCeremony.Controllers
             _context = context;
             _logger = logger;
         }
+
+
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
