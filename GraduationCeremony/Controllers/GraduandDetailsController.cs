@@ -208,11 +208,9 @@ namespace GraduationCeremony.Controllers
 
                 if (gradAwards == null)
                 {
-                    //COPY PASTED THIS FROM ONLINE
                     // Log the occurrence for debugging purposes
                     _logger.LogError($"Edit: GraduandAwards not found for PersonCode {personCode}");
 
-                    // Return a user-friendly error page or redirect to an error page
                     return View("Index");
                 }
 
@@ -227,7 +225,6 @@ namespace GraduationCeremony.Controllers
                 // Log the exception for further investigation
                 _logger.LogError($"Edit: An error occurred - {ex.Message}");
 
-                // Return a user-friendly error page or redirect to an error page
                 return View("Error");
             }
         }

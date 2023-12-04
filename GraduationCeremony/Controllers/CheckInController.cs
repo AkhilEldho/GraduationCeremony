@@ -154,7 +154,6 @@ namespace GraduationCeremony.Controllers
                 var graduantAwards = _context.GraduandAwards.AsQueryable();
                 var awards = _context.Awards.AsQueryable();
 
-                //CHANGED THINGS IN HERE
                 // Search for the grad
                 Graduand grad = await graduants
                     .Where(g => g.CollegeEmail.ToLower() == searchString.ToLower() ||
@@ -451,19 +450,7 @@ namespace GraduationCeremony.Controllers
         // POST: Graduation/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        /* public async Task<IActionResult> DeleteConfirmed(int id)
-         {
-             if (_context.CheckIns == null)
-             {
-                 return Problem("Entity set 'S232_Project01_TestContext.CheckIn'  is null.");
-             }
-
-             var student = await _context.CheckIns.FirstOrDefaultAsync(m => m.PersonCode == id);
-             _context.CheckIns.Remove(student);
-
-             await _context.SaveChangesAsync();
-             return RedirectToAction(nameof(CheckedInList));
-         }*/
+    
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.CheckIns == null)
