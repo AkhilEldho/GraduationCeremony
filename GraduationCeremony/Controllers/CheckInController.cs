@@ -326,6 +326,8 @@ namespace GraduationCeremony.Controllers
             return View(checkIn.ToPagedList(pageNumber, 10));
         }
 
+
+        [Authorize(Roles = "Admin, Presenter")]
         // PRESENTERS VIEW
         public async Task<IActionResult> Presenter()
         {
