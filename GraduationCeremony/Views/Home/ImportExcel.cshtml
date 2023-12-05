@@ -111,7 +111,7 @@
 
     @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
-        <div class="alert alert-danger" style="display:block; border: 10px red;" id="errorMessage">@ViewBag.ErrorMessage</div>
+        <div class="alert alert-danger" style="display:block" id="errorMessage">@ViewBag.ErrorMessage</div>
     }
 
     @if (ViewBag.Errors != null && ViewBag.Errors.Count > 0)
