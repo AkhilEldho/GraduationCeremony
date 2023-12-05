@@ -402,7 +402,7 @@ namespace GraduationCeremony.Controllers
 
         public async Task<ViewResult> DeleteAsync(string text)
         {
-            if (text == "Check")
+            if (text == "Checked-in List")
             {
                 var checkIn = from g in _context.CheckIns select g;
 

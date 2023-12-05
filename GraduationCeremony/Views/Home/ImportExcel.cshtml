@@ -92,7 +92,7 @@
     </form>
     @if (User.IsInRole("Admin"))
     {
-        <button href="#" onclick="confirmDelete('Check');" class="btn btn-secondary btn-block mt-3">Delete All Checked In Graduands</button>
+        <button href="#" onclick="confirmDelete('Checked-in List');" class="btn btn-secondary btn-block mt-3">Delete All Checked In Graduands</button>
 
         <button href="#" onclick="confirmDelete('Graduand')" class="btn btn-secondary btn-block" id="deleteGraduands" disabled>Delete All Graduands</button>
         <button onclick="confirmDelete('Everything')" class="btn btn-secondary btn-block" id="deleteEverything" disabled>Delete Everything</button>
@@ -139,20 +139,15 @@
 <script>
     function confirmDelete(text) {
         var confirmation = confirm("Are you sure you want to delete " + text + "?");
-        // if (confirmation) {
-        //     window.location.href = "/Home/Delete?text=" + text;
-        // }
-       
-
+     
         if (confirmation) {
             $.ajax({
                 type: "DELETE",
                 url: "/Home/Delete",
                 data: { text: text },
                 success: function (data) {
-                    console.log(data);
                     // checking if the one clicked is the Delete CheckedIn
-                    if (text === 'Check') {
+                    if (text === 'Checked-in List') {
                         alert("Checked In records deleted successfully");
                         DisableButtons();
                     } else if (text === 'Graduand') {
@@ -173,9 +168,5 @@
         document.getElementById('deleteEverything').removeAttribute('disabled');
     }
 
-    // function showAdditionalButtons() {
-    //     var additionalButtons = document.getElementById('additionalButtons');
-    //     additionalButtons.style.display = 'block';
-    // }
 </script>
 
