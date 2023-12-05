@@ -16,6 +16,12 @@
     </div>
     <br />
     <div class="form-group col-4">
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger" style="display:block" id="errorMessage">@ViewBag.ErrorMessage</div>
+        }
+
         <button type="submit" class="btn btn-success btn-primary">Add Role</button>
         <div>
             <a asp-action="ListAllRoles" class="btn btn-secondary my-3"><i class="fa-solid fa-angles-left"></i> Back</a>

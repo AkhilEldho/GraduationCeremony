@@ -3,6 +3,7 @@ using GraduationCeremony.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace GraduationCeremony.Controllers
@@ -46,29 +47,47 @@ namespace GraduationCeremony.Controllers
                 Name = model.RoleName
             };
 
-            var result = await _roleManager.CreateAsync(identityRole);
+            var roles = _roleManager.Roles;
+            string name = roles.FirstOrDefaultAsync(x => x.Name == identityRole.Name).ToString();
 
-            if (result.Succeeded)
+            if (name == null)
             {
-                return RedirectToAction("ListAllRoles");
-            }
+                var result = await _roleManager.CreateAsync(identityRole);
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-
-            // Log ModelState errors
-            foreach (var modelStateKey in ModelState.Keys)
-            {
-                var modelStateVal = ModelState[modelStateKey];
-                foreach (var error in modelStateVal.Errors)
+                if (result.Succeeded)
                 {
-                    Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                    return RedirectToAction("ListAllRoles");
                 }
-            }
 
-            return View("ListAllRoles");
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                // Log ModelState errors
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var modelStateVal = ModelState[modelStateKey];
+                    foreach (var error in modelStateVal.Errors)
+                    {
+                        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                    }
+                }
+
+                return View("ListAllRoles");
+            }
+            else if(name != null)
+            {
+                ViewBag.ErrorMessage = "Role exists";
+
+                return View();
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Unexpected Error";
+
+                return View();
+            }
         }
 
 
